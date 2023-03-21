@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Common.Parameters;
 using MassTransit;
 using Common.Contracts.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 public class UserController : BaseApiController
 {
@@ -34,6 +35,7 @@ public class UserController : BaseApiController
 
   // GET: api/<controller>/TestGetEntityData/{id}
   [HttpGet("/api/TestGetEntityData/{id}")]
+  [Authorize(Policy = "IsAdmin")]
   public async Task<IActionResult> TestGetEntityData(int id)
   {
     return Ok(await _client.GetResponse<GetEntityDataResult>(new { Id = id }));

@@ -16,10 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
+	<PackageReference Include="Keycloak.AuthServices.Authentication" Version="1.5.1" />
+	<PackageReference Include="Keycloak.AuthServices.Authorization" Version="1.5.1" />
 	<PackageReference Include="MassTransit" Version="8.0.7" />
 	<PackageReference Include="MassTransit.Newtonsoft" Version="8.0.7" />
 	<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.7" />
 	<PackageReference Include="MediatR" Version="11.0.0" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.15" />
 	<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
     <PackageReference Include="RulesEngine" Version="4.0.0" />

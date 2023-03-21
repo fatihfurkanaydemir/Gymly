@@ -2,9 +2,8 @@
   "profiles": {
     "Docker Compose": {
       "commandName": "DockerCompose",
-      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchAction": "None",
       "composeLaunchServiceName": "apigateway",
-      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/Swagger",
       "commandVersion": "1.0",
       "serviceActions": {
         "usersservice.api": "StartWithoutDebugging",

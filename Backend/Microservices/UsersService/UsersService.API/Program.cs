@@ -6,6 +6,8 @@ using UsersService.Infrastructure.Persistence;
 using UsersService.Application.Interfaces.Repositories;
 using UsersService.Infrastructure.Persistence.Seeds;
 using MassTransit;
+using Keycloak.AuthServices.Authentication;
+using Keycloak.AuthServices.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +67,16 @@ builder.Services.AddOptions<MassTransitHostOptions>().Configure(options =>
   options.StartTimeout = TimeSpan.FromSeconds(10);
   options.StopTimeout = TimeSpan.FromSeconds(30);
 });
+
+builder.Services.AddKeycloakAuthentication(config);
+builder.Services.AddAuthorization(o =>
+{
+  o.AddPolicy("IsAdmin", b =>
+  {
+    b.RequireRealmRoles("admin");
+  });
+});
+builder.Services.AddKeycloakAuthorization(config);
 
 var app = builder.Build();
 

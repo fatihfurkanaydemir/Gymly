@@ -1,0 +1,6 @@
+openssl x509 -inform PEM -outform DER -in gymly_cert.pem -out gymly_cert.der.crt
+openssl x509 -inform PEM -in gymly_cert.pem > public.pem
+openssl rsa -in gymly_cert.key -text > private.pem
+openssl req -x509 -new -nodes -key gymly_cert.key -sha256 -days 1825 -out gymly_cert.pem -config openssl.cnf
+openssl genrsa -des3 -out gymly_cert.key 2048
+

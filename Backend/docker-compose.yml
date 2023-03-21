@@ -16,8 +16,12 @@ services:
     build:
       context: .
       dockerfile: Microservices/UsersService/UsersService.API/Dockerfile
+    volumes:
+      - ./gymly_cert.pem:/etc/ssl/certs/server-certificate.pem 
     networks:
       - backend
+    extra_hosts:
+      - "192.168.137.1:192.168.137.1"
 
   otherservice.api:
     image: ${DOCKER_REGISTRY-}otherserviceapi

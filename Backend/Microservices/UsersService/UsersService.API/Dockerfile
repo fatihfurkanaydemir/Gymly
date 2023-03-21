@@ -6,6 +6,7 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+# Certificate
 WORKDIR /src
 COPY ["Microservices/UsersService/UsersService.API/UsersService.API.csproj", "Microservices/UsersService/UsersService.API/"]
 COPY ["Microservices/Common/Common.csproj", "Microservices/Common/"]
@@ -15,6 +16,7 @@ COPY ["Microservices/UsersService/UsersService.Infrastructure.Persistence/UsersS
 RUN dotnet restore "Microservices/UsersService/UsersService.API/UsersService.API.csproj"
 COPY . .
 WORKDIR "/src/Microservices/UsersService/UsersService.API"
+COPY ./gymly_cert.pem /etc/ssl/certs/server-certificate.pem
 RUN dotnet build "UsersService.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
