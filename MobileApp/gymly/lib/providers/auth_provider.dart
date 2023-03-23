@@ -20,7 +20,8 @@ class Authentication {
       this.expirationDate});
 
   bool get isAuth {
-    return accessToken != null && expirationDate!.isAfter(DateTime.now());
+    // TODO revert
+    return accessToken != null; //&& expirationDate!.isAfter(DateTime.now());
   }
 
   Authentication copyWith({

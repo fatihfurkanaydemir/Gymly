@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymly/pages/profile_page/profile_page.dart';
 import 'package:gymly/providers/auth_provider.dart';
+import '../constants/colors.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   static const routeName = '/';
@@ -15,34 +17,29 @@ class HomePage extends ConsumerStatefulWidget {
 class HomePageState extends ConsumerState<HomePage> {
   int _selectedIndex = 0;
 
+  final List<Widget> _pages = <Widget>[
+    const Text(
+      'Home',
+      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    ),
+    const Text(
+      'Chat',
+      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    ),
+    const Text(
+      'Workout',
+      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    ),
+    const ProfilePage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authProvider);
 
-    const TextStyle optionStyle =
-        TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-    const List<Widget> _widgetOptions = <Widget>[
-      Text(
-        'Home',
-        style: optionStyle,
-      ),
-      Text(
-        'Chat',
-        style: optionStyle,
-      ),
-      Text(
-        'Workout',
-        style: optionStyle,
-      ),
-      Text(
-        'Profile',
-        style: optionStyle,
-      ),
-    ];
-
     return Scaffold(
       body: Center(
-        child: _widgetOptions[_selectedIndex],
+        child: _pages[_selectedIndex],
       ),
       /*Center(
         child: Column(
@@ -63,34 +60,71 @@ class HomePageState extends ConsumerState<HomePage> {
         ),
       ),*/
       bottomNavigationBar: BottomNavigationBar(
-        // backgroundColor: Color(0xFF18122B),
         currentIndex: _selectedIndex,
         iconSize: 30,
         showUnselectedLabels: false,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              backgroundColor: Color(0xFF18122B),
-              icon: Icon(_selectedIndex == 0 ? Icons.home : Icons.home_outlined,
-                  weight: 100),
-              label: "-----"),
+              backgroundColor: primaryDarkColor,
+              icon: Column(children: [
+                const Icon(Icons.home_rounded),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  margin: const EdgeInsets.only(top: 2),
+                  width: _selectedIndex == 0 ? 24 : 0,
+                  height: 4,
+                  decoration: const BoxDecoration(
+                      color: Color(0xFF81B4FF),
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                ),
+              ]),
+              label: ""),
           BottomNavigationBarItem(
-              backgroundColor: Color(0xFF18122B),
-              icon: Icon(_selectedIndex == 1
-                  ? Icons.chat_bubble
-                  : Icons.chat_bubble_outline_outlined),
-              label: "-----"),
+              backgroundColor: primaryDarkColor,
+              icon: Column(children: [
+                const Icon(Icons.chat_bubble_rounded),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  margin: const EdgeInsets.only(top: 2),
+                  width: _selectedIndex == 1 ? 24 : 0,
+                  height: 4,
+                  decoration: const BoxDecoration(
+                      color: Color(0xFF81B4FF),
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                ),
+              ]),
+              label: ""),
           BottomNavigationBarItem(
-              backgroundColor: Color(0xFF18122B),
-              icon: Icon(_selectedIndex == 2
-                  ? Icons.fitness_center
-                  : Icons.fitness_center_outlined),
-              label: "-----"),
+              backgroundColor: primaryDarkColor,
+              icon: Column(children: [
+                const Icon(Icons.fitness_center_rounded),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  margin: const EdgeInsets.only(top: 2),
+                  width: _selectedIndex == 2 ? 24 : 0,
+                  height: 4,
+                  decoration: const BoxDecoration(
+                      color: Color(0xFF81B4FF),
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                ),
+              ]),
+              label: ""),
           BottomNavigationBarItem(
-              backgroundColor: Color(0xFF18122B),
-              icon: Icon(_selectedIndex == 3
-                  ? Icons.person
-                  : Icons.person_outline_outlined),
-              label: "-----"),
+            backgroundColor: primaryDarkColor,
+            icon: Column(children: [
+              const Icon(Icons.person_rounded),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                margin: const EdgeInsets.only(top: 2),
+                width: _selectedIndex == 3 ? 24 : 0,
+                height: 4,
+                decoration: const BoxDecoration(
+                    color: Color(0xFF81B4FF),
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+              ),
+            ]),
+            label: "",
+          ),
         ],
         onTap: (int index) {
           setState(() {
