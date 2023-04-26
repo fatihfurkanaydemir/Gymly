@@ -8,6 +8,7 @@ using Common.Parameters;
 using MassTransit;
 using Common.Contracts.Entities;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 public class UserController : BaseApiController
 {
@@ -19,23 +20,31 @@ public class UserController : BaseApiController
 
   // POST api/<controller>
   [HttpPost]
-  public async Task<IActionResult> Create(CreateUserCommand command)
+  [Authorize]
+  public async Task<IActionResult> Create()
   {
-    var succeededRules = await ExecuteRulesAllAsync("User", command);
+    return Ok(await Mediator.Send(new CreateUserCommand { SubjectId = User.FindFirstValue(ClaimTypes.NameIdentifier) }));
+  }
 
-    return Ok(await Mediator.Send(command));
+  // POST api/<controller>
+  [HttpPost("SwitchToTrainerAccountType")]
+  [Authorize]
+  public async Task<IActionResult> SwitchToTrainerAccountType()
+  {
+    return Ok(await Mediator.Send(new SwitchToTrainerAccountTypeCommand { SubjectId = User.FindFirstValue(ClaimTypes.NameIdentifier) }));
   }
 
   // GET: api/<controller>
   [HttpGet]
-  public async Task<IActionResult> Get([FromQuery] RequestParameter filter)
+  [Authorize]
+  public async Task<IActionResult> Get()
   {
-    return Ok(await Mediator.Send(new GetAllUsersQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
+    return Ok(await Mediator.Send(new GetUserQuery() { SubjectId = User.FindFirstValue(ClaimTypes.NameIdentifier) }));
   }
 
   // GET: api/<controller>/TestGetEntityData/{id}
   [HttpGet("/api/TestGetEntityData/{id}")]
-  [Authorize(Policy = "IsAdmin")]
+  //[Authorize(Policy = "IsAdmin")]
   public async Task<IActionResult> TestGetEntityData(int id)
   {
     return Ok(await _client.GetResponse<GetEntityDataResult>(new { Id = id }));

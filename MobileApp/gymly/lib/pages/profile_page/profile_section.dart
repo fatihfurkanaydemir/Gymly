@@ -18,7 +18,7 @@ class ProfileSection extends StatelessWidget {
     return ClipRRect(
       child: Container(
         width: double.infinity,
-        color: const Color(0xFF252735),
+        color: Colors.black,
         child: Padding(
           padding: const EdgeInsets.only(top: 30) +
               const EdgeInsets.symmetric(

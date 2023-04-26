@@ -13,4 +13,15 @@ public class UserRepositoryAsync: GenericRepositoryAsync<User>, IUserRepositoryA
   {
     _Users = dbContext.Users;
   }
+
+  public async Task<User?> GetBySubjectIdAsync(String subjectId)
+  {
+    return await
+      _Users
+      .Where(x => x.SubjectId == subjectId)
+      .Include(x => x.UserWorkoutPrograms)
+      .Include(x => x.TrainerWorkoutPrograms)
+      .AsNoTracking()
+      .FirstOrDefaultAsync();
+  }
 }

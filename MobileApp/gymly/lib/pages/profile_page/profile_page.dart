@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymly/constants/colors.dart';
 import 'package:gymly/pages/profile_page/profile_section.dart';
 import 'package:gymly/pages/profile_page/profile_tabs.dart';
+import 'package:gymly/providers/user_provider.dart';
 
 import '../../providers/auth_provider.dart';
 
@@ -17,27 +19,26 @@ class ProfilePage extends ConsumerWidget {
         child: SafeArea(
           child: CustomScrollView(slivers: [
             SliverAppBar(
-              backgroundColor: Color(0xFF252735),
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.settings),
+                  splashColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                )
+              ],
+              backgroundColor: Colors.black,
               pinned: true,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Gymly'),
-                  GestureDetector(
-                    child: Icon(
-                      Icons.settings,
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      size: 28,
-                    ),
-                    onTap: () {},
-                  ),
-                ],
+              title: Text(
+                'Gymly',
+                style: TextStyle(color: textColorWhite),
               ),
             ),
             SliverAppBar(
               expandedHeight: 240,
-              backgroundColor: Colors.white,
               flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.pin,
                 background: ProfileSection(
                   userName: auth.user?.name ?? '-',
                   userEmail: auth.user?.email ?? '-',
@@ -45,7 +46,7 @@ class ProfilePage extends ConsumerWidget {
                 ),
               ),
             ),
-            const SliverAppBar(
+            SliverAppBar(
               pinned: true,
               // expandedHeight: 20,
               backgroundColor: Colors.white,
@@ -62,15 +63,25 @@ class ProfilePage extends ConsumerWidget {
                           Text(auth.user!.name),
                           Text(auth.user!.email),
                           Text(auth.accessToken!),
-                          ElevatedButton(
+                          OutlinedButton(
                             onPressed: () {
                               ref.read(authProvider.notifier).logout();
                             },
                             child: const Text("Logout"),
+                          ),
+                          OutlinedButton(
+                            onPressed: () {
+                              ref.read(userProvider).getUser().then((value) {
+                                // print(
+                                //     "LOG: ${value.dateOfBirth.toIso8601String()}");
+                                // print("LOG: ${value.gender}");
+                              });
+                            },
+                            child: const Text("GetData"),
                           )
                         ],
                       ),
-                      Text("asd2"),
+                      Center(child: Text("asd2")),
                     ])))
           ]),
         ));

@@ -1,9 +1,15 @@
-﻿namespace UsersService.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-using Common.Entities;
+namespace UsersService.Domain.Entities;
 
-public class User : AuditableBaseEntity
+public class User : BaseUser
 {
-  public string FirstName { get; set; }
-  public int Age { get; set; }
+  public List<UserWorkoutProgram> UserWorkoutPrograms { get; set; } = new List<UserWorkoutProgram>();
+  public string Diet { get; set; } = default!;
+  // IF SWITCHED TO TRAINER ACCOUNT
+  public List<TrainerWorkoutProgram> TrainerWorkoutPrograms { get; set; } = new List<TrainerWorkoutProgram>();
 }

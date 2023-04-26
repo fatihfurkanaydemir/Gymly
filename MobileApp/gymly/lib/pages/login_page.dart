@@ -1,11 +1,16 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymly/constants/colors.dart';
+import 'package:gymly/pages/home_page.dart';
 import 'package:gymly/providers/auth_provider.dart';
 import 'package:video_player/video_player.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   static const routeName = '/LoginPage';
+
+  final isLoading;
+  LoginPage({this.isLoading = false, super.key});
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -66,7 +71,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
           ),
           Column(children: <Widget>[
-            const Spacer(flex: 8),
+            const Spacer(flex: 10),
             Row(children: [
               Flexible(
                 flex: 1,
@@ -75,24 +80,76 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromRGBO(43, 45, 66, 1),
+                        backgroundColor: primaryDarkColor,
                         minimumSize: const Size.fromHeight(55),
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(20)))),
-                    child: const Text('LOGIN OR SIGNUP',
-                        style: TextStyle(
-                            color: Color(0xFFD5D5D5),
-                            letterSpacing: 3,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700)),
-                    onPressed: () {
-                      ref.read(authProvider.notifier).login();
-                    },
+                                BorderRadius.all(Radius.circular(20))),
+                        disabledBackgroundColor: primaryDarkColor),
+                    onPressed: widget.isLoading
+                        ? null
+                        : () {
+                            ref.read(authProvider.notifier).login();
+                          },
+                    child: widget.isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Text('GİRİŞ YAP VEYA KAYIT OL',
+                            style: TextStyle(
+                                color: textColorWhite,
+                                letterSpacing: 2,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700)),
                   ),
                 ),
               ),
             ]),
+            GestureDetector(
+              child: Container(
+                margin: const EdgeInsets.only(top: 20),
+                child: Text(
+                  "Antrenör müsünüz?",
+                  style: TextStyle(color: textColorWhite, fontSize: 15),
+                ),
+              ),
+              onTap: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 12),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            width: 50,
+                            height: 10,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(20)),
+                                color: textColorGrey2),
+                          ),
+                          const Spacer(flex: 1),
+                          const Text('[AYARLAR ANTRENÖRLÜK]'),
+                          const Spacer(flex: 1),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  child: const Text('ANLADIM'),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
             const Spacer(flex: 1),
           ])
         ],

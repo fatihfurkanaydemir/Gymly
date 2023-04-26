@@ -18,54 +18,25 @@ class HomePageState extends ConsumerState<HomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = <Widget>[
-    const Text(
-      'Home',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-    ),
-    const Text(
-      'Chat',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-    ),
-    const Text(
-      'Workout',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-    ),
+    const CircularProgressIndicator(),
+    const CircularProgressIndicator(),
+    const CircularProgressIndicator(),
     const ProfilePage(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    final auth = ref.watch(authProvider);
-
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Center(
         child: _pages[_selectedIndex],
       ),
-      /*Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Text(auth.user!.sub),
-            // Text(auth.user!.name),
-            // Text(auth.user!.email),
-            // Text(auth.accessToken!),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     ref.read(authProvider.notifier).logout();
-            //   },
-            //   child: const Text("Logout"),
-            // )
-          ],
-        ),
-      ),*/
+      appBar: _selectedIndex == 3 ? null : AppBar(title: const Text("Gymly")),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         iconSize: 30,
-        showUnselectedLabels: false,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              backgroundColor: primaryDarkColor,
               icon: Column(children: [
                 const Icon(Icons.home_rounded),
                 AnimatedContainer(
@@ -74,13 +45,12 @@ class HomePageState extends ConsumerState<HomePage> {
                   width: _selectedIndex == 0 ? 24 : 0,
                   height: 4,
                   decoration: const BoxDecoration(
-                      color: Color(0xFF81B4FF),
+                      color: Colors.cyanAccent,
                       borderRadius: BorderRadius.all(Radius.circular(12))),
                 ),
               ]),
               label: ""),
           BottomNavigationBarItem(
-              backgroundColor: primaryDarkColor,
               icon: Column(children: [
                 const Icon(Icons.chat_bubble_rounded),
                 AnimatedContainer(
@@ -89,13 +59,12 @@ class HomePageState extends ConsumerState<HomePage> {
                   width: _selectedIndex == 1 ? 24 : 0,
                   height: 4,
                   decoration: const BoxDecoration(
-                      color: Color(0xFF81B4FF),
+                      color: Colors.cyanAccent,
                       borderRadius: BorderRadius.all(Radius.circular(12))),
                 ),
               ]),
               label: ""),
           BottomNavigationBarItem(
-              backgroundColor: primaryDarkColor,
               icon: Column(children: [
                 const Icon(Icons.fitness_center_rounded),
                 AnimatedContainer(
@@ -104,13 +73,12 @@ class HomePageState extends ConsumerState<HomePage> {
                   width: _selectedIndex == 2 ? 24 : 0,
                   height: 4,
                   decoration: const BoxDecoration(
-                      color: Color(0xFF81B4FF),
+                      color: Colors.cyanAccent,
                       borderRadius: BorderRadius.all(Radius.circular(12))),
                 ),
               ]),
               label: ""),
           BottomNavigationBarItem(
-            backgroundColor: primaryDarkColor,
             icon: Column(children: [
               const Icon(Icons.person_rounded),
               AnimatedContainer(
@@ -119,7 +87,7 @@ class HomePageState extends ConsumerState<HomePage> {
                 width: _selectedIndex == 3 ? 24 : 0,
                 height: 4,
                 decoration: const BoxDecoration(
-                    color: Color(0xFF81B4FF),
+                    color: Colors.cyanAccent,
                     borderRadius: BorderRadius.all(Radius.circular(12))),
               ),
             ]),

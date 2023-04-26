@@ -1,17 +1,32 @@
 ﻿[
   {
-    "FirstName": "User 1"
+    "SubjectId": "sadsadsad",
+    "Weight": 80.0,
+    "Height": 176.0,
+    "Gender": "Male",
+    "DateOfBirth": "2001-04-05",
+    "WorkoutPrograms": [
+      {
+        "Title": "prog 1",
+        "Description": "prog 1 description",
+        "Content": "d1, d2, d3"
+      }
+    ],
+    "Diet": "Example diet"
   },
   {
-    "FirstName": "User 2"
-  },
-  {
-    "FirstName": "User 3"
-  },
-  {
-    "FirstName": "User 4"
-  },
-  {
-    "FirstName": "User 5"
+    "SubjectId": "asdasdasddsa",
+    "Weight": 76.0,
+    "Height": 168.0,
+    "Gender": "Male",
+    "DateOfBirth": "1992-01-04",
+    "WorkoutPrograms": [
+      {
+        "Title": "prog 1",
+        "Description": "prog 1 description",
+        "Content": "d1, d2, d3"
+      }
+    ],
+    "Diet": "Example diet"
   },
 ]

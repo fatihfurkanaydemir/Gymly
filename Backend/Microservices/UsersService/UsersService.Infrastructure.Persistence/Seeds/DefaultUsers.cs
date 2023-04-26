@@ -17,7 +17,7 @@ public class DefaultUsers
     var _item1 = deserializedMockData[0];
 
     var itemList = await categoryRepository.GetAllAsync();
-    var _itemCount = itemList.Where(i => i.FirstName.StartsWith(_item1.FirstName)).Count();
+    var _itemCount = itemList.Where(i => i.SubjectId.Equals(_item1.SubjectId)).Count();
 
     if (_itemCount > 0) // ALREADY SEEDED
       return true;
