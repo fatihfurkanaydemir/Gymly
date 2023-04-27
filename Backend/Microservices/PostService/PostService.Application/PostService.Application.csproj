@@ -11,6 +11,7 @@
 	<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 	<PackageReference Include="DataAnnotationsExtensions" Version="5.0.1.27" />
 	<PackageReference Include="Mapster" Version="7.3.0" />
+	<PackageReference Include="MassTransit" Version="8.0.7" />
 	<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
 	<PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
 	<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
@@ -22,7 +23,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Common.csproj" />
-    <ProjectReference Include="..\UsersService.Domain\UsersService.Domain.csproj" />
+    <ProjectReference Include="..\PostService.Domain\PostService.Domain.csproj" />
   </ItemGroup>
 
 </Project>

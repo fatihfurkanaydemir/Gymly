@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymly/pages/posts_page.dart';
 import 'package:gymly/pages/profile_page/profile_page.dart';
+import 'package:gymly/pages/welcome_page.dart';
 import 'package:gymly/providers/auth_provider.dart';
 import '../constants/colors.dart';
 
@@ -18,7 +20,7 @@ class HomePageState extends ConsumerState<HomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = <Widget>[
-    const CircularProgressIndicator(),
+    const PostsPage(),
     const CircularProgressIndicator(),
     const CircularProgressIndicator(),
     const ProfilePage(),

@@ -1,11 +1,11 @@
-using UsersService.Application;
+using PostService.Application;
 using Common.Middlewares;
 using Microsoft.AspNetCore.Http.Features;
-using UsersService.API.Extensions;
-using UsersService.Infrastructure.Persistence;
-using UsersService.Application.Interfaces.Repositories;
-using UsersService.Infrastructure.Persistence.Seeds;
+using PostService.API.Extensions;
+using PostService.Infrastructure.Persistence;
 using MassTransit;
+using PostService.Infrastructure.Persistence.Settings;
+using PostService.Application.Helpers;
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
 
@@ -23,10 +23,13 @@ builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
   };
 });
 
+builder.Services.Configure<MongoDbSettings>(config.GetSection("MongoDbSettings"));
+builder.Services.AddTransient<IUserAccessor, UserAccessor>();
+
 builder.Services.AddApplicationLayer(config);
 builder.Services.AddPersistenceInfrastructure(config);
 builder.Services.AddSwaggerExtension();
-builder.Services.AddRulesEngineExtension();
+
 
 builder.Services.AddCors(options =>
 {
@@ -45,28 +48,7 @@ builder.Services.Configure<FormOptions>(o =>
 });
 
 builder.Services.AddHealthChecks();
-
-builder.Services.AddMassTransit(o =>
-{
-  o.UsingRabbitMq((context, cfg) =>
-  {
-    cfg.Host("rabbitmq", "/", h =>
-    {
-      h.Username("admin");
-      h.Password("admin");
-    });
-
-    cfg.UseNewtonsoftJsonSerializer();
-    cfg.ConfigureEndpoints(context);
-  });
-});
-
-builder.Services.AddOptions<MassTransitHostOptions>().Configure(options =>
-{
-  options.WaitUntilStarted = true;
-  options.StartTimeout = TimeSpan.FromSeconds(10);
-  options.StopTimeout = TimeSpan.FromSeconds(30);
-});
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddKeycloakAuthentication(config);
 builder.Services.AddAuthorization(o =>
@@ -80,22 +62,22 @@ builder.Services.AddKeycloakAuthorization(config);
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-  var services = scope.ServiceProvider;
+//using (var scope = app.Services.CreateScope())
+//{
+//  var services = scope.ServiceProvider;
 
-  try
-  {
-    var userRepository = services.GetRequiredService<IUserRepositoryAsync>();
+//  try
+//  {
+//    var entityRepository = services.GetRequiredService<IEntityRepositoryAsync>();
 
-    await DefaultUsers.SeedAsync(userRepository);
+//    await DefaultEntities.SeedAsync(entityRepository);
 
-  }
-  catch (Exception ex)
-  {
-    Console.Error.WriteLine(ex);
-  }
-}
+//  }
+//  catch (Exception ex)
+//  {
+//    Console.Error.WriteLine(ex);
+//  }
+//}
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
 

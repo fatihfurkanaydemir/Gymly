@@ -22,6 +22,8 @@ services:
       - backend
     extra_hosts:
       - "192.168.137.1:192.168.137.1"
+    depends_on:
+      - rabbitmq
 
   otherservice.api:
     image: ${DOCKER_REGISTRY-}otherserviceapi
@@ -30,6 +32,8 @@ services:
       dockerfile: Microservices/OtherService/OtherService.API/Dockerfile
     networks:
       - backend
+    depends_on:
+      - rabbitmq
 
   authservice.api:
     image: ${DOCKER_REGISTRY-}authserviceapi
@@ -38,6 +42,22 @@ services:
       dockerfile: Microservices/AuthService/AuthService.API/Dockerfile
     networks:
       - backend
+    depends_on:
+      - rabbitmq
+
+  postservice.api:
+    image: ${DOCKER_REGISTRY-}postserviceapi
+    build:
+      context: .
+      dockerfile: Microservices/PostService/PostService.API/Dockerfile
+    volumes:
+      - ./gymly_cert.pem:/etc/ssl/certs/server-certificate.pem 
+    networks:
+      - backend
+    extra_hosts:
+      - "192.168.137.1:192.168.137.1"
+    depends_on:
+      - rabbitmq
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -85,6 +105,22 @@ services:
       - backend
     restart: unless-stopped
 
+  mongodb:
+    image: mongo:4.2.3-bionic
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=gymly
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    volumes:
+      - ./mongo-entrypoint:/docker-entrypoint-initdb.d
+      - mongodb:/data/db
+      - mongoconfig:/data/configdb
+    networks:
+      - backend
+
 networks: 
   backend:
     driver: bridge
@@ -93,5 +129,8 @@ networks:
 volumes:
   pgadmin:
   postgres:
+  mongodb:
+  mongoconfig:
+
 
 

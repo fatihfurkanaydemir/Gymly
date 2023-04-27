@@ -37,6 +37,6 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Respo
 
     await _userRepository.AddAsync(user);
 
-    return new Response<string>(user.Id.ToString(), "User created");
+    return new Response<string>(user.Id.ToString(), "USER_CREATED");
   }
 }

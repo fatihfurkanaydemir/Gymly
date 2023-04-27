@@ -27,6 +27,19 @@
       "SwaggerKey": "otherservice"
     },
     {
+      "UpstreamPathTemplate": "/PostService/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Update", "Delete" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "postservice.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/{everything}",
+      "SwaggerKey": "postservice"
+    },
+    {
       "UpstreamPathTemplate": "/AuthService/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Update", "Delete" ],
       "DownstreamScheme": "http",
@@ -58,6 +71,16 @@
           "Name": "Other Service",
           "Version": "v1",
           "Url": "http://otherservice.api/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "postservice",
+      "Config": [
+        {
+          "Name": "Post Service",
+          "Version": "v1",
+          "Url": "http://postservice.api/swagger/v1/swagger.json"
         }
       ]
     },

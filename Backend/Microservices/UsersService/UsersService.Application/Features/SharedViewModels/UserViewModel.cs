@@ -9,7 +9,8 @@ public class UserViewModel
   public double Weight { get; set; } = default!;
   public double Height { get; set; } = default!;
   public string Gender { get; set; } = default!;
-  public List<UserWorkoutProgram> WorkoutPrograms { get; set; } = default!;
+  public List<UserWorkoutProgram> UserWorkoutPrograms { get; set; } = default!;
+  public List<UserWorkoutProgram> TrainerWorkoutPrograms { get; set; } = default!;
   public string Diet { get; set; } = default!;
   public UserType Type { get; set; } = default!;
 }

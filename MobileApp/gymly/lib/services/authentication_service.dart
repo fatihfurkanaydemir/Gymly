@@ -72,4 +72,21 @@ class AuthenticationService {
       rethrow;
     }
   }
+
+  static Future<bool> checkUserCreated(TokenResponse response) async {
+    try {
+      final http.Response httpResponse = await http.post(
+          Uri.parse("${dotenv.env['USER_SERVICE_URL']!}/User"),
+          headers: <String, String>{
+            'Authorization': 'Bearer ${response.accessToken}',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          });
+
+      final data = json.decode(httpResponse.body) as Map<String, dynamic>;
+      print("LOG: ${httpResponse.body}");
+      return data["message"] as String == "USER_CREATED";
+    } catch (_) {
+      rethrow;
+    }
+  }
 }

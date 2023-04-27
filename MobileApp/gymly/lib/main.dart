@@ -3,6 +3,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gymly/constants/colors.dart';
+import 'package:gymly/pages/body_measurements_page.dart';
+import 'package:gymly/pages/unknown_route_page.dart';
+import 'package:gymly/pages/welcome_page.dart';
 import 'package:gymly/providers/auth_provider.dart';
 import 'package:gymly/providers/storage_provider.dart';
 import './pages/login_page.dart';
@@ -40,6 +43,7 @@ class MyApp extends ConsumerWidget {
     final FlutterSecureStorage storage = ref.read(storageProvider);
     final auth = ref.read(authProvider.notifier);
     final isAuth = ref.watch(authProvider).isAuth;
+    final isFirstLogin = ref.watch(authProvider).isFirstLogin;
 
     checkAuth() async {
       if (isAuth) return true;
@@ -107,7 +111,11 @@ class MyApp extends ConsumerWidget {
           if (snapshot.hasData) {
             final authState = snapshot.data!;
             if (!authState) return LoginPage();
-            return const HomePage();
+            if (isFirstLogin != null && isFirstLogin) {
+              return const WelcomePage();
+            } else {
+              return const HomePage();
+            }
           } else if (snapshot.hasError) {
             return LoginPage();
           }
@@ -122,11 +130,18 @@ class MyApp extends ConsumerWidget {
           case HomePage.routeName:
             return MaterialPageRoute(
                 builder: (ctx) => const HomePage(), settings: settings);
+          case WelcomePage.routeName:
+            return MaterialPageRoute(
+                builder: (ctx) => const WelcomePage(), settings: settings);
+          case BodyMeasurementsPage.routeName:
+            return MaterialPageRoute(
+                builder: (ctx) => const BodyMeasurementsPage(),
+                settings: settings);
         }
         return null;
       },
       onUnknownRoute: (settings) {
-        return MaterialPageRoute(builder: (ctx) => const HomePage());
+        return MaterialPageRoute(builder: (ctx) => const UnknownRoutePage());
       },
     );
   }

@@ -1,4 +1,4 @@
-enum UserType { regular, trainer }
+enum UserType { normal, trainer }
 
 class AppUser {
   final double weight;

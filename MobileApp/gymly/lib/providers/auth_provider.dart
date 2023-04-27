@@ -9,6 +9,7 @@ import 'package:gymly/services/authentication_service.dart';
 @immutable
 class Authentication {
   final AuthUser? user;
+  final bool? isFirstLogin;
   final String? accessToken;
   final String? refreshToken;
   final String? idToken;
@@ -22,6 +23,7 @@ class Authentication {
     this.idToken,
     this.accessTokenExprDateTime,
     this.refreshTokenExprDateTime,
+    this.isFirstLogin,
   });
 
   bool get isAuth {
@@ -30,14 +32,14 @@ class Authentication {
         refreshTokenExprDateTime!.isAfter(DateTime.now());
   }
 
-  Authentication copyWith({
-    AuthUser? user,
-    String? accessToken,
-    String? refreshToken,
-    String? idToken,
-    DateTime? accessTokenExprDateTime,
-    DateTime? refreshTokenExprDateTime,
-  }) {
+  Authentication copyWith(
+      {AuthUser? user,
+      String? accessToken,
+      String? refreshToken,
+      String? idToken,
+      DateTime? accessTokenExprDateTime,
+      DateTime? refreshTokenExprDateTime,
+      bool? isFirstLogin}) {
     return Authentication(
       user: user ?? this.user,
       accessToken: accessToken ?? this.accessToken,
@@ -47,6 +49,7 @@ class Authentication {
           accessTokenExprDateTime ?? this.accessTokenExprDateTime,
       refreshTokenExprDateTime:
           refreshTokenExprDateTime ?? this.refreshTokenExprDateTime,
+      isFirstLogin: isFirstLogin ?? this.isFirstLogin,
     );
   }
 }
@@ -59,6 +62,9 @@ class AuthenticationNotifier extends StateNotifier<Authentication> {
     try {
       TokenResponse? response = await AuthenticationService.login();
       if (response != null) {
+        final isFirstLogin =
+            await AuthenticationService.checkUserCreated(response);
+
         AuthUser user = await AuthenticationService.getUserInfo(response);
         DateTime refreshExpiresDateTime = DateTime.fromMillisecondsSinceEpoch(
             DateTime.now().millisecondsSinceEpoch +
@@ -73,6 +79,7 @@ class AuthenticationNotifier extends StateNotifier<Authentication> {
           idToken: response.idToken,
           accessTokenExprDateTime: response.accessTokenExpirationDateTime,
           refreshTokenExprDateTime: refreshExpiresDateTime,
+          isFirstLogin: isFirstLogin,
         );
 
         await _storage.write(key: "refreshToken", value: response.refreshToken);
@@ -85,6 +92,10 @@ class AuthenticationNotifier extends StateNotifier<Authentication> {
     } catch (_) {
       rethrow;
     }
+  }
+
+  void cancelFirstLogin() {
+    state = state.copyWith(isFirstLogin: false);
   }
 
   Future<void> logout() async {

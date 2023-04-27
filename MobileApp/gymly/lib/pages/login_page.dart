@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/constants/colors.dart';
 import 'package:gymly/pages/home_page.dart';
 import 'package:gymly/providers/auth_provider.dart';
+import 'package:gymly/providers/user_provider.dart';
 import 'package:video_player/video_player.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -88,14 +89,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         disabledBackgroundColor: primaryDarkColor),
                     onPressed: widget.isLoading
                         ? null
-                        : () {
-                            ref.read(authProvider.notifier).login();
+                        : () async {
+                            final loginSuccess =
+                                await ref.read(authProvider.notifier).login();
                           },
                     child: widget.isLoading
                         ? const Center(
                             child: CircularProgressIndicator(),
                           )
-                        : Text('GİRİŞ YAP VEYA KAYIT OL',
+                        : Text('LOGIN OR SIGNUP',
                             style: TextStyle(
                                 color: textColorWhite,
                                 letterSpacing: 2,
@@ -109,7 +111,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               child: Container(
                 margin: const EdgeInsets.only(top: 20),
                 child: Text(
-                  "Antrenör müsünüz?",
+                  "Are you a trainer?",
                   style: TextStyle(color: textColorWhite, fontSize: 15),
                 ),
               ),
@@ -137,7 +139,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             children: [
                               Expanded(
                                 child: ElevatedButton(
-                                  child: const Text('ANLADIM'),
+                                  child: const Text('OKAY'),
                                   onPressed: () => Navigator.pop(context),
                                 ),
                               ),
