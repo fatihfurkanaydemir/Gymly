@@ -6,7 +6,7 @@ import 'package:gymly/services/post_service.dart';
 import '../models/post.dart';
 
 class PostState {
-  static const int pageSize = 20;
+  static const int pageSize = 5;
 
   final List<Post>? posts;
   final bool? isFirstFetch;

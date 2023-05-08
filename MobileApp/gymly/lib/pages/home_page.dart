@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymly/pages/posts_page.dart';
+import 'package:gymly/pages/posts_page/posts_page.dart';
 import 'package:gymly/pages/profile_page/profile_page.dart';
 import 'package:gymly/pages/welcome_page.dart';
 import 'package:gymly/providers/auth_provider.dart';

@@ -10,8 +10,7 @@ import 'package:video_player/video_player.dart';
 class LoginPage extends ConsumerStatefulWidget {
   static const routeName = '/LoginPage';
 
-  final isLoading;
-  LoginPage({this.isLoading = false, super.key});
+  LoginPage({super.key});
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -20,6 +19,7 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   final VideoPlayerController _videoController =
       VideoPlayerController.asset('assets/videos/login_background.mp4');
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -87,13 +87,22 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         disabledBackgroundColor: primaryDarkColor),
-                    onPressed: widget.isLoading
+                    onPressed: isLoading
                         ? null
                         : () async {
+                            setState(() {
+                              isLoading = true;
+                            });
                             final loginSuccess =
                                 await ref.read(authProvider.notifier).login();
+
+                            if (!loginSuccess) {
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
                           },
-                    child: widget.isLoading
+                    child: isLoading
                         ? const Center(
                             child: CircularProgressIndicator(),
                           )

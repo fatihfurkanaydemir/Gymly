@@ -119,7 +119,7 @@ class MyApp extends ConsumerWidget {
           } else if (snapshot.hasError) {
             return LoginPage();
           }
-          return LoginPage(isLoading: true);
+          return LoginPage();
         },
       ),
       onGenerateRoute: (settings) {

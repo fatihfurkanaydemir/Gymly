@@ -14,18 +14,30 @@ public class Post
   [BsonRepresentation(BsonType.ObjectId)]
   public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
 
-  [BsonElement("Date")]
+  [BsonElement("CreateDate")]
   public DateTime CreateDate { get; set; } = DateTime.UtcNow;
 
   [BsonElement("SubjectId")]
   public string SubjectId { get; set; }
 
-  [BsonElement("ImageUrl")]
-  public string ImageUrl { get; set; }
+  [BsonElement("ImageUrls")]
+  public List<string> ImageUrls { get; set; }
 
   [BsonElement("Content")]
   public string Content { get; set; }
 
-  [BsonElement("LikeCount")]
-  public int LikeCount { get; set; }
+  [BsonElement("AmazedCount")]
+  public int AmazedCount { get; set; }
+
+  [BsonElement("CelebrationCount")]
+  public int CelebrationCount { get; set; }
+
+  [BsonElement("ReachedTargetCount")]
+  public int ReachedTargetCount { get; set; }
+
+  [BsonElement("FlameCount")]
+  public int FlameCount { get; set; }
+
+  [BsonElement("LostMindCount")]
+  public int LostMindCount { get; set; }
 }

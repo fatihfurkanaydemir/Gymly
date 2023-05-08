@@ -11,9 +11,8 @@ namespace PostService.Application.Features.Posts.Commands;
 
 public class CreatePostCommand : IRequest<Response<string>>
 {
-  public string ImageUrl { get; set; }
+  public List<string> ImageUrls { get; set; }
   public string Content { get; set; }
-  public int LikeCount { get; set; }
 }
 
 public class CreateUserCommandHandler : IRequestHandler<CreatePostCommand, Response<string>>

@@ -32,7 +32,6 @@ class PostService {
           "${serviceUrl!}/Post?pageNumber=$pageNumber&pageSize=$pageSize"));
       final data = json.decode(response.body) as Map<String, dynamic>;
       final postData = data["data"] as List<dynamic>;
-      print("LOG: ${response.body}");
       List<Post> posts = [];
 
       for (dynamic post in postData) {

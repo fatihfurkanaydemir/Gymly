@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymly/pages/posts_page/post_card.dart';
 import 'package:gymly/pages/unknown_route_page.dart';
 import 'package:gymly/providers/post_provider.dart';
 
-import '../models/post.dart';
+import '../../models/post.dart';
 
 class PostsPage extends ConsumerStatefulWidget {
   static const routeName = "/PostsPage";
@@ -62,15 +63,11 @@ class PostsPageState extends ConsumerState<PostsPage> {
         await ref.read(postProvider.notifier).refreshPosts();
       },
       child: ListView.builder(
+        cacheExtent: 5000,
         controller: controller,
         itemBuilder: (ctx, index) {
           if (index < posts.length) {
-            return Container(
-              child: Text(posts[index].subjectId),
-              height: 100,
-              margin: const EdgeInsets.only(bottom: 5),
-              color: Colors.grey,
-            );
+            return PostCard(post: posts[index]);
           } else {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 32),
