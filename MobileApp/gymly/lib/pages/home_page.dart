@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/pages/posts_page/posts_page.dart';
 import 'package:gymly/pages/profile_page/profile_page.dart';
+import 'package:gymly/pages/add_post_page.dart';
 import 'package:gymly/pages/welcome_page.dart';
 import 'package:gymly/providers/auth_provider.dart';
 import '../constants/colors.dart';
@@ -26,6 +27,24 @@ class HomePageState extends ConsumerState<HomePage> {
     const ProfilePage(),
   ];
 
+  PreferredSizeWidget? buildAppBar(context) {
+    if (_selectedIndex == 3) {
+      return null;
+    } else {
+      return AppBar(
+        title: const Text("Gymly"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(AddPostPage.routeName);
+            },
+            icon: const Icon(Icons.add),
+          )
+        ],
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +52,7 @@ class HomePageState extends ConsumerState<HomePage> {
       body: Center(
         child: _pages[_selectedIndex],
       ),
-      appBar: _selectedIndex == 3 ? null : AppBar(title: const Text("Gymly")),
+      appBar: buildAppBar(context),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         iconSize: 30,

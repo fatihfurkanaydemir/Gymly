@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gymly/constants/colors.dart';
+import 'package:gymly/pages/add_post_page.dart';
 import 'package:gymly/pages/body_measurements_page.dart';
 import 'package:gymly/pages/unknown_route_page.dart';
 import 'package:gymly/pages/welcome_page.dart';
@@ -133,6 +134,9 @@ class MyApp extends ConsumerWidget {
           case WelcomePage.routeName:
             return MaterialPageRoute(
                 builder: (ctx) => const WelcomePage(), settings: settings);
+          case AddPostPage.routeName:
+            return MaterialPageRoute(
+                builder: (ctx) => const AddPostPage(), settings: settings);
           case BodyMeasurementsPage.routeName:
             return MaterialPageRoute(
                 builder: (ctx) => const BodyMeasurementsPage(),
