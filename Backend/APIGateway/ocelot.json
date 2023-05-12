@@ -51,6 +51,19 @@
       ],
       "DownstreamPathTemplate": "/{everything}",
       "SwaggerKey": "authservice"
+    },
+    {
+      "UpstreamPathTemplate": "/ResourceService/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Update", "Delete" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "resourceservice.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/{everything}",
+      "SwaggerKey": "resourceservice"
     }
   ],
   "SwaggerEndPoints": [
@@ -91,6 +104,16 @@
           "Name": "Auth Service",
           "Version": "v1",
           "Url": "http://authservice.api/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "resourceservice",
+      "Config": [
+        {
+          "Name": "Resource Service",
+          "Version": "v1",
+          "Url": "http://resourceservice.api/swagger/v1/swagger.json"
         }
       ]
     }

@@ -12,7 +12,10 @@
         "apigateway": "StartDebugging",
         "authservice.api": "StartWithoutDebugging",
         "pgadmin": "StartWithoutDebugging",
-        "postgres": "StartWithoutDebugging"
+        "postgres": "StartWithoutDebugging",
+        "mongodb": "StartWithoutDebugging",
+        "postservice.api": "StartWithoutDebugging",
+        "resourceservice.api": "StartWithoutDebugging"
       }
     }
   }

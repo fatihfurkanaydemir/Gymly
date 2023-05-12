@@ -59,6 +59,20 @@ services:
     depends_on:
       - rabbitmq
 
+  resourceservice.api:
+    image: ${DOCKER_REGISTRY-}resourceserviceapi
+    build:
+      context: .
+      dockerfile: Microservices/ResourceService/ResourceService.API/Dockerfile
+    volumes:
+      - ./gymly_cert.pem:/etc/ssl/certs/server-certificate.pem 
+    networks:
+      - backend
+    extra_hosts:
+      - "192.168.137.1:192.168.137.1"
+    depends_on:
+      - rabbitmq
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: 'rabbitmq'
@@ -131,6 +145,7 @@ volumes:
   postgres:
   mongodb:
   mongoconfig:
+
 
 
 

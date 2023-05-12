@@ -1,0 +1,99 @@
+using Common.Middlewares;
+using Microsoft.AspNetCore.Http.Features;
+using ResourceService.API.Extensions;
+using MassTransit;
+using Microsoft.Extensions.FileProviders;
+using ResourceService.API.Services;
+
+var builder = WebApplication.CreateBuilder(args);
+
+var config = new ConfigurationBuilder()
+  .AddJsonFile("appsettings.json")
+  .Build();
+
+builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+{
+  options.InvalidModelStateResponseFactory = actionContext =>
+  {
+    return Common.Wrappers.Response<string>.ModelValidationErrorResponse(actionContext);
+  };
+});
+
+builder.Services.AddSwaggerExtension();
+
+builder.Services.AddCors(options =>
+{
+  options.AddDefaultPolicy(
+    builder =>
+    {
+      builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
+builder.Services.Configure<FormOptions>(o =>
+{
+  o.ValueLengthLimit = int.MaxValue;
+  o.MultipartBodyLengthLimit = int.MaxValue;
+  o.MemoryBufferThreshold = int.MaxValue;
+});
+
+builder.Services.AddSingleton<FileUploaderService>();
+
+builder.Services.AddHealthChecks();
+
+//builder.Services.AddMassTransit(o =>
+//{
+//  o.AddConsumer<GetEntityDataConsumer>();
+
+//  o.UsingRabbitMq((context, cfg) =>
+//  {
+//    cfg.Host("rabbitmq", "/", h =>
+//    {
+//      h.Username("admin");
+//      h.Password("admin");
+//    });
+
+//    cfg.UseNewtonsoftJsonSerializer();
+//    cfg.ConfigureEndpoints(context);
+//  });
+//});
+
+//builder.Services.AddOptions<MassTransitHostOptions>().Configure(options =>
+//{
+//  options.WaitUntilStarted = true;
+//  options.StartTimeout = TimeSpan.FromSeconds(10);
+//  options.StopTimeout = TimeSpan.FromSeconds(30);
+//});
+
+var app = builder.Build();
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
+
+app.UseCors();
+app.UseRouting();
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseHealthChecks("/health");
+
+foreach(var kv in config.GetSection("Directories").GetChildren().AsEnumerable())
+{
+  var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), kv.Value);
+  Console.WriteLine(pathToSave);
+  if (!Directory.Exists(pathToSave))
+    Directory.CreateDirectory(pathToSave);
+}
+
+app.UseDefaultFiles();
+app.UseStaticFiles(new StaticFileOptions()
+{
+  FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
+  RequestPath = new PathString("/Resources"),
+});
+
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();
+
