@@ -17,14 +17,14 @@ public class FileUploaderService
     _configuration = config;
   }
 
-  public async Task<Response<IList<string>>> UploadImages(IFormFile[] files)
+  public async Task<Response<IList<string>>> UploadImages(IFormCollection formCollection)
   {
     var imagesPath = _configuration.GetSection("Directories").GetValue<string>("Images");
     var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), imagesPath);
 
     var imagesToAdd = new List<string>();
 
-    foreach (var file in files)
+    foreach (var file in formCollection.Files)
     {
       if (file.Length > 0)
       {

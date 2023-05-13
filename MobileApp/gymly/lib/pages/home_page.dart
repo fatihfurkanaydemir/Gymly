@@ -4,7 +4,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/pages/posts_page/posts_page.dart';
 import 'package:gymly/pages/profile_page/profile_page.dart';
-import 'package:gymly/pages/add_post_page.dart';
+import 'package:gymly/pages/add_post_page/add_post_page.dart';
 import 'package:gymly/pages/welcome_page.dart';
 import 'package:gymly/providers/auth_provider.dart';
 import '../constants/colors.dart';

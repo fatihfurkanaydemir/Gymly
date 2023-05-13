@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/providers/auth_provider.dart';
 import 'package:gymly/providers/storage_provider.dart';
@@ -53,6 +55,13 @@ class PostStateNotifier extends StateNotifier<PostState> {
     state = const PostState(posts: [], isFirstFetch: false);
 
     await getPosts();
+  }
+
+  Future<bool> uploadPost({
+    required List<File> images,
+    required String content,
+  }) {
+    return postService.uploadPost(images: images, content: content);
   }
 }
 

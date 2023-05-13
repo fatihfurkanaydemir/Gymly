@@ -22,6 +22,7 @@ public class PostRepository : IPostRepository
   {
     return await collection
         .Find(x => true)
+        .SortByDescending(x => x.CreateDate)
         .Skip((pageNumber - 1) * pageSize)
         .Limit(pageSize)
         .ToListAsync();

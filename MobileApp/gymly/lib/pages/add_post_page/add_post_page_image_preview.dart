@@ -1,22 +1,21 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:gymly/models/post.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class PostImages extends StatefulWidget {
-  final Post post;
-  const PostImages({required this.post, super.key});
+class AddPostPageImagePreview extends StatefulWidget {
+  final List<XFile> imageFileList;
+  const AddPostPageImagePreview({required this.imageFileList, super.key});
 
   @override
-  State<PostImages> createState() => _PostImagesState();
+  State<AddPostPageImagePreview> createState() =>
+      _AddPostPageImagePreviewState();
 }
 
-class _PostImagesState extends State<PostImages> {
+class _AddPostPageImagePreviewState extends State<AddPostPageImagePreview> {
   int activeIndex = 0;
-  final resourceUrl = dotenv.env["RESOURCE_URL"];
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class _PostImagesState extends State<PostImages> {
             options: CarouselOptions(
               clipBehavior: Clip.hardEdge,
               enableInfiniteScroll: false,
-              height: 400,
+              height: double.infinity,
               viewportFraction: 1,
               onPageChanged: (index, reason) {
                 setState(() {
@@ -35,14 +34,14 @@ class _PostImagesState extends State<PostImages> {
                 });
               },
             ),
-            itemCount: widget.post.imageUrls.length,
+            itemCount: widget.imageFileList.length,
             itemBuilder: (context, index, realIndex) =>
-                buildImage(widget.post.imageUrls[index], index)),
+                buildImage(widget.imageFileList[index], index)),
         Positioned(
           bottom: 20,
           child: AnimatedSmoothIndicator(
             activeIndex: activeIndex,
-            count: widget.post.imageUrls.length,
+            count: widget.imageFileList.length,
             effect: WormEffect(
                 activeDotColor: Colors.black,
                 dotColor: Colors.black.withOpacity(0.3),
@@ -54,12 +53,15 @@ class _PostImagesState extends State<PostImages> {
     );
   }
 
-  Widget buildImage(String imageUrl, int index) {
+  Widget buildImage(XFile file, int index) {
     return Container(
       width: double.infinity,
-      child: Image.network(
-        "$resourceUrl/$imageUrl",
+      child: Image.file(
+        File(file.path),
         fit: BoxFit.cover,
+        errorBuilder:
+            (BuildContext context, Object error, StackTrace? stackTrace) =>
+                const Center(child: Text('This image type is not supported')),
       ),
     );
   }

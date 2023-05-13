@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gymly/constants/colors.dart';
-import 'package:gymly/pages/add_post_page.dart';
+import 'package:gymly/pages/add_post_page/add_post_page.dart';
 import 'package:gymly/pages/body_measurements_page.dart';
 import 'package:gymly/pages/unknown_route_page.dart';
 import 'package:gymly/pages/welcome_page.dart';
@@ -66,7 +66,6 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // colorSchemeSeed: Colors.black,
         brightness: Brightness.dark,
         colorScheme: ColorScheme.dark(
           primary: textColorWhite,

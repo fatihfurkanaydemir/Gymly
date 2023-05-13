@@ -18,6 +18,6 @@ public class ResourceController : BaseApiController
   [HttpPost("UploadImages")]
   public async Task<IActionResult> UploadImage(IFormFile[] files)
   {
-    return Ok(await fileUploaderService.UploadImages(files));
+    return Ok(await fileUploaderService.UploadImages(await Request.ReadFormAsync()));
   }
 }
