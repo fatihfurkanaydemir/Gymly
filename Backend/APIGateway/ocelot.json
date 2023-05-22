@@ -2,7 +2,7 @@
   "Routes": [
     {
       "UpstreamPathTemplate": "/UsersService/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Update", "Delete" ],
+      "UpstreamHttpMethod": [ "Get", "Post", "Patch", "Delete" ],
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

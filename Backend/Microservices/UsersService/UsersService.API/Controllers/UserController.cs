@@ -27,6 +27,24 @@ public class UserController : BaseApiController
   }
 
   // POST api/<controller>
+  [HttpPatch("UpdateMeasurements")]
+  [Authorize]
+  public async Task<IActionResult> UpdateMeasurements(UpdateUserMeasurementsCommand command)
+  {
+    command.SubjectId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    return Ok(await Mediator.Send(command));
+  }
+
+  // POST api/<controller>
+  [HttpPatch("UpdateDiet")]
+  [Authorize]
+  public async Task<IActionResult> UpdateDiet(UpdateUserDietCommand command)
+  {
+    command.SubjectId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    return Ok(await Mediator.Send(command));
+  }
+
+  // POST api/<controller>
   [HttpPost("SwitchToTrainerAccountType")]
   [Authorize]
   public async Task<IActionResult> SwitchToTrainerAccountType()

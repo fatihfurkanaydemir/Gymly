@@ -8,6 +8,8 @@ using UsersService.Infrastructure.Persistence.Seeds;
 using MassTransit;
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
+using OtherService.Application.Features.Entities.Queries.GetEntity;
+using Keycloak.AuthServices.Sdk.Admin;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +50,8 @@ builder.Services.AddHealthChecks();
 
 builder.Services.AddMassTransit(o =>
 {
+  o.AddConsumer<GetUserConsumer>();
+
   o.UsingRabbitMq((context, cfg) =>
   {
     cfg.Host("rabbitmq", "/", h =>
@@ -77,7 +81,8 @@ builder.Services.AddAuthorization(o =>
   });
 });
 builder.Services.AddKeycloakAuthorization(config);
-
+builder.Services.AddKeycloakAdminHttpClient(config);
+  
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

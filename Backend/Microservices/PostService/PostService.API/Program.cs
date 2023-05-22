@@ -40,6 +40,28 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddMassTransit(o =>
+{
+  o.UsingRabbitMq((context, cfg) =>
+  {
+    cfg.Host("rabbitmq", "/", h =>
+    {
+      h.Username("admin");
+      h.Password("admin");
+    });
+
+    cfg.UseNewtonsoftJsonSerializer();
+    cfg.ConfigureEndpoints(context);
+  });
+});
+
+builder.Services.AddOptions<MassTransitHostOptions>().Configure(options =>
+{
+  options.WaitUntilStarted = true;
+  options.StartTimeout = TimeSpan.FromSeconds(10);
+  options.StopTimeout = TimeSpan.FromSeconds(30);
+});
+
 builder.Services.Configure<FormOptions>(o =>
 {
   o.ValueLengthLimit = int.MaxValue;

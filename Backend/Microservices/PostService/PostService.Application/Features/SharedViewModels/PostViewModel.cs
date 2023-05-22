@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,4 +19,5 @@ public class PostViewModel
   public int ReachedTargetCount { get; set; }
   public int FlameCount { get; set; }
   public int LostMindCount { get; set; }
+  public GetUserContractResult User { get; set; }
 }

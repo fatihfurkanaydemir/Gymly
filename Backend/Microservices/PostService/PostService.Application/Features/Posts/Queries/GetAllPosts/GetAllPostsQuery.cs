@@ -6,7 +6,8 @@ using Common.Wrappers;
 using Common.Parameters;
 using MediatR;
 using Mapster;
-using PostService.Application.Helpers;
+using MassTransit;
+using Common.Contracts;
 
 public class GetAllPostsQuery : IRequest<PagedResponse<IEnumerable<PostViewModel>>>
 {
@@ -17,11 +18,11 @@ public class GetAllPostsQuery : IRequest<PagedResponse<IEnumerable<PostViewModel
 public class GetAllPostsQueryHandler : IRequestHandler<GetAllPostsQuery, PagedResponse<IEnumerable<PostViewModel>>>
 {
   private readonly IPostRepository _postRepository;
-  private readonly IUserAccessor _userAccessor;
-  public GetAllPostsQueryHandler(IPostRepository postRepository, IUserAccessor userAccessor)
+  private readonly IRequestClient<GetUserContract> _client;
+  public GetAllPostsQueryHandler(IPostRepository postRepository, IRequestClient<GetUserContract> client)
   {
     _postRepository = postRepository;
-    _userAccessor = userAccessor;
+    _client = client;
   }
 
   public async Task<PagedResponse<IEnumerable<PostViewModel>>> Handle(GetAllPostsQuery request, CancellationToken cancellationToken)
@@ -35,7 +36,11 @@ public class GetAllPostsQueryHandler : IRequestHandler<GetAllPostsQuery, PagedRe
 
     foreach (var p in posts)
     {
-      postViewModels.Add(p.Adapt<PostViewModel>());
+      var user = (await _client.GetResponse<GetUserContractResult>(new GetUserContract(){SubjectId = p.SubjectId})).Message;
+      var postViewModel = p.Adapt<PostViewModel>();
+      postViewModel.User = user;
+
+      postViewModels.Add(postViewModel);
     }
 
     return new PagedResponse<IEnumerable<PostViewModel>>(postViewModels, validFilter.PageNumber, validFilter.PageSize, dataCount);

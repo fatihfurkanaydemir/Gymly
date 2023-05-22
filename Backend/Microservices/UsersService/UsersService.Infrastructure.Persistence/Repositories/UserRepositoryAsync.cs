@@ -24,4 +24,13 @@ public class UserRepositoryAsync: GenericRepositoryAsync<User>, IUserRepositoryA
       .AsNoTracking()
       .FirstOrDefaultAsync();
   }
+
+  public async Task<User?> GetBySubjectIdMinAsync(String subjectId)
+  {
+    return await
+      _Users
+      .Where(x => x.SubjectId == subjectId)
+      .AsNoTracking()
+      .FirstOrDefaultAsync();
+  }
 }
