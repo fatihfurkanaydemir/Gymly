@@ -26,19 +26,8 @@ class PostCard extends StatelessWidget {
           PostHead(
             post: post,
           ),
-          SizedBox(
-            width: double.infinity,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                PostImages(
-                  post: post,
-                ),
-                // PostEmojis(
-                //   post: post,
-                // )
-              ],
-            ),
+          PostImages(
+            post: post,
           ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 15),
@@ -46,50 +35,16 @@ class PostCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
-                  height: 7.5,
-                ),
-                // AutoSizeText.rich(
-                //   TextSpan(
-                //     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                //           fontWeight: FontWeight.w400,
-                //           color: Colors.black.withOpacity(.6),
-                //         ),
-                //     children: [
-                //       const TextSpan(text: "Liked by "),
-                //       TextSpan(
-                //         text: "${post.amazedCount}",
-                //         style: const TextStyle(
-                //             fontWeight: FontWeight.w700, color: Colors.black),
-                //       ),
-                //       const TextSpan(text: " people"),
-                //     ],
-                //   ),
-                // ),
-
-                const SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
                 AutoSizeText.rich(
                   TextSpan(
+                    text: post.content,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           fontWeight: FontWeight.w400,
                           color: Colors.black,
                           fontSize: 14,
                         ),
-                    children: [
-                      // TextSpan(
-                      //   text: "${post.title} ",
-                      //   style: const TextStyle(
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
-                      TextSpan(
-                        text: post.content,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
                   ),
                 ),
                 PostEmojis(

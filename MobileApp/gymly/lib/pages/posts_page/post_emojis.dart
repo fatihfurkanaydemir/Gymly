@@ -113,11 +113,10 @@ class _PostEmojiState extends State<PostEmoji> {
             ),
           ),
         ),
-        const SizedBox(height: 5),
         Container(
           padding: const EdgeInsets.symmetric(
             horizontal: 8,
-            vertical: 2,
+            vertical: 4,
           ),
           decoration: BoxDecoration(
             color: Colors.black.withOpacity(.7),

@@ -27,7 +27,7 @@ class _PostImagesState extends State<PostImages> {
             options: CarouselOptions(
               clipBehavior: Clip.hardEdge,
               enableInfiniteScroll: false,
-              height: 400,
+              height: 500,
               viewportFraction: 1,
               onPageChanged: (index, reason) {
                 setState(() {

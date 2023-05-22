@@ -21,7 +21,7 @@ class ProfileTabs extends StatelessWidget {
         children: const [
           Icon(Icons.bolt_rounded),
           SizedBox(width: 8),
-          Text("Activity"),
+          Text("Personal"),
         ],
       ),
     ),

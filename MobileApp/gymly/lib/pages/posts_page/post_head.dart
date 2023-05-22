@@ -32,7 +32,7 @@ class PostHead extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AutoSizeText(
-                    "Author Name", //post.authorName,
+                    "${post.user.firstName} ${post.user.lastName}",
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium!

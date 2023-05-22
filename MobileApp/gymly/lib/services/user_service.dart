@@ -26,10 +26,45 @@ class UserService {
     try {
       final response = await client.get(Uri.parse("${serviceUrl!}/User"));
       final data = json.decode(response.body) as Map<String, dynamic>;
-      print("LOG: ${response.body}");
 
-      return AppUser(
-          0, 0, UserType.normal, "", DateTime.now()); //AppUser.fromJson(data);
+      return AppUser.fromJson(data["data"] as Map<String, dynamic>);
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<bool> updateMeasurements(double weight, double height) async {
+    try {
+      final response = await client.patch(
+        Uri.parse("${serviceUrl!}/User/UpdateMeasurements"),
+        body:
+            json.encode({"subjectId": "", "weight": weight, "height": height}),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      return data["succeeded"] as bool;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<bool> addUserWorkoutProgram(
+      String title, String description, String content) async {
+    try {
+      final response = await client.post(
+        Uri.parse("${serviceUrl!}/WorkoutProgram/CreateUserWorkoutProgram"),
+        body: json.encode({
+          "subjectId": "",
+          "title": title,
+          "description": description,
+          "content": content
+        }),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      return data["succeeded"] as bool;
     } catch (_) {
       rethrow;
     }

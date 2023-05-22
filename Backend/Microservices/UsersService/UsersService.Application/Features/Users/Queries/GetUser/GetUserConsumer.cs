@@ -26,6 +26,7 @@ namespace OtherService.Application.Features.Entities.Queries.GetEntity
       var result = user.Adapt<GetUserContractResult>();
 
       var kcUser = await _kcClient.GetUser("gymly", user.SubjectId);
+      result.AvatarUrl = ""; // TODO change
       result.FirstName = kcUser.FirstName ?? "";
       result.LastName = kcUser.LastName ?? "";
 
