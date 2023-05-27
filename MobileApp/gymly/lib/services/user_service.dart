@@ -91,4 +91,22 @@ class UserService {
       rethrow;
     }
   }
+
+  Future<bool> deleteUserWorkoutProgram(int id) async {
+    try {
+      final response = await client.delete(
+        Uri.parse("${serviceUrl!}/WorkoutProgram/DeleteUserWorkoutProgram"),
+        body: json.encode({
+          "subjectId": "",
+          "id": id,
+        }),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      return data["succeeded"] as bool;
+    } catch (_) {
+      rethrow;
+    }
+  }
 }

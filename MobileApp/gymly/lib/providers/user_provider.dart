@@ -37,6 +37,10 @@ class UserStateNotifier extends StateNotifier<UserState> {
     return await userService.updateUserWorkoutProgram(
         id, title, description, content);
   }
+
+  Future<bool> deleteUserWorkoutProgram(int id) async {
+    return await userService.deleteUserWorkoutProgram(id);
+  }
 }
 
 final userProvider = StateNotifierProvider<UserStateNotifier, UserState>(

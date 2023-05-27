@@ -71,7 +71,11 @@ class _UserWorkoutProgramsPageState
                     if (user != null) {
                       return Column(
                         children: [
-                          ViewUserWorkout(user.userWorkoutPrograms[index]),
+                          ViewUserWorkout(
+                            user.userWorkoutPrograms[index],
+                            key: Key(
+                                user.userWorkoutPrograms[index].id.toString()),
+                          ),
                           SizedBox(
                             width: double.infinity,
                             height: 2,

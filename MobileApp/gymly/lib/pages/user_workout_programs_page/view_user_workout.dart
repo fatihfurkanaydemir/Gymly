@@ -59,6 +59,7 @@ class _ViewUserWorkoutState extends ConsumerState<ViewUserWorkout> {
   Widget build(BuildContext context) {
     return Container(
       child: ExpansionTile(
+        initiallyExpanded: false,
         collapsedBackgroundColor: Colors.black,
         backgroundColor: Colors.black,
         title: Text(
@@ -94,172 +95,217 @@ class _ViewUserWorkoutState extends ConsumerState<ViewUserWorkout> {
                   decoration: buildDecoration(),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  showModalBottomSheet<void>(
-                    isScrollControlled: true,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Container(
-                        height: MediaQuery.of(context).size.height * 0.8,
-                        color: Colors.black.withAlpha(230),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 12),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              width: 50,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 25),
-                            Form(
-                              key: _formKey,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        showModalBottomSheet<void>(
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              height: MediaQuery.of(context).size.height * 0.8,
+                              color: Colors.black.withAlpha(230),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 12),
                               child: Column(
                                 children: <Widget>[
-                                  SizedBox(
-                                    height: 70,
-                                    child: TextFormField(
-                                      onSaved: (newValue) {
-                                        title = newValue ?? "";
-                                      },
-                                      expands: true,
-                                      maxLines: null,
-                                      initialValue: title,
-                                      minLines: null,
-                                      decoration: buildDecoration("Title", ""),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter a value';
-                                        }
+                                  Container(
+                                    width: 50,
+                                    height: 8,
+                                    decoration: const BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 25),
+                                  Form(
+                                    key: _formKey,
+                                    child: Column(
+                                      children: <Widget>[
+                                        SizedBox(
+                                          height: 70,
+                                          child: TextFormField(
+                                            onSaved: (newValue) {
+                                              title = newValue ?? "";
+                                            },
+                                            expands: true,
+                                            maxLines: null,
+                                            initialValue: title,
+                                            minLines: null,
+                                            decoration:
+                                                buildDecoration("Title", ""),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Please enter a value';
+                                              }
 
-                                        return null;
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 15),
-                                  SizedBox(
-                                    height: 70,
-                                    child: TextFormField(
-                                      onSaved: (newValue) {
-                                        description = newValue ?? "";
-                                      },
-                                      expands: true,
-                                      maxLines: null,
-                                      initialValue: description,
-                                      minLines: null,
-                                      decoration: buildDecoration(
-                                          "Description (optional)", ""),
-                                      validator: (value) {
-                                        return null;
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 15),
-                                  SizedBox(
-                                    height: 300,
-                                    child: TextFormField(
-                                      onSaved: (newValue) {
-                                        content = newValue ?? "";
-                                      },
-                                      maxLines: 15,
-                                      minLines: 15,
-                                      initialValue: content,
-                                      decoration:
-                                          buildDecoration("Content", ""),
-                                      keyboardType: TextInputType.multiline,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter a value';
-                                        }
-
-                                        return null;
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Spacer(flex: 1),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      if (_formKey.currentState!.validate()) {
-                                        _formKey.currentState!.save();
-                                        final isAdded = await ref
-                                            .read(userProvider.notifier)
-                                            .updateUserWorkoutProgram(
-                                              widget.program.id,
-                                              title,
-                                              description,
-                                              content,
-                                            );
-                                        if (isAdded) {
-                                          ref
-                                              .read(userProvider.notifier)
-                                              .getUser();
-                                          Navigator.pop(context);
-                                        }
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 10),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: const [
-                                        Icon(
-                                          Icons.save,
-                                          color: Colors.white,
-                                          size: 30,
+                                              return null;
+                                            },
+                                          ),
                                         ),
-                                        SizedBox(width: 15),
-                                        Text(
-                                          "Save",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 22),
-                                        )
+                                        const SizedBox(height: 15),
+                                        SizedBox(
+                                          height: 70,
+                                          child: TextFormField(
+                                            onSaved: (newValue) {
+                                              description = newValue ?? "";
+                                            },
+                                            expands: true,
+                                            maxLines: null,
+                                            initialValue: description,
+                                            minLines: null,
+                                            decoration: buildDecoration(
+                                                "Description (optional)", ""),
+                                            validator: (value) {
+                                              return null;
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(height: 15),
+                                        SizedBox(
+                                          height: 300,
+                                          child: TextFormField(
+                                            onSaved: (newValue) {
+                                              content = newValue ?? "";
+                                            },
+                                            maxLines: 15,
+                                            minLines: 15,
+                                            initialValue: content,
+                                            decoration:
+                                                buildDecoration("Content", ""),
+                                            keyboardType:
+                                                TextInputType.multiline,
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Please enter a value';
+                                              }
+
+                                              return null;
+                                            },
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                      size: 20,
+                                  const Spacer(flex: 1),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              _formKey.currentState!.save();
+                                              final isAdded = await ref
+                                                  .read(userProvider.notifier)
+                                                  .updateUserWorkoutProgram(
+                                                    widget.program.id,
+                                                    title,
+                                                    description,
+                                                    content,
+                                                  );
+                                              if (isAdded) {
+                                                ref
+                                                    .read(userProvider.notifier)
+                                                    .getUser();
+                                                Navigator.pop(context);
+                                              }
+                                            }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.blue,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 10),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: const [
+                                              Icon(
+                                                Icons.save,
+                                                color: Colors.white,
+                                                size: 30,
+                                              ),
+                                              SizedBox(width: 15),
+                                              Text(
+                                                "Save",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 22),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          SizedBox(width: 15),
+                          Text(
+                            "Edit",
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          )
+                        ],
+                      ),
                     ),
-                    SizedBox(width: 15),
-                    Text(
-                      "Edit",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    )
-                  ],
-                ),
-              ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final isDeleted = await ref
+                            .read(userProvider.notifier)
+                            .deleteUserWorkoutProgram(
+                              widget.program.id,
+                            );
+                        if (isDeleted) {
+                          ref.read(userProvider.notifier).getUser();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          SizedBox(width: 15),
+                          Text(
+                            "Delete",
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ]),
           )
         ],

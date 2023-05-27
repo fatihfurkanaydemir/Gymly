@@ -143,6 +143,7 @@ class BodyMeasurementsPageState extends ConsumerState<BodyMeasurementsPage> {
                       if (isUpdated) {
                         ref.read(userProvider.notifier).getUser();
                         if (widget.firstLogin != null && widget.firstLogin!) {
+                          ref.read(authProvider.notifier).cancelFirstLogin();
                           Navigator.of(context)
                               .pushReplacementNamed(HomePage.routeName);
                         } else {

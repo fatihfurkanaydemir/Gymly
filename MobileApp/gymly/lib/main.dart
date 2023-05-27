@@ -138,12 +138,18 @@ class MyApp extends ConsumerWidget {
             return MaterialPageRoute(
                 builder: (ctx) => const AddPostPage(), settings: settings);
           case BodyMeasurementsPage.routeName:
-            return MaterialPageRoute(
-                builder: (ctx) => BodyMeasurementsPage(
-                    firstLogin: (settings.arguments
-                            as Map<String, bool>)["firstLogin"] ??
-                        false),
-                settings: settings);
+            {
+              final arguments = settings.arguments;
+              bool firstLogin = false;
+              if (arguments != null) {
+                firstLogin =
+                    (arguments as Map<String, bool>)["firstLogin"] ?? false;
+              }
+              return MaterialPageRoute(
+                  builder: (ctx) =>
+                      BodyMeasurementsPage(firstLogin: firstLogin),
+                  settings: settings);
+            }
           case UserWorkoutProgramsPage.routeName:
             return MaterialPageRoute(
                 builder: (ctx) => const UserWorkoutProgramsPage(),
