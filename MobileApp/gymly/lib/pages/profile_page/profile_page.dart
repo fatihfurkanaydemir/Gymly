@@ -7,7 +7,7 @@ import 'package:gymly/pages/profile_page/profile_tabs.dart';
 import 'package:gymly/providers/user_provider.dart';
 
 import '../../providers/auth_provider.dart';
-import '../user_workout_programs_page.dart';
+import '../user_workout_programs_page/user_workout_programs_page.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});

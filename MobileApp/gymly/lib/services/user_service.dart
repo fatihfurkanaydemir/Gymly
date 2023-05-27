@@ -69,4 +69,26 @@ class UserService {
       rethrow;
     }
   }
+
+  Future<bool> updateUserWorkoutProgram(
+      int id, String title, String description, String content) async {
+    try {
+      final response = await client.patch(
+        Uri.parse("${serviceUrl!}/WorkoutProgram/UpdateUserWorkoutProgram"),
+        body: json.encode({
+          "subjectId": "",
+          "id": id,
+          "title": title,
+          "description": description,
+          "content": content
+        }),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      return data["succeeded"] as bool;
+    } catch (_) {
+      rethrow;
+    }
+  }
 }

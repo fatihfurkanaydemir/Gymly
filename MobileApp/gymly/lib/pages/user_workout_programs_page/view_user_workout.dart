@@ -1,29 +1,42 @@
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymly/providers/user_provider.dart';
+import 'package:gymly/models/user_workout_program.dart';
 
-class UserWorkoutProgramsPage extends ConsumerStatefulWidget {
-  static const String routeName = "/UserWorkoutPrograms";
+import '../../providers/user_provider.dart';
 
-  const UserWorkoutProgramsPage({super.key});
+class ViewUserWorkout extends ConsumerStatefulWidget {
+  final UserWorkoutProgram program;
+  const ViewUserWorkout(this.program, {super.key});
 
   @override
-  ConsumerState<UserWorkoutProgramsPage> createState() =>
-      _UserWorkoutProgramsPageState();
+  ConsumerState<ViewUserWorkout> createState() => _ViewUserWorkoutState();
 }
 
-class _UserWorkoutProgramsPageState
-    extends ConsumerState<UserWorkoutProgramsPage> {
+class _ViewUserWorkoutState extends ConsumerState<ViewUserWorkout> {
   final _formKey = GlobalKey<FormState>();
 
   String title = "";
   String description = "";
   String content = "";
 
-  InputDecoration buildDecoration(String hintText, String suffixText) {
+  @override
+  void initState() {
+    super.initState();
+    title = widget.program.title;
+    description =
+        widget.program.description.isEmpty ? "" : widget.program.description;
+    content = widget.program.content;
+  }
+
+  InputDecoration buildDecoration(
+      [String hintText = "", String suffixText = ""]) {
     return InputDecoration(
         hintText: hintText,
         suffixText: suffixText,
+        disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(
+                color: Colors.blue, style: BorderStyle.solid, width: 1)),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: const BorderSide(
@@ -44,37 +57,43 @@ class _UserWorkoutProgramsPageState
 
   @override
   Widget build(BuildContext context) {
-    var user = ref.watch(userProvider).user;
-
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text("Gymly")),
-      backgroundColor: Colors.black,
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const SizedBox(height: 20),
-              const Center(
-                child: Text(
-                  "Your Workout Programs",
-                  style: TextStyle(fontSize: 32),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: ListView.builder(
-                  itemBuilder: (ctx, index) {
-                    if (user != null) {
-                      return Text(user.userWorkoutPrograms[index].title);
-                    }
-                  },
-                  itemCount: user == null ? 0 : user.userWorkoutPrograms.length,
+    return Container(
+      child: ExpansionTile(
+        collapsedBackgroundColor: Colors.black,
+        backgroundColor: Colors.black,
+        title: Text(
+          widget.program.title,
+          style: const TextStyle(fontSize: 16),
+        ),
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            child: Column(children: [
+              SizedBox(
+                height: 70,
+                child: TextFormField(
+                  expands: true,
+                  enabled: false,
+                  initialValue: widget.program.description.isEmpty
+                      ? "No description"
+                      : widget.program.description,
+                  maxLines: null,
+                  minLines: null,
+                  decoration: buildDecoration(),
                 ),
               ),
               const SizedBox(height: 15),
+              SizedBox(
+                height: 300,
+                child: TextFormField(
+                  maxLines: 15,
+                  minLines: 15,
+                  enabled: false,
+                  initialValue: widget.program.content,
+                  keyboardType: TextInputType.multiline,
+                  decoration: buildDecoration(),
+                ),
+              ),
               ElevatedButton(
                 onPressed: () async {
                   showModalBottomSheet<void>(
@@ -110,6 +129,7 @@ class _UserWorkoutProgramsPageState
                                       },
                                       expands: true,
                                       maxLines: null,
+                                      initialValue: title,
                                       minLines: null,
                                       decoration: buildDecoration("Title", ""),
                                       validator: (value) {
@@ -130,6 +150,7 @@ class _UserWorkoutProgramsPageState
                                       },
                                       expands: true,
                                       maxLines: null,
+                                      initialValue: description,
                                       minLines: null,
                                       decoration: buildDecoration(
                                           "Description (optional)", ""),
@@ -147,6 +168,7 @@ class _UserWorkoutProgramsPageState
                                       },
                                       maxLines: 15,
                                       minLines: 15,
+                                      initialValue: content,
                                       decoration:
                                           buildDecoration("Content", ""),
                                       keyboardType: TextInputType.multiline,
@@ -172,7 +194,8 @@ class _UserWorkoutProgramsPageState
                                         _formKey.currentState!.save();
                                         final isAdded = await ref
                                             .read(userProvider.notifier)
-                                            .addUserWorkoutProgram(
+                                            .updateUserWorkoutProgram(
+                                              widget.program.id,
                                               title,
                                               description,
                                               content,
@@ -220,29 +243,26 @@ class _UserWorkoutProgramsPageState
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
                     Icon(
-                      Icons.add,
+                      Icons.edit,
                       color: Colors.white,
-                      size: 30,
+                      size: 20,
                     ),
                     SizedBox(width: 15),
                     Text(
-                      "Add",
-                      style: TextStyle(color: Colors.white, fontSize: 22),
+                      "Edit",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
                     )
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 0,
-              ),
             ]),
+          )
+        ],
       ),
     );
   }

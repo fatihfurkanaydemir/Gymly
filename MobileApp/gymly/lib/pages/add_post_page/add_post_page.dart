@@ -80,7 +80,7 @@ class _AddPostPageState extends ConsumerState<AddPostPage> {
 
   Future<void> retrieveLostData() async {
     final LostDataResponse response = await _picker.retrieveLostData();
-    print(response.isEmpty);
+
     if (response.isEmpty) {
       return;
     }

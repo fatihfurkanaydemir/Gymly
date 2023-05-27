@@ -6,7 +6,7 @@ import 'package:gymly/constants/colors.dart';
 import 'package:gymly/pages/add_post_page/add_post_page.dart';
 import 'package:gymly/pages/body_measurements_page.dart';
 import 'package:gymly/pages/unknown_route_page.dart';
-import 'package:gymly/pages/user_workout_programs_page.dart';
+import 'package:gymly/pages/user_workout_programs_page/user_workout_programs_page.dart';
 import 'package:gymly/pages/welcome_page.dart';
 import 'package:gymly/providers/auth_provider.dart';
 import 'package:gymly/providers/storage_provider.dart';
@@ -139,7 +139,10 @@ class MyApp extends ConsumerWidget {
                 builder: (ctx) => const AddPostPage(), settings: settings);
           case BodyMeasurementsPage.routeName:
             return MaterialPageRoute(
-                builder: (ctx) => const BodyMeasurementsPage(),
+                builder: (ctx) => BodyMeasurementsPage(
+                    firstLogin: (settings.arguments
+                            as Map<String, bool>)["firstLogin"] ??
+                        false),
                 settings: settings);
           case UserWorkoutProgramsPage.routeName:
             return MaterialPageRoute(

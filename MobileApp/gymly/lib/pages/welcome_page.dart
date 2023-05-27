@@ -15,8 +15,9 @@ class WelcomePage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
             onPressed: () {
-              Navigator.of(context)
-                  .pushReplacementNamed(BodyMeasurementsPage.routeName);
+              Navigator.of(context).pushReplacementNamed(
+                  BodyMeasurementsPage.routeName,
+                  arguments: {"firstLogin": true});
             },
             child: const Text("WELCOME TO APP")),
       ),
