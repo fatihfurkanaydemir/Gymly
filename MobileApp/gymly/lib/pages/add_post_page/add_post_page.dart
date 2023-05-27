@@ -154,7 +154,7 @@ class _AddPostPageState extends ConsumerState<AddPostPage> {
                                 switch (snapshot.connectionState) {
                                   case ConnectionState.none:
                                   case ConnectionState.waiting:
-                                    return _buildAddImageButton();
+                                    return _previewImages();
                                   case ConnectionState.done:
                                     return _previewImages();
                                   case ConnectionState.active:

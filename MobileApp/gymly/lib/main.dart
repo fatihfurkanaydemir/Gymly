@@ -3,8 +3,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gymly/constants/colors.dart';
+import 'package:gymly/models/trainer_workout_program.dart';
 import 'package:gymly/pages/add_post_page/add_post_page.dart';
 import 'package:gymly/pages/body_measurements_page.dart';
+import 'package:gymly/pages/profile_page/profile_settings.dart';
+import 'package:gymly/pages/trainer_workout_programs_page/add_trainer_workout_program.dart';
+import 'package:gymly/pages/trainer_workout_programs_page/trainer_workout_programs_page.dart';
+import 'package:gymly/pages/trainer_workout_programs_page/view_trainer_workout_program.dart';
 import 'package:gymly/pages/unknown_route_page.dart';
 import 'package:gymly/pages/user_workout_programs_page/user_workout_programs_page.dart';
 import 'package:gymly/pages/welcome_page.dart';
@@ -154,6 +159,39 @@ class MyApp extends ConsumerWidget {
             return MaterialPageRoute(
                 builder: (ctx) => const UserWorkoutProgramsPage(),
                 settings: settings);
+          case TrainerWorkoutProgramsPage.routeName:
+            return MaterialPageRoute(
+                builder: (ctx) => const TrainerWorkoutProgramsPage(),
+                settings: settings);
+          case AddTrainerWorkoutProgram.routeName:
+            return MaterialPageRoute(
+                builder: (ctx) => const AddTrainerWorkoutProgram(),
+                settings: settings);
+          case ViewTrainerWorkoutProgram.routeName:
+            {
+              if (settings.arguments == null) {
+                return MaterialPageRoute(
+                    builder: (ctx) => const UnknownRoutePage());
+              }
+
+              Map<String, dynamic> arguments =
+                  settings.arguments as Map<String, dynamic>;
+
+              TrainerWorkoutProgram program =
+                  arguments["program"] as TrainerWorkoutProgram;
+              bool trainerMode = arguments["trainerMode"];
+              bool buyMode = arguments["buyMode"];
+              return MaterialPageRoute(
+                  builder: (ctx) => ViewTrainerWorkoutProgram(
+                        program,
+                        trainerMode: trainerMode,
+                        buyMode: buyMode,
+                      ),
+                  settings: settings);
+            }
+          case ProfileSettings.routeName:
+            return MaterialPageRoute(
+                builder: (ctx) => const ProfileSettings(), settings: settings);
         }
         return null;
       },
@@ -163,3 +201,5 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
+
+class TrainerWorkoutProgramsPageouteName {}

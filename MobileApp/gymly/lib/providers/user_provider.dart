@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/models/appuser.dart';
 import 'package:gymly/providers/auth_provider.dart';
@@ -40,6 +42,30 @@ class UserStateNotifier extends StateNotifier<UserState> {
 
   Future<bool> deleteUserWorkoutProgram(int id) async {
     return await userService.deleteUserWorkoutProgram(id);
+  }
+
+  Future<bool> addTrainerWorkoutProgram(
+    File image,
+    String name,
+    String title,
+    String description,
+    String programDetails,
+  ) async {
+    bool success = await userService.addTrainerWorkoutProgram(
+        image, name, title, description, programDetails);
+    await getUser();
+    return success;
+  }
+
+  Future<bool> deleteTrainerWorkoutProgram(int id) async {
+    return await userService.deleteTrainerWorkoutProgram(id);
+  }
+
+  Future<bool> switchToTrainerAccountType() async {
+    bool success = await userService.switchToTrainerAccountType();
+    await getUser();
+
+    return success;
   }
 }
 

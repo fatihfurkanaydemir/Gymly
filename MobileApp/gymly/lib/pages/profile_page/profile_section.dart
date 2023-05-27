@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:gymly/constants/colors.dart';
+import '../../models/appuser.dart';
 import 'profile_image.dart';
 
 class ProfileSection extends StatelessWidget {
   final String imageUrl;
   final String userName, userEmail;
+  final UserType userType;
 
   const ProfileSection({
     required this.userName,
     required this.userEmail,
     required this.imageUrl,
+    required this.userType,
     super.key,
   });
 
@@ -47,7 +50,25 @@ class ProfileSection extends StatelessWidget {
                     .titleMedium
                     ?.copyWith(color: textColorWhite),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              if (userType == UserType.trainer)
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.cyan, width: 2),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+                  child: Text(
+                    "TRAINER ACCOUNT",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: textColorWhite),
+                  ),
+                ),
+              const SizedBox(height: 10),
             ],
           ),
         ),

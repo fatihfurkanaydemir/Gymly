@@ -34,12 +34,13 @@ class HomePageState extends ConsumerState<HomePage> {
       return AppBar(
         title: const Text("Gymly"),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(AddPostPage.routeName);
-            },
-            icon: const Icon(Icons.add),
-          )
+          if (_selectedIndex == 0)
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(AddPostPage.routeName);
+              },
+              icon: const Icon(Icons.add),
+            )
         ],
       );
     }

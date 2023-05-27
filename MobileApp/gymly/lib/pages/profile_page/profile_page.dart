@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/constants/colors.dart';
+import 'package:gymly/models/appuser.dart';
 import 'package:gymly/pages/body_measurements_page.dart';
 import 'package:gymly/pages/profile_page/profile_section.dart';
+import 'package:gymly/pages/profile_page/profile_settings.dart';
 import 'package:gymly/pages/profile_page/profile_tabs.dart';
 import 'package:gymly/providers/user_provider.dart';
 
 import '../../providers/auth_provider.dart';
+import '../trainer_workout_programs_page/trainer_workout_programs_page.dart';
 import '../user_workout_programs_page/user_workout_programs_page.dart';
 
 class ProfilePage extends ConsumerWidget {
@@ -49,7 +52,9 @@ class ProfilePage extends ConsumerWidget {
             SliverAppBar(
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(ProfileSettings.routeName);
+                  },
                   icon: const Icon(Icons.settings),
                   splashColor: Colors.transparent,
                   hoverColor: Colors.transparent,
@@ -64,12 +69,13 @@ class ProfilePage extends ConsumerWidget {
               ),
             ),
             SliverAppBar(
-              expandedHeight: 240,
+              expandedHeight: 270,
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.pin,
                 background: ProfileSection(
                   userName: auth.user?.name ?? '-',
                   userEmail: auth.user?.email ?? '-',
+                  userType: user?.userType ?? UserType.normal,
                   imageUrl: '',
                 ),
               ),
@@ -115,6 +121,12 @@ class ProfilePage extends ConsumerWidget {
                           Navigator.of(context)
                               .pushNamed(UserWorkoutProgramsPage.routeName);
                         }),
+                        const SizedBox(height: 15),
+                        if (user?.userType == UserType.trainer)
+                          buildButton("TRAINER WORKOUT PROGRAMS", () {
+                            Navigator.of(context).pushNamed(
+                                TrainerWorkoutProgramsPage.routeName);
+                          }),
                       ],
                     ),
                   )
