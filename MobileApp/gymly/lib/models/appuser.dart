@@ -11,9 +11,18 @@ class AppUser {
   final UserType userType;
   final List<UserWorkoutProgram> userWorkoutPrograms;
   final List<TrainerWorkoutProgram> trainerWorkoutPrograms;
+  final TrainerWorkoutProgram? enrolledProgram;
 
-  AppUser(this.weight, this.height, this.userType, this.gender,
-      this.dateOfBirth, this.userWorkoutPrograms, this.trainerWorkoutPrograms);
+  AppUser(
+    this.weight,
+    this.height,
+    this.userType,
+    this.gender,
+    this.dateOfBirth,
+    this.userWorkoutPrograms,
+    this.trainerWorkoutPrograms,
+    this.enrolledProgram,
+  );
 
   factory AppUser.fromJson(Map<String, dynamic> json) {
     final userWorkoutPrograms = <UserWorkoutProgram>[];
@@ -28,15 +37,19 @@ class AppUser {
           .add(TrainerWorkoutProgram.fromJson(element as Map<String, dynamic>));
     });
 
+    TrainerWorkoutProgram? enrolledProgram;
+    if (json["enrolledProgram"] != null) {
+      enrolledProgram = json["endrolledProgram"];
+    }
     return AppUser(
-      double.parse(json['weight'].toString()),
-      double.parse(json["height"].toString()),
-      UserType.values[json["type"] as int],
-      json["gender"] as String,
-      // json["dateOfBirth"] as DateTime,
-      DateTime.now(), // TODO change
-      userWorkoutPrograms,
-      trainerWorkoutPrograms,
-    );
+        double.parse(json['weight'].toString()),
+        double.parse(json["height"].toString()),
+        UserType.values[json["type"] as int],
+        json["gender"] as String,
+        // json["dateOfBirth"] as DateTime,
+        DateTime.now(), // TODO change
+        userWorkoutPrograms,
+        trainerWorkoutPrograms,
+        enrolledProgram);
   }
 }

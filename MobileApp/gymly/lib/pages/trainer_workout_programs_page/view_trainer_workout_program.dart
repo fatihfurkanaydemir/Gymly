@@ -37,6 +37,23 @@ class ViewTrainerWorkoutProgram extends ConsumerWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
+              const SizedBox(height: 10),
+              Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.cyan, width: 2),
+                      borderRadius: BorderRadius.circular(50)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+                  child: Text(
+                    "${program.price.toStringAsFixed(2)}₺",
+                    style: const TextStyle(
+                      fontSize: 22,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
               const SizedBox(height: 20),
               Container(
                 width: double.infinity,
@@ -129,6 +146,20 @@ class ViewTrainerWorkoutProgram extends ConsumerWidget {
                             ),
                           ),
                         ],
+                      ),
+                    if (buyMode)
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 0, vertical: 15),
+                          backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text(
+                          "Enroll to Program",
+                          style: TextStyle(fontSize: 20),
+                        ),
                       )
                   ],
                 ),

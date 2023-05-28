@@ -11,6 +11,7 @@ public class CreateTrainerWorkoutProgramCommand : IRequest<Response<string>>
 {
   public string SubjectId { get; set; } = default!;
   public string Name { get; set; } = default!;
+  public double Price { get; set; } = default!;
   public string Title { get; set; } = default!;
   public string Description { get; set; } = default!;
   public string HeaderImageUrl { get; set; } = default!;
@@ -37,7 +38,8 @@ public class CreateTrainerWorkoutProgramCommandHandler : IRequestHandler<CreateT
       request.Title.Trim() == "" ||
       request.Description.Trim() == "" ||
       request.HeaderImageUrl.Trim() == "" ||
-      request.ProgramDetails.Trim() == ""
+      request.ProgramDetails.Trim() == "" ||
+      request.Price < 1.0
       ) throw new ApiException("INVALID_VALUES");
 
     var workoutProgram = request.Adapt<TrainerWorkoutProgram>();

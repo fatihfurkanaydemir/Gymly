@@ -110,19 +110,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHealthChecks("/health");
 
-//var folderName = Path.Combine("Resources", "Images");
-//var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-//if (!Directory.Exists(pathToSave))
-//  Directory.CreateDirectory(pathToSave);
-
-app.UseDefaultFiles();
-app.UseStaticFiles();
-//app.UseStaticFiles(new StaticFileOptions()
-//{
-//  FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
-//  RequestPath = new PathString("/Resources")
-//});
-
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

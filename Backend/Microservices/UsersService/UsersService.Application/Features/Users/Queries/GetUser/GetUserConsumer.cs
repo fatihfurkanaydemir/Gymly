@@ -21,7 +21,7 @@ namespace OtherService.Application.Features.Entities.Queries.GetEntity
     public async Task Consume(ConsumeContext<GetUserContract> context)
     {
       var user = await _userRepository.GetBySubjectIdMinAsync(context.Message.SubjectId);
-      if (user == null) throw new ApiException("User data not found");
+      if (user == null) throw new ApiException($"User data not found ({context.Message.SubjectId})");
 
       var result = user.Adapt<GetUserContractResult>();
 

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:gymly/models/trainer.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -32,6 +33,40 @@ class UserService {
       final data = json.decode(response.body) as Map<String, dynamic>;
 
       return AppUser.fromJson(data["data"] as Map<String, dynamic>);
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<List<Trainer>> getTrainers({
+    required int pageNumber,
+    required int pageSize,
+  }) async {
+    try {
+      final response = await client.get(Uri.parse(
+          "${serviceUrl!}/User/Trainer?pageNumber=$pageNumber&pageSize=$pageSize"));
+      final data = json.decode(response.body) as Map<String, dynamic>;
+
+      final trainerData = data["data"] as List<dynamic>;
+      List<Trainer> trainers = [];
+
+      for (dynamic trainer in trainerData) {
+        trainers.add(Trainer.fromJson(trainer));
+      }
+
+      return trainers;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<Trainer> getTrainerBySubjectId(String subjectId) async {
+    try {
+      final response =
+          await client.get(Uri.parse("${serviceUrl!}/User/Trainer/$subjectId"));
+      final data = json.decode(response.body) as Map<String, dynamic>;
+
+      return Trainer.fromJson(data["data"] as Map<String, dynamic>);
     } catch (_) {
       rethrow;
     }
@@ -120,6 +155,7 @@ class UserService {
     String title,
     String description,
     String programDetails,
+    double price,
   ) async {
     try {
       var fileUploadRequest = http.MultipartRequest(
@@ -153,7 +189,8 @@ class UserService {
           "title": title,
           "description": description,
           "programDetails": programDetails,
-          "headerImageUrl": fileUrls[0]
+          "headerImageUrl": fileUrls[0],
+          "price": price
         }),
         headers: {"Content-Type": "application/json"},
       );

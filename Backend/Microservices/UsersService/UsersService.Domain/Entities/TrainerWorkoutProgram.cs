@@ -14,4 +14,5 @@ public class TrainerWorkoutProgram : AuditableBaseEntity
   public string Description { get; set; } = default!;
   public string HeaderImageUrl { get; set; } = default!;
   public string ProgramDetails { get; set; } = default!;
+  public double Price { get; set; } = default!;
 }

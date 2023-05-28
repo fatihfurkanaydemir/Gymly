@@ -5,15 +5,10 @@ class TrainerWorkoutProgram {
   final String description;
   final String headerImageUrl;
   final String programDetails;
+  final double price;
 
-  TrainerWorkoutProgram(
-    this.id,
-    this.name,
-    this.title,
-    this.description,
-    this.headerImageUrl,
-    this.programDetails,
-  );
+  TrainerWorkoutProgram(this.id, this.name, this.title, this.description,
+      this.headerImageUrl, this.programDetails, this.price);
 
   factory TrainerWorkoutProgram.fromJson(Map<String, dynamic> json) {
     return TrainerWorkoutProgram(
@@ -23,6 +18,7 @@ class TrainerWorkoutProgram {
       json["description"] as String,
       json["headerImageUrl"] as String,
       json["programDetails"] as String,
+      double.tryParse(json["price"].toString())!,
     );
   }
 }

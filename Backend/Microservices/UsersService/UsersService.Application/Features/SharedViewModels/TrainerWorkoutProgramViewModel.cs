@@ -9,6 +9,7 @@ public class TrainerWorkoutProgramViewModel
   public DateTime Created { get; set; }
   public DateTime LastModified { get; set; }
   public string Name { get; set; } = default!;
+  public double Price { get; set; } = default!;
   public string Title { get; set; } = default!;
   public string Description { get; set; } = default!;
   public string HeaderImageUrl { get; set; } = default!;

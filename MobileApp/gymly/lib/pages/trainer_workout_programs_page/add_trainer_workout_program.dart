@@ -27,6 +27,7 @@ class _AddTrainerWorkoutProgramState
   String title = "";
   String description = "";
   String programDetails = "";
+  double price = 1;
   XFile? _imageFile;
 
   dynamic _pickImageError;
@@ -175,6 +176,32 @@ class _AddTrainerWorkoutProgramState
                       height: 80,
                       child: TextFormField(
                         onSaved: (newValue) {
+                          price = double.tryParse(newValue ?? "") ?? 1;
+                        },
+                        expands: true,
+                        maxLines: null,
+                        minLines: null,
+                        decoration: buildDecoration("Price", ""),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a value';
+                          }
+                          double? price = double.tryParse(value);
+                          if (price != null && price < 1.0) {
+                            return 'Please enter a value greater than 1';
+                          }
+
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    SizedBox(
+                      height: 80,
+                      child: TextFormField(
+                        onSaved: (newValue) {
                           title = newValue ?? "";
                         },
                         expands: true,
@@ -285,8 +312,13 @@ class _AddTrainerWorkoutProgramState
                           _formKey.currentState!.save();
                           final isAdded = await ref
                               .read(userProvider.notifier)
-                              .addTrainerWorkoutProgram(File(_imageFile!.path),
-                                  name, title, description, programDetails);
+                              .addTrainerWorkoutProgram(
+                                  File(_imageFile!.path),
+                                  name,
+                                  title,
+                                  description,
+                                  programDetails,
+                                  price);
                           if (isAdded) {
                             ref.read(userProvider.notifier).getUser();
                             Navigator.pop(context);

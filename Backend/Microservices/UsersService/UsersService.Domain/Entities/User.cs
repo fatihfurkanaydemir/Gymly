@@ -10,6 +10,6 @@ public class User : BaseUser
 {
   public List<UserWorkoutProgram> UserWorkoutPrograms { get; set; } = new List<UserWorkoutProgram>();
   public string Diet { get; set; } = default!;
-  // IF SWITCHED TO TRAINER ACCOUNT
   public List<TrainerWorkoutProgram> TrainerWorkoutPrograms { get; set; } = new List<TrainerWorkoutProgram>();
+  public TrainerWorkoutProgram? EnrolledProgram { get; set; }
 }

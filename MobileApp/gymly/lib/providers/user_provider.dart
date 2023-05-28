@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/models/appuser.dart';
+import 'package:gymly/models/trainer.dart';
 import 'package:gymly/providers/auth_provider.dart';
 import 'package:gymly/providers/storage_provider.dart';
 import 'package:gymly/services/user_service.dart';
@@ -50,9 +51,10 @@ class UserStateNotifier extends StateNotifier<UserState> {
     String title,
     String description,
     String programDetails,
+    double price,
   ) async {
     bool success = await userService.addTrainerWorkoutProgram(
-        image, name, title, description, programDetails);
+        image, name, title, description, programDetails, price);
     await getUser();
     return success;
   }

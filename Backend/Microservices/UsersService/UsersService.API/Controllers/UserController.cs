@@ -9,6 +9,8 @@ using MassTransit;
 using Common.Contracts.Entities;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using UsersService.Application.Features.Users.Queries.GetTrainerBySubjectId;
+using UsersService.Application.Features.Users.Queries.GetAllTrainers;
 
 public class UserController : BaseApiController
 {
@@ -58,6 +60,30 @@ public class UserController : BaseApiController
   public async Task<IActionResult> Get()
   {
     return Ok(await Mediator.Send(new GetUserQuery() { SubjectId = User.FindFirstValue(ClaimTypes.NameIdentifier) }));
+  }
+
+  // GET: api/<controller>
+  [HttpGet("AllUsers")]
+  [Authorize]
+  public async Task<IActionResult> Get([FromQuery] GetAllUsersQuery query)
+  {
+    return Ok(await Mediator.Send(query));
+  }
+
+  // GET: api/<controller>
+  [HttpGet("Trainer/{subjectId}")]
+  [Authorize]
+  public async Task<IActionResult> Get(string subjectId)
+  {
+    return Ok(await Mediator.Send(new GetTrainerBySubjectIdQuery() { SubjectId = subjectId}));
+  }
+
+  // GET: api/<controller>
+  [HttpGet("Trainer")]
+  [Authorize]
+  public async Task<IActionResult> Get([FromQuery] GetAllTrainersQuery query)
+  {
+    return Ok(await Mediator.Send(query));
   }
 
   // GET: api/<controller>/TestGetEntityData/{id}

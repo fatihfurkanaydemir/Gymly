@@ -42,14 +42,15 @@ class ProfileSection extends StatelessWidget {
                     ?.copyWith(color: textColorWhite),
               ),
               const SizedBox(height: 10),
-              Text(
-                userEmail,
-                textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(color: textColorWhite),
-              ),
+              if (userEmail != "")
+                Text(
+                  userEmail,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: textColorWhite),
+                ),
               const SizedBox(height: 10),
               if (userType == UserType.trainer)
                 Container(

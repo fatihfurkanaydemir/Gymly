@@ -12,6 +12,7 @@ public class UpdateTrainerWorkoutProgramCommand : IRequest<Response<string>>
   public string SubjectId { get; set; } = default!;
   public int Id { get; set; } = default!;
   public string Name { get; set; } = default!;
+  public double Price { get; set; } = default!;
   public string Title { get; set; } = default!;
   public string Description { get; set; } = default!;
   public string HeaderImageUrl { get; set; } = default!;
@@ -36,7 +37,8 @@ public class UpdateTrainerWorkoutProgramCommandHandler : IRequestHandler<UpdateT
       request.Title.Trim() == "" ||
       request.Description.Trim() == "" ||
       request.HeaderImageUrl.Trim() == "" ||
-      request.ProgramDetails.Trim() == ""
+      request.ProgramDetails.Trim() == "" ||
+      request.Price < 1.0
       ) throw new ApiException("INVALID_VALUES");
 
     program.Name = request.Name;
@@ -44,6 +46,7 @@ public class UpdateTrainerWorkoutProgramCommandHandler : IRequestHandler<UpdateT
     program.Description = request.Description;
     program.HeaderImageUrl = request.HeaderImageUrl;
     program.ProgramDetails = request.ProgramDetails;
+    program.Price = request.Price;
 
     await _trainerWorkoutProgramRepository.UpdateAsync(program);
 

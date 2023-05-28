@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymly/pages/gym_page/gym_page.dart';
 import 'package:gymly/pages/posts_page/posts_page.dart';
 import 'package:gymly/pages/profile_page/profile_page.dart';
 import 'package:gymly/pages/add_post_page/add_post_page.dart';
@@ -23,7 +24,7 @@ class HomePageState extends ConsumerState<HomePage> {
   final List<Widget> _pages = <Widget>[
     const PostsPage(),
     const CircularProgressIndicator(),
-    const CircularProgressIndicator(),
+    const GymPage(),
     const ProfilePage(),
   ];
 
@@ -40,6 +41,13 @@ class HomePageState extends ConsumerState<HomePage> {
                 Navigator.of(context).pushNamed(AddPostPage.routeName);
               },
               icon: const Icon(Icons.add),
+            ),
+          if (_selectedIndex == 2)
+            IconButton(
+              onPressed: () {
+                // Navigator.of(context).pushNamed(AddPostPage.routeName);
+              },
+              icon: const Icon(Icons.fitness_center_rounded),
             )
         ],
       );
