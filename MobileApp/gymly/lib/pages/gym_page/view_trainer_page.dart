@@ -72,38 +72,42 @@ class _ViewTrainerPageState extends ConsumerState<ViewTrainerPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 0, vertical: 20),
                       itemBuilder: ((context, index) {
-                        return OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                  width: 2.5, color: Colors.cyan),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                  ViewTrainerWorkoutProgram.routeName,
-                                  arguments: {
-                                    "program":
-                                        trainer.trainerWorkoutPrograms[index],
-                                    "trainerMode": false,
-                                    "buyMode":
-                                        user?.userType != UserType.trainer
-                                  });
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  trainer.trainerWorkoutPrograms[index].name,
-                                  style: const TextStyle(fontSize: 16),
-                                ),
-                                const Icon(
-                                  Icons.chevron_right,
-                                  size: 40,
-                                  color: Colors.cyanAccent,
-                                )
-                              ],
-                            ));
+                        return Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          child: OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                side: const BorderSide(
+                                    width: 2.5, color: Colors.cyan),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pushNamed(
+                                    ViewTrainerWorkoutProgram.routeName,
+                                    arguments: {
+                                      "program":
+                                          trainer.trainerWorkoutPrograms[index],
+                                      "trainerMode": false,
+                                      "buyMode":
+                                          user?.userType != UserType.trainer
+                                    });
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    trainer.trainerWorkoutPrograms[index].name,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                  const Icon(
+                                    Icons.chevron_right,
+                                    size: 40,
+                                    color: Colors.cyanAccent,
+                                  )
+                                ],
+                              )),
+                        );
                       }),
                       itemCount: trainer.trainerWorkoutPrograms.length,
                     ),

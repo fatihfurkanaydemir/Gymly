@@ -65,22 +65,11 @@ class GymPage extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const SizedBox(height: 50),
-                        buildButton("BODY MEASUREMENTS", () {
-                          Navigator.of(context)
-                              .pushNamed(BodyMeasurementsPage.routeName);
+                        const SizedBox(height: 20),
+                        buildButton("WORKOUT HISTORY", () {
+                          // Navigator.of(context)
+                          //     .pushNamed(BodyMeasurementsPage.routeName);
                         }),
-                        const SizedBox(height: 15),
-                        buildButton("WORKOUT PROGRAMS", () {
-                          Navigator.of(context)
-                              .pushNamed(UserWorkoutProgramsPage.routeName);
-                        }),
-                        const SizedBox(height: 15),
-                        if (user?.userType == UserType.trainer)
-                          buildButton("TRAINER WORKOUT PROGRAMS", () {
-                            Navigator.of(context).pushNamed(
-                                TrainerWorkoutProgramsPage.routeName);
-                          }),
                       ],
                     ),
                   ),

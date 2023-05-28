@@ -1,25 +1,118 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:gymly/models/appuser.dart';
 import 'package:gymly/models/trainer_workout_program.dart';
+import 'package:gymly/pages/home_page.dart';
+import 'package:http/http.dart' as http;
 
 import '../../providers/user_provider.dart';
 
-class ViewTrainerWorkoutProgram extends ConsumerWidget {
+class ViewTrainerWorkoutProgram extends ConsumerStatefulWidget {
   static const String routeName = "/ViewTrainerWorkoutProgram";
   final TrainerWorkoutProgram program;
   final bool trainerMode;
   final bool buyMode;
 
-  final resourceUrl = dotenv.env["RESOURCE_URL"];
-
   ViewTrainerWorkoutProgram(this.program,
       {this.trainerMode = false, this.buyMode = false, super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ViewTrainerWorkoutProgram> createState() =>
+      _ViewTrainerWorkoutProgramState();
+}
+
+class _ViewTrainerWorkoutProgramState
+    extends ConsumerState<ViewTrainerWorkoutProgram> {
+  final resourceUrl = dotenv.env["RESOURCE_URL"];
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppUser? user = ref.watch(userProvider).user;
+    Map<String, dynamic>? paymentIntent;
+
+    createPaymentIntent(String amount, String currency) async {
+      try {
+        //Request body
+        Map<String, dynamic> body = {
+          'amount': amount,
+          'currency': currency,
+        };
+
+        //Make post request to Stripe
+        var response = await http.post(
+          Uri.parse('https://api.stripe.com/v1/payment_intents'),
+          headers: {
+            'Authorization': 'Bearer ${dotenv.env['STRIPE_SECRET']}',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: body,
+        );
+        return json.decode(response.body);
+      } catch (err) {
+        throw Exception(err.toString());
+      }
+    }
+
+    displayPaymentSheet() async {
+      try {
+        await Stripe.instance.presentPaymentSheet().then((value) {
+          showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(
+                          Icons.check_circle,
+                          color: Colors.green,
+                          size: 100.0,
+                        ),
+                        SizedBox(height: 10.0),
+                        Text("Payment Successful!"),
+                      ],
+                    ),
+                  ));
+          paymentIntent = null;
+          Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+        }).onError((error, stackTrace) {
+          setState(() {
+            isLoading = false;
+          });
+          throw Exception(error);
+        });
+      } on StripeException catch (e) {
+        print('Error is:---> $e');
+        setState(() {
+          isLoading = false;
+        });
+        AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: const [
+                  Icon(
+                    Icons.cancel,
+                    color: Colors.red,
+                  ),
+                  Text("Payment Failed"),
+                ],
+              ),
+            ],
+          ),
+        );
+      } catch (e) {
+        print('$e');
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text("Gymly")),
       backgroundColor: Colors.black,
@@ -30,7 +123,7 @@ class ViewTrainerWorkoutProgram extends ConsumerWidget {
               const SizedBox(height: 30),
               Center(
                 child: Text(
-                  program.name,
+                  widget.program.name,
                   style: const TextStyle(
                     fontSize: 32,
                   ),
@@ -46,7 +139,7 @@ class ViewTrainerWorkoutProgram extends ConsumerWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
                   child: Text(
-                    "${program.price.toStringAsFixed(2)}₺",
+                    "${widget.program.price.toStringAsFixed(2)}₺",
                     style: const TextStyle(
                       fontSize: 22,
                     ),
@@ -58,14 +151,14 @@ class ViewTrainerWorkoutProgram extends ConsumerWidget {
               Container(
                 width: double.infinity,
                 child: Image.network(
-                  "$resourceUrl/${program.headerImageUrl}",
+                  "$resourceUrl/${widget.program.headerImageUrl}",
                   fit: BoxFit.cover,
                 ),
               ),
               const SizedBox(height: 20),
               Center(
                 child: Text(
-                  program.title,
+                  widget.program.title,
                   style: const TextStyle(
                     fontSize: 32,
                   ),
@@ -78,11 +171,11 @@ class ViewTrainerWorkoutProgram extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(program.description),
+                    Text(widget.program.description),
                     const SizedBox(height: 20),
-                    Text(program.programDetails),
+                    Text(widget.program.programDetails),
                     const SizedBox(height: 20),
-                    if (trainerMode)
+                    if (widget.trainerMode)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -117,7 +210,7 @@ class ViewTrainerWorkoutProgram extends ConsumerWidget {
                                 final isDeleted = await ref
                                     .read(userProvider.notifier)
                                     .deleteTrainerWorkoutProgram(
-                                      program.id,
+                                      widget.program.id,
                                     );
                                 if (isDeleted) {
                                   ref.read(userProvider.notifier).getUser();
@@ -147,19 +240,55 @@ class ViewTrainerWorkoutProgram extends ConsumerWidget {
                           ),
                         ],
                       ),
-                    if (buyMode)
+                    if (widget.buyMode)
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: isLoading
+                            ? null
+                            : (user?.enrolledProgram != null
+                                ? null
+                                : () async {
+                                    try {
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      var paymentIntent =
+                                          await createPaymentIntent(
+                                              (widget.program.price * 100)
+                                                  .toStringAsFixed(0),
+                                              'TRY');
+
+                                      await Stripe.instance
+                                          .initPaymentSheet(
+                                              paymentSheetParameters:
+                                                  SetupPaymentSheetParameters(
+                                                      paymentIntentClientSecret:
+                                                          paymentIntent![
+                                                              'client_secret'], //Gotten from payment intent
+                                                      style: ThemeMode.light,
+                                                      merchantDisplayName:
+                                                          'Gymly'))
+                                          .then((value) {});
+
+                                      displayPaymentSheet();
+                                    } catch (err) {
+                                      throw Exception(err);
+                                    }
+                                  }),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 0, vertical: 15),
+                              horizontal: 10, vertical: 15),
                           backgroundColor: Colors.blue,
                           foregroundColor: Colors.white,
                         ),
-                        child: const Text(
-                          "Enroll to Program",
-                          style: TextStyle(fontSize: 20),
-                        ),
+                        child: isLoading
+                            ? const CircularProgressIndicator()
+                            : Text(
+                                user?.enrolledProgram == null
+                                    ? "Enroll to Program"
+                                    : "You are already enrolled to another program",
+                                style: const TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center,
+                              ),
                       )
                   ],
                 ),

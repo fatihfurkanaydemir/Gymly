@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:gymly/constants/colors.dart';
 import 'package:gymly/models/trainer_workout_program.dart';
 import 'package:gymly/pages/add_post_page/add_post_page.dart';
@@ -37,6 +38,10 @@ class MyHttpOverrides extends HttpOverrides {
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
 
+  WidgetsFlutterBinding.ensureInitialized();
+
+  Stripe.publishableKey =
+      "pk_test_51NCoNRI17M7GL77zV3ID4GW6vWWTgzKxOnkdZOrUkFDKuum2ANJJkSSRW0WhrxjR87A0woQeVi7db5W8zHMy87vl00m4OZrPuO";
   await dotenv.load(fileName: ".env");
   runApp(ProviderScope(child: MyApp()));
 }
