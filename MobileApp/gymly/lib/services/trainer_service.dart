@@ -12,6 +12,8 @@ import 'package:http_interceptor/http_interceptor.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http_parser/http_parser.dart';
 
+import '../models/trainee.dart';
+
 class TrainerService {
   Client client;
   static final serviceUrl = dotenv.env['USER_SERVICE_URL'];
@@ -56,6 +58,35 @@ class TrainerService {
       final data = json.decode(response.body) as Map<String, dynamic>;
 
       return Trainer.fromJson(data["data"] as Map<String, dynamic>);
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<Trainee> getTraineeBySubjectId(String subjectId) async {
+    try {
+      final response =
+          await client.get(Uri.parse("${serviceUrl!}/User/Trainee/$subjectId"));
+      final data = json.decode(response.body) as Map<String, dynamic>;
+
+      return Trainee.fromJson(data["data"] as Map<String, dynamic>);
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<List<Trainee>> getTrainees() async {
+    try {
+      final response = await client
+          .get(Uri.parse("${serviceUrl!}/User/Trainer/GetEnrolledUsers"));
+      final data = json.decode(response.body) as Map<String, dynamic>;
+
+      List<Trainee> trainees = [];
+      for (var traineeJson in (data["data"] as List<dynamic>)) {
+        trainees.add(Trainee.fromJson(traineeJson as Map<String, dynamic>));
+      }
+
+      return trainees;
     } catch (_) {
       rethrow;
     }

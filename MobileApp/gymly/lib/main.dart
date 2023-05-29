@@ -184,13 +184,15 @@ class MyApp extends ConsumerWidget {
 
               TrainerWorkoutProgram program =
                   arguments["program"] as TrainerWorkoutProgram;
-              bool trainerMode = arguments["trainerMode"];
-              bool buyMode = arguments["buyMode"];
+              bool trainerMode = arguments["trainerMode"] ?? false;
+              bool buyMode = arguments["buyMode"] ?? false;
+              bool cancelMode = arguments["cancelMode"] ?? false;
               return MaterialPageRoute(
                   builder: (ctx) => ViewTrainerWorkoutProgram(
                         program,
                         trainerMode: trainerMode,
                         buyMode: buyMode,
+                        cancelMode: cancelMode,
                       ),
                   settings: settings);
             }

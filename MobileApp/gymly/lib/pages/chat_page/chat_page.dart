@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/constants/colors.dart';
 import 'package:gymly/models/appuser.dart';
 import 'package:gymly/pages/body_measurements_page.dart';
+import 'package:gymly/pages/chat_page/trainees_tab.dart';
 import 'package:gymly/pages/gym_page/gym_page_tabs.dart';
 import 'package:gymly/pages/gym_page/trainers_tab.dart';
 import 'package:gymly/pages/profile_page/profile_section.dart';
@@ -14,9 +15,10 @@ import 'package:gymly/providers/user_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../trainer_workout_programs_page/trainer_workout_programs_page.dart';
 import '../user_workout_programs_page/user_workout_programs_page.dart';
+import 'chat_page_tabs.dart';
 
-class GymPage extends ConsumerWidget {
-  const GymPage({super.key});
+class ChatPage extends ConsumerWidget {
+  const ChatPage({super.key});
 
   Widget buildButton(String text, void Function()? onPressed,
       [Color borderColor = Colors.cyanAccent, double borderWidth = 2.5]) {
@@ -54,7 +56,7 @@ class GymPage extends ConsumerWidget {
             SliverAppBar(
               pinned: true,
               backgroundColor: Colors.white,
-              flexibleSpace: FlexibleSpaceBar(background: GymPageTabs()),
+              flexibleSpace: FlexibleSpaceBar(background: ChatPageTabs()),
             ),
             SliverToBoxAdapter(
               child: SizedBox(
@@ -67,25 +69,25 @@ class GymPage extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const SizedBox(height: 20),
-                        if (user?.enrolledProgram != null)
-                          buildButton("MY SUBSCRIBED PROGRAM", () {
-                            Navigator.of(context).pushNamed(
-                                ViewTrainerWorkoutProgram.routeName,
-                                arguments: {
-                                  "program": user!.enrolledProgram,
-                                  "cancelMode": true
-                                });
-                          }, Colors.green, 5),
-                        const SizedBox(height: 20),
-                        buildButton("WORKOUT HISTORY", () {
-                          // Navigator.of(context)
-                          //     .pushNamed(BodyMeasurementsPage.routeName);
-                        }),
+                        // const SizedBox(height: 20),
+                        // if (user?.enrolledProgram != null)
+                        //   buildButton("MY SUBSCRIBED PROGRAM", () {
+                        //     Navigator.of(context).pushNamed(
+                        //         ViewTrainerWorkoutProgram.routeName,
+                        //         arguments: {
+                        //           "program": user!.enrolledProgram,
+                        //           "cancelMode": true
+                        //         });
+                        //   }, Colors.green, 5),
+                        // const SizedBox(height: 20),
+                        // buildButton("WORKOUT HISTORY", () {
+                        //   // Navigator.of(context)
+                        //   //     .pushNamed(BodyMeasurementsPage.routeName);
+                        // }),
                       ],
                     ),
                   ),
-                  TrainersTab(),
+                  TraineesTab(),
                 ]),
               ),
             )

@@ -6,6 +6,7 @@ import 'profile_image.dart';
 class ProfileSection extends StatelessWidget {
   final String imageUrl;
   final String userName, userEmail;
+  final String? programName;
   final UserType userType;
 
   const ProfileSection({
@@ -13,6 +14,7 @@ class ProfileSection extends StatelessWidget {
     required this.userEmail,
     required this.imageUrl,
     required this.userType,
+    this.programName,
     super.key,
   });
 
@@ -62,6 +64,23 @@ class ProfileSection extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
                   child: Text(
                     "TRAINER ACCOUNT",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: textColorWhite),
+                  ),
+                ),
+              if (programName != null)
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.cyan, width: 2),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+                  child: Text(
+                    programName!,
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme

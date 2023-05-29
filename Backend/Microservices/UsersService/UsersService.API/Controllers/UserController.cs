@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using UsersService.Application.Features.Users.Queries.GetTrainerBySubjectId;
 using UsersService.Application.Features.Users.Queries.GetAllTrainers;
+using UsersService.Application.Features.Users.Queries.GetEnrolledUsers;
+using UsersService.Application.Features.Users.Queries.GetTraineeBySubjectId;
 
 public class UserController : BaseApiController
 {
@@ -79,11 +81,27 @@ public class UserController : BaseApiController
   }
 
   // GET: api/<controller>
+  [HttpGet("Trainee/{subjectId}")]
+  [Authorize]
+  public async Task<IActionResult> GetTrainee(string subjectId)
+  {
+    return Ok(await Mediator.Send(new GetTraineeBySubjectIdQuery() { SubjectId = subjectId }));
+  }
+
+  // GET: api/<controller>
   [HttpGet("Trainer")]
   [Authorize]
   public async Task<IActionResult> Get([FromQuery] GetAllTrainersQuery query)
   {
     return Ok(await Mediator.Send(query));
+  }
+
+  // GET: api/<controller>
+  [HttpGet("Trainer/GetEnrolledUsers")]
+  [Authorize]
+  public async Task<IActionResult> GetEnrolledUsers()
+  {
+    return Ok(await Mediator.Send(new GetEnrolledUsersQuery()));
   }
 
   // GET: api/<controller>/TestGetEntityData/{id}

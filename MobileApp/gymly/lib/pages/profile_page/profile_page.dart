@@ -42,7 +42,6 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
-    ref.read(userProvider.notifier).getUser();
     final user = ref.watch(userProvider).user;
 
     return DefaultTabController(

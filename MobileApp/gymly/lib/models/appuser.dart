@@ -39,17 +39,19 @@ class AppUser {
 
     TrainerWorkoutProgram? enrolledProgram;
     if (json["enrolledProgram"] != null) {
-      enrolledProgram = json["endrolledProgram"];
+      enrolledProgram = TrainerWorkoutProgram.fromJson(json["enrolledProgram"]);
     }
+
     return AppUser(
-        double.parse(json['weight'].toString()),
-        double.parse(json["height"].toString()),
-        UserType.values[json["type"] as int],
-        json["gender"] as String,
-        // json["dateOfBirth"] as DateTime,
-        DateTime.now(), // TODO change
-        userWorkoutPrograms,
-        trainerWorkoutPrograms,
-        enrolledProgram);
+      double.parse(json['weight'].toString()),
+      double.parse(json["height"].toString()),
+      UserType.values[json["type"] as int],
+      json["gender"] as String,
+      // json["dateOfBirth"] as DateTime,
+      DateTime.now(), // TODO change
+      userWorkoutPrograms,
+      trainerWorkoutPrograms,
+      enrolledProgram,
+    );
   }
 }

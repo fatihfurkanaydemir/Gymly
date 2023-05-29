@@ -9,6 +9,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:gymly/models/appuser.dart';
 import 'package:gymly/models/trainer_workout_program.dart';
 import 'package:gymly/pages/home_page.dart';
+import 'package:gymly/providers/workout_provider.dart';
 import 'package:http/http.dart' as http;
 
 import '../../providers/user_provider.dart';
@@ -18,9 +19,13 @@ class ViewTrainerWorkoutProgram extends ConsumerStatefulWidget {
   final TrainerWorkoutProgram program;
   final bool trainerMode;
   final bool buyMode;
+  final bool cancelMode;
 
   ViewTrainerWorkoutProgram(this.program,
-      {this.trainerMode = false, this.buyMode = false, super.key});
+      {this.trainerMode = false,
+      this.buyMode = false,
+      this.cancelMode = false,
+      super.key});
 
   @override
   ConsumerState<ViewTrainerWorkoutProgram> createState() =>
@@ -62,7 +67,7 @@ class _ViewTrainerWorkoutProgramState
 
     displayPaymentSheet() async {
       try {
-        await Stripe.instance.presentPaymentSheet().then((value) {
+        await Stripe.instance.presentPaymentSheet().then((value) async {
           showDialog(
               context: context,
               builder: (_) => AlertDialog(
@@ -80,7 +85,12 @@ class _ViewTrainerWorkoutProgramState
                     ),
                   ));
           paymentIntent = null;
-          Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+          await ref
+              .read(workoutProvider.notifier)
+              .enrollUserToProgram(widget.program.id);
+          await ref.read(userProvider.notifier).getUser();
+          Navigator.of(context)
+              .popUntil(ModalRoute.withName(HomePage.routeName));
         }).onError((error, stackTrace) {
           setState(() {
             isLoading = false;
@@ -289,6 +299,103 @@ class _ViewTrainerWorkoutProgramState
                                 style: const TextStyle(fontSize: 20),
                                 textAlign: TextAlign.center,
                               ),
+                      ),
+                    if (widget.cancelMode)
+                      ElevatedButton(
+                        onPressed: () async {
+                          showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        const Icon(
+                                          Icons.warning_amber,
+                                          color: Colors.amber,
+                                          size: 100.0,
+                                        ),
+                                        const SizedBox(height: 10.0),
+                                        const Text(
+                                          "Are you sure?",
+                                          style: TextStyle(fontSize: 24),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 10.0),
+                                        const Text(
+                                          "We have no money refund policy in customer initiated cancelation requests",
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 24.0),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.green,
+                                                ),
+                                                child: const Text(
+                                                  "No",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 15),
+                                            Expanded(
+                                              child: ElevatedButton(
+                                                onPressed: () async {
+                                                  final isCanceled = await ref
+                                                      .read(workoutProvider
+                                                          .notifier)
+                                                      .cancelUserEnrollment();
+                                                  if (isCanceled) {
+                                                    ref
+                                                        .read(userProvider
+                                                            .notifier)
+                                                        .getUser();
+                                                    Navigator.of(context)
+                                                        .popUntil(
+                                                            ModalRoute.withName(
+                                                      HomePage.routeName,
+                                                    ));
+                                                  }
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.red,
+                                                ),
+                                                child: const Text(
+                                                  "Yes",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 15),
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text(
+                          "Cancel your subscription",
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.center,
+                        ),
                       )
                   ],
                 ),

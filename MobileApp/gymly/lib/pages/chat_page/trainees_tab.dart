@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/models/trainer.dart';
+import 'package:gymly/pages/chat_page/view_trainee_page.dart';
 import 'package:gymly/pages/gym_page/view_trainer_page.dart';
+import 'package:gymly/providers/trainee_provider.dart';
 import 'package:gymly/providers/trainer_provider.dart';
 
-class TrainersTab extends ConsumerStatefulWidget {
-  const TrainersTab({super.key});
+import '../../models/trainee.dart';
+
+class TraineesTab extends ConsumerStatefulWidget {
+  const TraineesTab({super.key});
 
   @override
-  ConsumerState<TrainersTab> createState() => _TrainersTabState();
+  ConsumerState<TraineesTab> createState() => _TraineesTabState();
 }
 
-class _TrainersTabState extends ConsumerState<TrainersTab> {
+class _TraineesTabState extends ConsumerState<TraineesTab> {
   bool hasListener = false;
+  bool isFirstRender = true;
   final controller = ScrollController();
 
   @override
@@ -23,12 +28,21 @@ class _TrainersTabState extends ConsumerState<TrainersTab> {
 
   @override
   Widget build(BuildContext context) {
-    List<Trainer> trainers = ref.watch(trainerProvider).trainers ?? [];
-    bool firstFetch = ref.watch(trainerProvider).isFirstFetch ?? true;
-    bool canFetchMore = ref.watch(trainerProvider).canFetchMore ?? true;
+    List<Trainee> trainees = ref.watch(traineeProvider).trainees ?? [];
+    bool firstFetch = ref.watch(traineeProvider).isFirstFetch ?? true;
+    // if (isFirstRender) {
+    //   Future(() {
+    //     ref.read(traineeProvider.notifier).refreshTrainees();
+    //     setState(() {
+    //       isFirstRender = false;
+    //     });
+    //   });
+    // }
+
+    bool canFetchMore = ref.watch(traineeProvider).canFetchMore ?? true;
 
     void fetch() {
-      ref.read(trainerProvider.notifier).getTrainers();
+      ref.read(traineeProvider.notifier).getTrainees();
     }
 
     if (!hasListener) {
@@ -46,7 +60,7 @@ class _TrainersTabState extends ConsumerState<TrainersTab> {
       fetch();
     }
 
-    if (trainers.isEmpty) {
+    if (trainees.isEmpty) {
       return const Center(
         child: CircularProgressIndicator(),
       );
@@ -54,7 +68,7 @@ class _TrainersTabState extends ConsumerState<TrainersTab> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        await ref.read(trainerProvider.notifier).refreshTrainers();
+        await ref.read(traineeProvider.notifier).refreshTrainees();
       },
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -62,7 +76,7 @@ class _TrainersTabState extends ConsumerState<TrainersTab> {
         cacheExtent: 2000,
         controller: controller,
         itemBuilder: (ctx, index) {
-          if (index < trainers.length) {
+          if (index < trainees.length) {
             return Container(
               margin: const EdgeInsets.only(bottom: 10),
               child: OutlinedButton(
@@ -74,7 +88,7 @@ class _TrainersTabState extends ConsumerState<TrainersTab> {
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (ctx) =>
-                            ViewTrainerPage(trainers[index].subjectId)));
+                            ViewTraineePage(trainees[index].subjectId)));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,17 +101,20 @@ class _TrainersTabState extends ConsumerState<TrainersTab> {
                                 Image.asset("assets/images/1.jpg").image,
                           ),
                           const SizedBox(width: 30),
-                          Column(
-                            children: [
-                              Text(
-                                trainers[index].firstName,
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              Text(
-                                trainers[index].lastName,
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                            ],
+                          Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  "${trainees[index].firstName} ${trainees[index].lastName}",
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  trainees[index].enrolledProgram?.name ?? "",
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -121,7 +138,7 @@ class _TrainersTabState extends ConsumerState<TrainersTab> {
             );
           }
         },
-        itemCount: trainers.length + 1,
+        itemCount: trainees.length + 1,
       ),
     );
   }

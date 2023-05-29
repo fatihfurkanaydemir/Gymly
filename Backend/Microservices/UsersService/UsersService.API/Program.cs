@@ -10,6 +10,7 @@ using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
 using OtherService.Application.Features.Entities.Queries.GetEntity;
 using Keycloak.AuthServices.Sdk.Admin;
+using Common.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ var config = new ConfigurationBuilder()
   .AddJsonFile("appsettings.json")
   .Build();
 
+builder.Services.AddTransient<IUserAccessor, UserAccessor>();
 builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
 {
   options.InvalidModelStateResponseFactory = actionContext =>
@@ -92,8 +94,9 @@ using (var scope = app.Services.CreateScope())
   try
   {
     var userRepository = services.GetRequiredService<IUserRepositoryAsync>();
+    var trainerWorkoutRepository = services.GetRequiredService<ITrainerWorkoutProgramRepositoryAsync>();
 
-    await DefaultUsers.SeedAsync(userRepository);
+    await DefaultUsers.SeedAsync(userRepository, trainerWorkoutRepository);
 
   }
   catch (Exception ex)

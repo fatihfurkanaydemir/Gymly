@@ -63,6 +63,7 @@ class PostsPageState extends ConsumerState<PostsPage> {
         await ref.read(postProvider.notifier).refreshPosts();
       },
       child: ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
         cacheExtent: 5000,
         controller: controller,
         itemBuilder: (ctx, index) {

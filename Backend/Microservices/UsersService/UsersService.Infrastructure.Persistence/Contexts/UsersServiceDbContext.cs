@@ -41,6 +41,10 @@ public class UsersServiceDbContext: DbContext
         property.SetColumnType("decimal(18,6)");
       }
 
+    builder.Entity<User>()
+      .HasOne(u => u.EnrolledProgram)
+      .WithMany(p => p.EnrolledUsers);
+
     base.OnModelCreating(builder);
   }
 }

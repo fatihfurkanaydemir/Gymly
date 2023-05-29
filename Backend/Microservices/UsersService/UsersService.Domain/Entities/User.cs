@@ -8,8 +8,8 @@ namespace UsersService.Domain.Entities;
 
 public class User : BaseUser
 {
-  public List<UserWorkoutProgram> UserWorkoutPrograms { get; set; } = new List<UserWorkoutProgram>();
-  public string Diet { get; set; } = default!;
-  public List<TrainerWorkoutProgram> TrainerWorkoutPrograms { get; set; } = new List<TrainerWorkoutProgram>();
-  public TrainerWorkoutProgram? EnrolledProgram { get; set; }
+  public virtual List<UserWorkoutProgram> UserWorkoutPrograms { get; set; } = new List<UserWorkoutProgram>();
+  public virtual string Diet { get; set; } = default!;
+  public virtual List<TrainerWorkoutProgram> TrainerWorkoutPrograms { get; set; } = new List<TrainerWorkoutProgram>();
+  public virtual TrainerWorkoutProgram? EnrolledProgram { get; set; }
 }

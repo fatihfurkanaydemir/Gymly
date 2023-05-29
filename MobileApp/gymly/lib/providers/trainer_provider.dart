@@ -3,6 +3,7 @@ import 'package:gymly/models/trainer.dart';
 import 'package:gymly/providers/storage_provider.dart';
 import 'package:gymly/services/user_service.dart';
 
+import '../models/trainee.dart';
 import '../services/trainer_service.dart';
 import 'auth_provider.dart';
 
@@ -60,6 +61,14 @@ class TrainerProviderStateNotifier extends StateNotifier<TrainerProviderState> {
 
   Future<Trainer> getTrainerBySubjectId(String subjectId) async {
     return await trainerService.getTrainerBySubjectId(subjectId);
+  }
+
+  Future<Trainee> getTraineeBySubjectId(String subjectId) async {
+    return await trainerService.getTraineeBySubjectId(subjectId);
+  }
+
+  Future<List<Trainee>> getTrainees() async {
+    return await trainerService.getTrainees();
   }
 }
 

@@ -26,11 +26,33 @@ public class UserRepositoryAsync: GenericRepositoryAsync<User>, IUserRepositoryA
       .FirstOrDefaultAsync();
   }
 
+  public async Task<User?> GetBySubjectIdAsTrackingAsync(String subjectId)
+  {
+    return await
+      _Users
+      .Where(x => x.SubjectId == subjectId)
+      .Include(x => x.UserWorkoutPrograms)
+      .Include(x => x.TrainerWorkoutPrograms)
+      .Include(x => x.EnrolledProgram)
+      .AsTracking()
+      .FirstOrDefaultAsync();
+  }
+
   public async Task<User?> GetBySubjectIdMinAsync(String subjectId)
   {
     return await
       _Users
       .Where(x => x.SubjectId == subjectId)
+      .AsNoTracking()
+      .FirstOrDefaultAsync();
+  }
+
+  public async Task<User?> GetBySubjectIdWithEnrolledProgramAsync(String subjectId)
+  {
+    return await
+      _Users
+      .Where(x => x.SubjectId == subjectId)
+      .Include(x => x.EnrolledProgram)
       .AsNoTracking()
       .FirstOrDefaultAsync();
   }

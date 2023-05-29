@@ -13,4 +13,11 @@ public class TrainerWorkoutProgramRepositoryAsync: GenericRepositoryAsync<Traine
   {
     _trainerWorkoutPrograms = dbContext.TrainerWorkoutPrograms;
   }
+
+  public async Task<TrainerWorkoutProgram?> getByIdWithRelationsAsync(int id)
+  {
+    return await _trainerWorkoutPrograms
+      .Include(p => p.EnrolledUsers)
+      .FirstOrDefaultAsync(p => p.Id == id);
+  }
 }

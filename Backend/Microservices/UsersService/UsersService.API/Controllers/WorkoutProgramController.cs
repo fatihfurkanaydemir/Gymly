@@ -71,4 +71,20 @@ public class WorkoutProgramController : BaseApiController
     command.SubjectId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     return Ok(await Mediator.Send(command));
   }
+
+  // POST api/<controller>
+  [HttpPost("EnrollUserToProgram")]
+  [Authorize]
+  public async Task<IActionResult> EnrollUserToProgram(EnrollUserToProgramCommand command)
+  {
+    return Ok(await Mediator.Send(command));
+  }
+
+  // POST api/<controller>
+  [HttpPost("CancelUserEnrollment")]
+  [Authorize]
+  public async Task<IActionResult> CancelUserEnrollment()
+  {
+    return Ok(await Mediator.Send(new CancelUserEnrollmentCommand()));
+  }
 }

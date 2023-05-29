@@ -19,7 +19,9 @@ class UserState {
 
 class UserStateNotifier extends StateNotifier<UserState> {
   UserService userService;
-  UserStateNotifier(this.userService) : super(const UserState());
+  UserStateNotifier(this.userService) : super(const UserState()) {
+    getUser();
+  }
 
   Future<void> getUser() async {
     AppUser user = await userService.getUser();

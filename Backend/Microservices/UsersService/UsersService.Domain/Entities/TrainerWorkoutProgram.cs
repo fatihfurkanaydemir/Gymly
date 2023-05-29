@@ -15,4 +15,5 @@ public class TrainerWorkoutProgram : AuditableBaseEntity
   public string HeaderImageUrl { get; set; } = default!;
   public string ProgramDetails { get; set; } = default!;
   public double Price { get; set; } = default!;
+  public virtual List<User> EnrolledUsers { get; set; } = new List<User>();
 }
