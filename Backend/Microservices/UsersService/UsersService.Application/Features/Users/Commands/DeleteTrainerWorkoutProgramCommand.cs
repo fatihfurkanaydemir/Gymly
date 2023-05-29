@@ -23,8 +23,10 @@ public class DeleteTrainerWorkoutProgramCommandHandler : IRequestHandler<DeleteT
 
   public async Task<Response<string>> Handle(DeleteTrainerWorkoutProgramCommand request, CancellationToken cancellationToken)
   {
-    var program = await _trainerWorkoutProgramRepository.GetByIdAsync(request.Id);
+    var program = await _trainerWorkoutProgramRepository.getByIdWithRelationsAsync(request.Id);
     if (program == null) throw new ApiException("PROGRAM_NOT_FOUND");
+
+    if (program.EnrolledUsers.Count != 0) throw new ApiException("Can't delete a program having active subscribers");
 
     await _trainerWorkoutProgramRepository.DeleteAsync(program);
 

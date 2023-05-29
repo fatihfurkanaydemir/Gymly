@@ -20,6 +20,31 @@ class ViewTraineePage extends ConsumerStatefulWidget {
   ConsumerState<ViewTraineePage> createState() => _ViewTraineePageState();
 }
 
+Widget buildButton(String text, void Function()? onPressed,
+    [Color borderColor = Colors.cyanAccent, double borderWidth = 2.5]) {
+  return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        side: BorderSide(width: borderWidth, color: borderColor),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      ),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            text,
+            style: const TextStyle(fontSize: 16),
+          ),
+          const SizedBox(width: 15),
+          Icon(
+            Icons.chevron_right,
+            size: 40,
+            color: borderColor,
+          )
+        ],
+      ));
+}
+
 class _ViewTraineePageState extends ConsumerState<ViewTraineePage> {
   @override
   Widget build(BuildContext context) {
@@ -68,51 +93,100 @@ class _ViewTraineePageState extends ConsumerState<ViewTraineePage> {
                     width: double.infinity,
                     height: 2,
                   ),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.55,
-                    child: ListView.builder(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 0, vertical: 20),
-                        itemBuilder: ((context, index) {
-                          // return Container(
-                          //   margin: const EdgeInsets.only(top: 10),
-                          //   child: OutlinedButton(
-                          //       style: OutlinedButton.styleFrom(
-                          //         side: const BorderSide(
-                          //             width: 2.5, color: Colors.cyan),
-                          //         padding: const EdgeInsets.symmetric(
-                          //             horizontal: 20, vertical: 10),
-                          //       ),
-                          //       onPressed: () {
-                          //         Navigator.of(context).pushNamed(
-                          //             ViewTrainerWorkoutProgram.routeName,
-                          //             arguments: {
-                          //               "program":
-                          //                   trainer.trainerWorkoutPrograms[index],
-                          //               "trainerMode": false,
-                          //               "buyMode":
-                          //                   user?.userType != UserType.trainer
-                          //             });
-                          //       },
-                          //       child: Row(
-                          //         mainAxisAlignment:
-                          //             MainAxisAlignment.spaceBetween,
-                          //         children: [
-                          //           Text(
-                          //             trainer.trainerWorkoutPrograms[index].name,
-                          //             style: const TextStyle(fontSize: 16),
-                          //           ),
-                          //           const Icon(
-                          //             Icons.chevron_right,
-                          //             size: 40,
-                          //             color: Colors.cyanAccent,
-                          //           )
-                          //         ],
-                          //       )),
-                          // );
-                        }),
-                        itemCount: 0 //trainer.trainerWorkoutPrograms.length,
-                        ),
+                  SingleChildScrollView(
+                    child: Container(
+                        height: MediaQuery.of(context).size.height * 0.55,
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 10),
+                            ExpansionTile(
+                                initiallyExpanded: false,
+                                collapsedBackgroundColor: Colors.black,
+                                backgroundColor: Colors.black,
+                                title: const Text(
+                                  "Diet",
+                                  style: const TextStyle(fontSize: 22),
+                                ),
+                                children: [
+                                  Text(trainee.diet),
+                                ]),
+                            const SizedBox(height: 10),
+                            Container(
+                              color: Colors.cyanAccent,
+                              width: double.infinity,
+                              height: 2,
+                            ),
+                            const SizedBox(height: 10),
+                            ExpansionTile(
+                                initiallyExpanded: false,
+                                collapsedBackgroundColor: Colors.black,
+                                backgroundColor: Colors.black,
+                                title: const Text(
+                                  "Measurements",
+                                  style: TextStyle(fontSize: 22),
+                                ),
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Text(
+                                              "Weight: ",
+                                              style: TextStyle(fontSize: 20),
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Text(
+                                              trainee.weight.toStringAsFixed(2),
+                                              style:
+                                                  const TextStyle(fontSize: 20),
+                                            ),
+                                            const SizedBox(width: 4),
+                                            const Text(
+                                              "kg",
+                                              style: TextStyle(fontSize: 16),
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            const Text(
+                                              "Height: ",
+                                              style: TextStyle(fontSize: 20),
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Text(
+                                              trainee.height.toStringAsFixed(2),
+                                              style:
+                                                  const TextStyle(fontSize: 20),
+                                            ),
+                                            const SizedBox(width: 4),
+                                            const Text(
+                                              "cm",
+                                              style: TextStyle(fontSize: 16),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ]),
+                            const SizedBox(height: 10),
+                            Container(
+                              color: Colors.cyanAccent,
+                              width: double.infinity,
+                              height: 2,
+                            ),
+                            const SizedBox(height: 20),
+                            const Text(
+                              "Workout History",
+                              style: const TextStyle(fontSize: 22),
+                            ),
+                          ],
+                        )),
                   ),
                 ]),
               );

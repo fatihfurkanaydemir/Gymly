@@ -49,49 +49,59 @@ class ChatPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider).user;
 
-    return DefaultTabController(
-        length: 2,
-        child: SafeArea(
-          child: CustomScrollView(slivers: [
-            SliverAppBar(
-              pinned: true,
-              backgroundColor: Colors.white,
-              flexibleSpace: FlexibleSpaceBar(background: ChatPageTabs()),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height - 210,
-                width: MediaQuery.of(context).size.width - 10,
-                child: TabBarView(children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // const SizedBox(height: 20),
-                        // if (user?.enrolledProgram != null)
-                        //   buildButton("MY SUBSCRIBED PROGRAM", () {
-                        //     Navigator.of(context).pushNamed(
-                        //         ViewTrainerWorkoutProgram.routeName,
-                        //         arguments: {
-                        //           "program": user!.enrolledProgram,
-                        //           "cancelMode": true
-                        //         });
-                        //   }, Colors.green, 5),
-                        // const SizedBox(height: 20),
-                        // buildButton("WORKOUT HISTORY", () {
-                        //   // Navigator.of(context)
-                        //   //     .pushNamed(BodyMeasurementsPage.routeName);
-                        // }),
-                      ],
-                    ),
-                  ),
-                  TraineesTab(),
-                ]),
+    if (user?.enrolledProgram != null || user?.userType == UserType.trainer) {
+      return DefaultTabController(
+          length: 2,
+          child: SafeArea(
+            child: CustomScrollView(slivers: [
+              SliverAppBar(
+                pinned: true,
+                backgroundColor: Colors.white,
+                flexibleSpace: FlexibleSpaceBar(background: ChatPageTabs()),
               ),
-            )
-          ]),
-        ));
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height - 210,
+                  width: MediaQuery.of(context).size.width - 10,
+                  child: TabBarView(children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // const SizedBox(height: 20),
+                          // if (user?.enrolledProgram != null)
+                          //   buildButton("MY SUBSCRIBED PROGRAM", () {
+                          //     Navigator.of(context).pushNamed(
+                          //         ViewTrainerWorkoutProgram.routeName,
+                          //         arguments: {
+                          //           "program": user!.enrolledProgram,
+                          //           "cancelMode": true
+                          //         });
+                          //   }, Colors.green, 5),
+                          // const SizedBox(height: 20),
+                          // buildButton("WORKOUT HISTORY", () {
+                          //   // Navigator.of(context)
+                          //   //     .pushNamed(BodyMeasurementsPage.routeName);
+                          // }),
+                        ],
+                      ),
+                    ),
+                    TraineesTab(),
+                  ]),
+                ),
+              )
+            ]),
+          ));
+    } else {
+      return const Center(
+        child: Text(
+          "You have no current subscription. Enroll to a program to access trainee features.",
+          style: TextStyle(fontSize: 26),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
   }
 }
