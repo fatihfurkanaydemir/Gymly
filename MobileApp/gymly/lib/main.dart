@@ -7,6 +7,8 @@ import 'package:gymly/constants/colors.dart';
 import 'package:gymly/models/trainer_workout_program.dart';
 import 'package:gymly/pages/add_post_page/add_post_page.dart';
 import 'package:gymly/pages/body_measurements_page.dart';
+import 'package:gymly/pages/gym_page/add_workout_page.dart';
+import 'package:gymly/pages/profile_page/diet_page.dart';
 import 'package:gymly/pages/profile_page/profile_settings.dart';
 import 'package:gymly/pages/trainer_workout_programs_page/add_trainer_workout_program.dart';
 import 'package:gymly/pages/trainer_workout_programs_page/trainer_workout_programs_page.dart';
@@ -199,6 +201,12 @@ class MyApp extends ConsumerWidget {
           case ProfileSettings.routeName:
             return MaterialPageRoute(
                 builder: (ctx) => const ProfileSettings(), settings: settings);
+          case DietPage.routeName:
+            return MaterialPageRoute(
+                builder: (ctx) => const DietPage(), settings: settings);
+          case AddWorkoutPage.routeName:
+            return MaterialPageRoute(
+                builder: (ctx) => const AddWorkoutPage(), settings: settings);
         }
         return null;
       },

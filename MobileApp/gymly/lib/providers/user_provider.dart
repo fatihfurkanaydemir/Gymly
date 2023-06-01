@@ -7,6 +7,8 @@ import 'package:gymly/providers/auth_provider.dart';
 import 'package:gymly/providers/storage_provider.dart';
 import 'package:gymly/services/user_service.dart';
 
+import '../models/workout.dart';
+
 class UserState {
   final AppUser? user;
 
@@ -45,6 +47,24 @@ class UserStateNotifier extends StateNotifier<UserState> {
 
   Future<bool> deleteUserWorkoutProgram(int id) async {
     return await userService.deleteUserWorkoutProgram(id);
+  }
+
+  Future<bool> updateDiet(String diet) async {
+    return await userService.updateDiet(diet);
+  }
+
+  Future<List<Workout>> getWorkoutHistory() async {
+    return await userService.getWorkoutHistory(pageNumber: 1, pageSize: 100);
+  }
+
+  Future<bool> createWorkout(
+      int durationInMinutes, int userWorkoutProgramId) async {
+    return await userService.createWorkout(
+        durationInMinutes, userWorkoutProgramId);
+  }
+
+  Future<bool> deleteWorkout(int id) async {
+    return await userService.deleteWorkout(id);
   }
 
   Future<bool> addTrainerWorkoutProgram(

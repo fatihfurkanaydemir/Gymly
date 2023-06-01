@@ -12,6 +12,8 @@ import 'package:http_interceptor/http_interceptor.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http_parser/http_parser.dart';
 
+import '../models/workout.dart';
+
 class UserService {
   Client client;
   static final serviceUrl = dotenv.env['USER_SERVICE_URL'];
@@ -78,6 +80,79 @@ class UserService {
         Uri.parse("${serviceUrl!}/User/UpdateMeasurements"),
         body:
             json.encode({"subjectId": "", "weight": weight, "height": height}),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      return data["succeeded"] as bool;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<bool> updateDiet(String diet) async {
+    try {
+      final response = await client.patch(
+        Uri.parse("${serviceUrl!}/User/UpdateDiet"),
+        body: json.encode({"diet": diet}),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      return data["succeeded"] as bool;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<List<Workout>> getWorkoutHistory({
+    required int pageNumber,
+    required int pageSize,
+  }) async {
+    try {
+      final response = await client.get(Uri.parse(
+          "${serviceUrl!}/User/Workout?pageNumber=$pageNumber&pageSize=$pageSize"));
+      final data = json.decode(response.body) as Map<String, dynamic>;
+
+      final workoutData = data["data"] as List<dynamic>;
+      List<Workout> workouts = [];
+
+      for (dynamic workout in workoutData) {
+        workouts.add(Workout.fromJson(workout));
+      }
+
+      return workouts;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<bool> createWorkout(
+      int durationInMinutes, int userWorkoutProgramId) async {
+    try {
+      final response = await client.post(
+        Uri.parse("${serviceUrl!}/User/Workout"),
+        body: json.encode({
+          "durationInMinutes": durationInMinutes,
+          "userWorkoutProgramId": userWorkoutProgramId
+        }),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      return data["succeeded"] as bool;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<bool> deleteWorkout(int id) async {
+    try {
+      final response = await client.delete(
+        Uri.parse("${serviceUrl!}/User/Workout"),
+        body: json.encode({
+          "id": id,
+        }),
         headers: {"Content-Type": "application/json"},
       );
 

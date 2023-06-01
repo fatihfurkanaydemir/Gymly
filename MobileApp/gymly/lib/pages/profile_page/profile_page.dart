@@ -11,6 +11,7 @@ import 'package:gymly/providers/user_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../trainer_workout_programs_page/trainer_workout_programs_page.dart';
 import '../user_workout_programs_page/user_workout_programs_page.dart';
+import 'diet_page.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
@@ -114,6 +115,10 @@ class ProfilePage extends ConsumerWidget {
                         buildButton("BODY MEASUREMENTS", () {
                           Navigator.of(context)
                               .pushNamed(BodyMeasurementsPage.routeName);
+                        }),
+                        const SizedBox(height: 15),
+                        buildButton("DIET", () {
+                          Navigator.of(context).pushNamed(DietPage.routeName);
                         }),
                         const SizedBox(height: 15),
                         buildButton("WORKOUT PROGRAMS", () {

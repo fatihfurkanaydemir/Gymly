@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/pages/chat_page/chat_page.dart';
+import 'package:gymly/pages/gym_page/add_workout_page.dart';
 import 'package:gymly/pages/gym_page/gym_page.dart';
 import 'package:gymly/pages/posts_page/posts_page.dart';
 import 'package:gymly/pages/profile_page/profile_page.dart';
@@ -46,7 +47,7 @@ class HomePageState extends ConsumerState<HomePage> {
           if (_selectedIndex == 2)
             IconButton(
               onPressed: () {
-                // Navigator.of(context).pushNamed(AddPostPage.routeName);
+                Navigator.of(context).pushNamed(AddWorkoutPage.routeName);
               },
               icon: const Icon(Icons.fitness_center_rounded),
             )
