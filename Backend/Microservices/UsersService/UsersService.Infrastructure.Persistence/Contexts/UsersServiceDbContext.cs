@@ -14,6 +14,7 @@ public class UsersServiceDbContext: DbContext
   public DbSet<User> Users { get; set; }
   public DbSet<UserWorkoutProgram> UserWorkoutPrograms { get; set; }
   public DbSet<TrainerWorkoutProgram> TrainerWorkoutPrograms { get; set; }
+  public DbSet<Workout> Workouts{ get; set; }
   public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
   {
     foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())

@@ -44,7 +44,6 @@ public class UserController : BaseApiController
   [Authorize]
   public async Task<IActionResult> UpdateDiet(UpdateUserDietCommand command)
   {
-    command.SubjectId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     return Ok(await Mediator.Send(command));
   }
 
@@ -112,38 +111,24 @@ public class UserController : BaseApiController
     return Ok(await _client.GetResponse<GetEntityDataResult>(new { Id = id }));
   }
 
-  //// GET: api/<controller>
-  //[HttpGet("Search")]
-  //public async Task<IActionResult> GetBySearchFilter([FromQuery] GetUsersBySearchFilterParameter filter)
-  //{
-  //  return Ok(await Mediator.Send(new GetUsersBySearchFilterQuery() { FilterString = filter.FilterString, PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
-  //}
+  [HttpPost("Workout")]
+  [Authorize]
+  public async Task<IActionResult> CreateWorkout(CreateWorkoutCommand command)
+  {
+    return Ok(await Mediator.Send(command));
+  }
 
-  //// GET: api/<controller>/id
-  //[HttpGet("{id}")]
-  //public async Task<IActionResult> GetById(int id)
-  //{
-  //  return Ok(await Mediator.Send(new GetUserByIdQuery() { Id = id }));
-  //}
+  [HttpDelete("Workout")]
+  [Authorize]
+  public async Task<IActionResult> DeleteWorkout(DeleteWorkoutCommand command)
+  {
+    return Ok(await Mediator.Send(command));
+  }
 
-  //// PATCH: api/<controller>
-  //[HttpPatch]
-  //public async Task<IActionResult> Patch(UpdateUserCommand command)
-  //{
-  //  return Ok(await Mediator.Send(command));
-  //}
-
-  //// POST: api/<controller>/deactivate
-  //[HttpPost("deactivate")]
-  //public async Task<IActionResult> Deactivate(DeactivateUserCommand command)
-  //{
-  //  return Ok(await Mediator.Send(command));
-  //}
-
-  //// POST: api/<controller>/activate
-  //[HttpPost("activate")]
-  //public async Task<IActionResult> Activate(ActivateUserCommand command)
-  //{
-  //  return Ok(await Mediator.Send(command));
-  //}
+  [HttpGet("Workout")]
+  [Authorize]
+  public async Task<IActionResult> GetWorkouts([FromQuery] GetWorkoutsQuery query)
+  {
+    return Ok(await Mediator.Send(query));
+  }
 }
