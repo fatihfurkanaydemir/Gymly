@@ -9,8 +9,10 @@ namespace PostService.Application.Interfaces.Repositories;
 
 public interface IPostRepository
 {
-  public Task<IReadOnlyList<Post>> GetPagedReponseAsync(int pageNumber, int pageSize);
+  public Task<IReadOnlyList<Post>> GetPagedReponseAsync(string subjectId, int pageNumber, int pageSize);
+  Task<IReadOnlyList<Post>> GetPagedReponseBySubjectIdAsync(string subjectId, int pageNumber, int pageSize);
   public Task<int> GetDataCount();
+  Task<int> GetDataCountBySubjectId(string subjectId);
   public Task<Post> GetByIdAsync(string id);
   public Task AddAsync(Post post);
   public Task RemoveAsync(string id);

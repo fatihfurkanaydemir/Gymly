@@ -16,19 +16,39 @@ enum EmojiType {
 
 class PostEmojis extends StatelessWidget {
   final Post post;
-  const PostEmojis({required this.post, super.key});
+  final bool isUserPost;
+  const PostEmojis({required this.post, this.isUserPost = false, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        PostEmoji(count: post.amazedCount, type: EmojiType.amazed),
-        PostEmoji(count: post.celebrationCount, type: EmojiType.celebration),
-        PostEmoji(count: post.flameCount, type: EmojiType.flame),
-        PostEmoji(count: post.lostMindCount, type: EmojiType.lostMind),
         PostEmoji(
-            count: post.reachedTargetCount, type: EmojiType.reachedTarget),
+          count: post.amazedCount,
+          type: EmojiType.amazed,
+          isUserPost: isUserPost,
+        ),
+        PostEmoji(
+          count: post.celebrationCount,
+          type: EmojiType.celebration,
+          isUserPost: isUserPost,
+        ),
+        PostEmoji(
+          count: post.flameCount,
+          type: EmojiType.flame,
+          isUserPost: isUserPost,
+        ),
+        PostEmoji(
+          count: post.lostMindCount,
+          type: EmojiType.lostMind,
+          isUserPost: isUserPost,
+        ),
+        PostEmoji(
+          count: post.reachedTargetCount,
+          type: EmojiType.reachedTarget,
+          isUserPost: isUserPost,
+        ),
       ],
     );
   }
@@ -37,7 +57,12 @@ class PostEmojis extends StatelessWidget {
 class PostEmoji extends StatefulWidget {
   final int count;
   final EmojiType type;
-  const PostEmoji({required this.count, required this.type, super.key});
+  final bool isUserPost;
+  const PostEmoji(
+      {required this.count,
+      required this.type,
+      this.isUserPost = false,
+      super.key});
 
   @override
   State<PostEmoji> createState() => _PostEmojiState();
@@ -56,7 +81,9 @@ class _PostEmojiState extends State<PostEmoji> {
     art.addController(ctrl);
 
     _isClicked = ctrl.findInput<bool>('isHover') as SMIBool;
-
+    if (widget.isUserPost) {
+      _isClicked!.value = true;
+    }
     setState(() {
       _controller = ctrl;
     });
@@ -100,11 +127,13 @@ class _PostEmojiState extends State<PostEmoji> {
           width: 70,
           height: 70,
           child: GestureDetector(
-            onTap: () => setState(() {
-              if (_isClicked != null) {
-                _isClicked!.value = !_isClicked!.value;
-              }
-            }),
+            onTap: widget.isUserPost
+                ? null
+                : () => setState(() {
+                      if (_isClicked != null) {
+                        _isClicked!.value = !_isClicked!.value;
+                      }
+                    }),
             child: RiveAnimation.asset(
               'assets/rive_animations/rives_animated_emojis.riv',
               artboard: artboard,

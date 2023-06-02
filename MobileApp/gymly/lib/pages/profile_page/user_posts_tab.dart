@@ -4,20 +4,21 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/pages/posts_page/post_card.dart';
 import 'package:gymly/pages/unknown_route_page.dart';
+import 'package:gymly/providers/auth_provider.dart';
 import 'package:gymly/providers/post_provider.dart';
+import 'package:gymly/providers/user_posts_provider.dart';
 
+import '../../models/auth_user.dart';
 import '../../models/post.dart';
 
-class PostsPage extends ConsumerStatefulWidget {
-  static const routeName = "/PostsPage";
-
-  const PostsPage({super.key});
+class UserPostsTab extends ConsumerStatefulWidget {
+  const UserPostsTab({super.key});
 
   @override
-  PostsPageState createState() => PostsPageState();
+  UserPostsTabState createState() => UserPostsTabState();
 }
 
-class PostsPageState extends ConsumerState<PostsPage> {
+class UserPostsTabState extends ConsumerState<UserPostsTab> {
   bool hasListener = false;
   final controller = ScrollController();
 
@@ -29,12 +30,13 @@ class PostsPageState extends ConsumerState<PostsPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Post>? posts = ref.watch(postProvider).posts;
-    bool firstFetch = ref.watch(postProvider).isFirstFetch ?? true;
-    bool canFetchMore = ref.watch(postProvider).canFetchMore ?? true;
+    AuthUser? user = ref.watch(authProvider).user;
+    List<Post>? posts = ref.watch(userPostsProvider).posts;
+    bool firstFetch = ref.watch(userPostsProvider).isFirstFetch ?? true;
+    bool canFetchMore = ref.watch(userPostsProvider).canFetchMore ?? true;
 
     void fetch() {
-      ref.read(postProvider.notifier).getPosts();
+      ref.read(userPostsProvider.notifier).getPosts(user?.sub ?? "");
     }
 
     if (!hasListener) {
@@ -60,7 +62,9 @@ class PostsPageState extends ConsumerState<PostsPage> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        await ref.read(postProvider.notifier).refreshPosts();
+        await ref
+            .read(userPostsProvider.notifier)
+            .refreshPosts(user?.sub ?? "");
       },
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -68,14 +72,16 @@ class PostsPageState extends ConsumerState<PostsPage> {
         controller: controller,
         itemBuilder: (ctx, index) {
           if (index < posts.length) {
-            return PostCard(post: posts[index]);
+            return PostCard(post: posts[index], isUserPost: true);
           } else {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 32),
               child: Center(
                 child: canFetchMore
                     ? const CircularProgressIndicator()
-                    : const Text("End of the posts"),
+                    : (posts.isEmpty)
+                        ? const Text("You didn't post anything yet.")
+                        : const Text("End of the posts."),
               ),
             );
           }

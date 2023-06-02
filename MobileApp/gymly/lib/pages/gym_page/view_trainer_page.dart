@@ -74,10 +74,11 @@ class _ViewTrainerPageState extends ConsumerState<ViewTrainerPage> {
                       itemBuilder: ((context, index) {
                         return Container(
                           margin: const EdgeInsets.only(top: 10),
-                          child: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                side: const BorderSide(
-                                    width: 2.5, color: Colors.cyan),
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 10),
                               ),
@@ -103,7 +104,7 @@ class _ViewTrainerPageState extends ConsumerState<ViewTrainerPage> {
                                   const Icon(
                                     Icons.chevron_right,
                                     size: 40,
-                                    color: Colors.cyanAccent,
+                                    color: Colors.black,
                                   )
                                 ],
                               )),

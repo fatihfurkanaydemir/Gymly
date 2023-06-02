@@ -23,7 +23,7 @@ class _TrainersTabState extends ConsumerState<TrainersTab> {
 
   @override
   Widget build(BuildContext context) {
-    List<Trainer> trainers = ref.watch(trainerProvider).trainers ?? [];
+    List<Trainer>? trainers = ref.watch(trainerProvider).trainers;
     bool firstFetch = ref.watch(trainerProvider).isFirstFetch ?? true;
     bool canFetchMore = ref.watch(trainerProvider).canFetchMore ?? true;
 
@@ -46,7 +46,7 @@ class _TrainersTabState extends ConsumerState<TrainersTab> {
       fetch();
     }
 
-    if (trainers.isEmpty) {
+    if (trainers == null) {
       return const Center(
         child: CircularProgressIndicator(),
       );
@@ -65,9 +65,11 @@ class _TrainersTabState extends ConsumerState<TrainersTab> {
           if (index < trainers.length) {
             return Container(
               margin: const EdgeInsets.only(bottom: 10),
-              child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(width: 2.5, color: Colors.cyan),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 10),
                   ),
@@ -82,7 +84,7 @@ class _TrainersTabState extends ConsumerState<TrainersTab> {
                       Row(
                         children: [
                           CircleAvatar(
-                            radius: 20,
+                            radius: 30,
                             backgroundImage:
                                 Image.asset("assets/images/1.jpg").image,
                           ),
@@ -105,7 +107,7 @@ class _TrainersTabState extends ConsumerState<TrainersTab> {
                       const Icon(
                         Icons.chevron_right,
                         size: 40,
-                        color: Colors.cyanAccent,
+                        color: Colors.black,
                       )
                     ],
                   )),

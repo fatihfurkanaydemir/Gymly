@@ -1,4 +1,4 @@
-﻿namespace PostService.Application.Features.Posts.Queries.GetAllUsers;
+﻿namespace PostService.Application.Features.Posts.Queries.GetPostsBySubjectId;
 
 using PostService.Application.Interfaces.Repositories;
 using PostService.Application.Features.SharedViewModels;
@@ -8,32 +8,30 @@ using MediatR;
 using Mapster;
 using MassTransit;
 using Common.Contracts;
-using Common.Helpers;
 
-public class GetAllPostsQuery : IRequest<PagedResponse<IEnumerable<PostViewModel>>>
+public class GetPostsBySubjectIdQuery : IRequest<PagedResponse<IEnumerable<PostViewModel>>>
 {
+  public string SubjectId { get; set; }
   public int PageNumber { get; set; }
   public int PageSize { get; set; }
 }
 
-public class GetAllPostsQueryHandler : IRequestHandler<GetAllPostsQuery, PagedResponse<IEnumerable<PostViewModel>>>
+public class GetPostsBySubjectIdQueryHandler : IRequestHandler<GetPostsBySubjectIdQuery, PagedResponse<IEnumerable<PostViewModel>>>
 {
   private readonly IPostRepository _postRepository;
   private readonly IRequestClient<GetUserContract> _client;
-  private readonly IUserAccessor _userAccessor;
-  public GetAllPostsQueryHandler(IPostRepository postRepository, IRequestClient<GetUserContract> client, IUserAccessor userAccessor)
+  public GetPostsBySubjectIdQueryHandler(IPostRepository postRepository, IRequestClient<GetUserContract> client)
   {
     _postRepository = postRepository;
     _client = client;
-    _userAccessor = userAccessor;
   }
 
-  public async Task<PagedResponse<IEnumerable<PostViewModel>>> Handle(GetAllPostsQuery request, CancellationToken cancellationToken)
+  public async Task<PagedResponse<IEnumerable<PostViewModel>>> Handle(GetPostsBySubjectIdQuery request, CancellationToken cancellationToken)
   {
 
     var validFilter = request.Adapt<RequestParameter>();
-    var dataCount = await _postRepository.GetDataCount();
-    var posts = await _postRepository.GetPagedReponseAsync(_userAccessor.SubjectId, request.PageNumber, request.PageSize);
+    var dataCount = await _postRepository.GetDataCountBySubjectId(request.SubjectId);
+    var posts = await _postRepository.GetPagedReponseBySubjectIdAsync(request.SubjectId, request.PageNumber, request.PageSize);
 
     var postViewModels = new List<PostViewModel>();
 

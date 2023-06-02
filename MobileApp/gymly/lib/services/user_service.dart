@@ -32,6 +32,7 @@ class UserService {
   Future<AppUser> getUser() async {
     try {
       final response = await client.get(Uri.parse("${serviceUrl!}/User"));
+
       final data = json.decode(response.body) as Map<String, dynamic>;
 
       return AppUser.fromJson(data["data"] as Map<String, dynamic>);
@@ -105,20 +106,19 @@ class UserService {
     }
   }
 
-  Future<List<Workout>> getWorkoutHistory({
+  Future<List<Workout>> getWorkoutHistory(
+    String subjectId, {
     required int pageNumber,
     required int pageSize,
   }) async {
     try {
       final response = await client.get(Uri.parse(
-          "${serviceUrl!}/User/Workout?pageNumber=$pageNumber&pageSize=$pageSize"));
+          "${serviceUrl!}/User/Workout?subjectId=$subjectId&pageNumber=$pageNumber&pageSize=$pageSize"));
       final data = json.decode(response.body) as Map<String, dynamic>;
 
-      final workoutData = data["data"] as List<dynamic>;
       List<Workout> workouts = [];
-
-      for (dynamic workout in workoutData) {
-        workouts.add(Workout.fromJson(workout));
+      for (var workoutJson in (data["data"] as List<dynamic>)) {
+        workouts.add(Workout.fromJson(workoutJson as Map<String, dynamic>));
       }
 
       return workouts;

@@ -1,8 +1,8 @@
 ﻿using Common.Exceptions;
+using Common.Helpers;
 using Common.Wrappers;
 using Mapster;
 using MediatR;
-using PostService.Application.Helpers;
 using PostService.Application.Interfaces.Repositories;
 using PostService.Domain.Entities;
 using System.Security.Claims;
@@ -15,11 +15,11 @@ public class CreatePostCommand : IRequest<Response<string>>
   public string Content { get; set; }
 }
 
-public class CreateUserCommandHandler : IRequestHandler<CreatePostCommand, Response<string>>
+public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, Response<string>>
 {
   private readonly IPostRepository _postRepository;
   private readonly IUserAccessor _userAccessor;
-  public CreateUserCommandHandler(IPostRepository postRepository, IUserAccessor userAccessor)
+  public CreatePostCommandHandler(IPostRepository postRepository, IUserAccessor userAccessor)
   {
     _postRepository = postRepository;
     _userAccessor = userAccessor;
@@ -29,7 +29,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreatePostCommand, Respo
   {
     var post = request.Adapt<Post>();
 
-    post.SubjectId = _userAccessor.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    post.SubjectId = _userAccessor.SubjectId;
     await _postRepository.AddAsync(post);
 
     return new Response<string>(post.Id.ToString(), "POST_CREATED");

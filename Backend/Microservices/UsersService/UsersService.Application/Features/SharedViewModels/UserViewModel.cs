@@ -13,5 +13,8 @@ public class UserViewModel
   public List<TrainerWorkoutProgramViewModel> TrainerWorkoutPrograms { get; set; } = default!;
   public TrainerWorkoutProgramViewModel? EnrolledProgram { get; set; }
   public string Diet { get; set; } = default!;
+  public string FirstName { get; set; } = default!;
+  public string LastName { get; set; } = default!;
+  public string AvatarUrl { get; set; } = default!;
   public UserType Type { get; set; } = default!;
 }

@@ -4,15 +4,16 @@ import 'package:gymly/models/user_workout_program.dart';
 
 import '../../providers/user_provider.dart';
 
-class ViewUserWorkout extends ConsumerStatefulWidget {
+class ViewUserWorkoutProgram extends ConsumerStatefulWidget {
   final UserWorkoutProgram program;
-  const ViewUserWorkout(this.program, {super.key});
+  const ViewUserWorkoutProgram(this.program, {super.key});
 
   @override
-  ConsumerState<ViewUserWorkout> createState() => _ViewUserWorkoutState();
+  ConsumerState<ViewUserWorkoutProgram> createState() =>
+      _ViewUserWorkoutState();
 }
 
-class _ViewUserWorkoutState extends ConsumerState<ViewUserWorkout> {
+class _ViewUserWorkoutState extends ConsumerState<ViewUserWorkoutProgram> {
   final _formKey = GlobalKey<FormState>();
 
   String title = "";
@@ -60,8 +61,15 @@ class _ViewUserWorkoutState extends ConsumerState<ViewUserWorkout> {
     return Container(
       child: ExpansionTile(
         initiallyExpanded: false,
-        collapsedBackgroundColor: Colors.black,
-        backgroundColor: Colors.black,
+        collapsedBackgroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        textColor: Colors.black,
+        collapsedShape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        collapsedTextColor: Colors.black,
+        iconColor: Colors.black,
+        collapsedIconColor: Colors.black,
         title: Text(
           widget.program.title,
           style: const TextStyle(fontSize: 16),
@@ -73,6 +81,7 @@ class _ViewUserWorkoutState extends ConsumerState<ViewUserWorkout> {
               SizedBox(
                 height: 70,
                 child: TextFormField(
+                  style: const TextStyle(color: Colors.black),
                   expands: true,
                   enabled: false,
                   initialValue: widget.program.description.isEmpty
@@ -88,6 +97,7 @@ class _ViewUserWorkoutState extends ConsumerState<ViewUserWorkout> {
                 height: 300,
                 child: TextFormField(
                   maxLines: 15,
+                  style: const TextStyle(color: Colors.black),
                   minLines: 15,
                   enabled: false,
                   initialValue: widget.program.content,

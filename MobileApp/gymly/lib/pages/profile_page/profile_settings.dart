@@ -3,36 +3,15 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/models/appuser.dart';
+import 'package:gymly/pages/components/navigation_button.dart';
 import 'package:gymly/providers/user_provider.dart';
+
+import '../../providers/auth_provider.dart';
 
 class ProfileSettings extends ConsumerWidget {
   static const String routeName = "/ProfileSettings";
 
   const ProfileSettings({super.key});
-
-  Widget buildButton(String text, void Function()? onPressed) {
-    return OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          side: const BorderSide(width: 2.5, color: Colors.cyan),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        ),
-        onPressed: onPressed,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              text,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(width: 15),
-            const Icon(
-              Icons.chevron_right,
-              size: 40,
-              color: Colors.cyanAccent,
-            )
-          ],
-        ));
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,15 +25,21 @@ class ProfileSettings extends ConsumerWidget {
             padding: const EdgeInsets.all(8),
             height: MediaQuery.of(context).size.height * 0.8,
             child: Column(children: [
-              buildButton(
-                  "Switch to trainer account",
-                  type != UserType.normal
-                      ? null
-                      : () async {
-                          await ref
-                              .read(userProvider.notifier)
-                              .switchToTrainerAccountType();
-                        }),
+              NavigationButton(
+                "Switch to trainer account",
+                type != UserType.normal
+                    ? null
+                    : () async {
+                        await ref
+                            .read(userProvider.notifier)
+                            .switchToTrainerAccountType();
+                      },
+              ),
+              const SizedBox(height: 10),
+              NavigationButton("Logout", () {
+                ref.read(authProvider.notifier).logout();
+                Navigator.of(context).pop();
+              }),
             ]),
           ),
         ));

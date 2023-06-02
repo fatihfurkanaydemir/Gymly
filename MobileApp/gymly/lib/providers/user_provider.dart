@@ -53,8 +53,9 @@ class UserStateNotifier extends StateNotifier<UserState> {
     return await userService.updateDiet(diet);
   }
 
-  Future<List<Workout>> getWorkoutHistory() async {
-    return await userService.getWorkoutHistory(pageNumber: 1, pageSize: 100);
+  Future<List<Workout>> getWorkoutHistory(String subjectId) async {
+    return await userService.getWorkoutHistory(subjectId,
+        pageNumber: 1, pageSize: 100);
   }
 
   Future<bool> createWorkout(

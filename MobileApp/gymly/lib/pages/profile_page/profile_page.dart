@@ -6,39 +6,17 @@ import 'package:gymly/pages/body_measurements_page.dart';
 import 'package:gymly/pages/profile_page/profile_section.dart';
 import 'package:gymly/pages/profile_page/profile_settings.dart';
 import 'package:gymly/pages/profile_page/profile_tabs.dart';
+import 'package:gymly/pages/profile_page/user_posts_tab.dart';
 import 'package:gymly/providers/user_provider.dart';
 
 import '../../providers/auth_provider.dart';
+import '../components/navigation_button.dart';
 import '../trainer_workout_programs_page/trainer_workout_programs_page.dart';
 import '../user_workout_programs_page/user_workout_programs_page.dart';
 import 'diet_page.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
-
-  Widget buildButton(String text, void Function()? onPressed) {
-    return OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          side: const BorderSide(width: 2.5, color: Colors.cyan),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        ),
-        onPressed: onPressed,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              text,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(width: 15),
-            const Icon(
-              Icons.chevron_right,
-              size: 40,
-              color: Colors.cyanAccent,
-            )
-          ],
-        ));
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,7 +51,7 @@ class ProfilePage extends ConsumerWidget {
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.pin,
                 background: ProfileSection(
-                  userName: auth.user?.name ?? '-',
+                  userName: "${user?.firstName ?? ""} ${user?.lastName ?? ""}",
                   userEmail: auth.user?.email ?? '-',
                   userType: user?.userType ?? UserType.normal,
                   imageUrl: '',
@@ -91,20 +69,7 @@ class ProfilePage extends ConsumerWidget {
                 height: MediaQuery.of(context).size.height - 210,
                 width: MediaQuery.of(context).size.width - 10,
                 child: TabBarView(children: [
-                  Column(
-                    children: [
-                      Text(auth.user!.sub),
-                      Text(auth.user!.name),
-                      Text(auth.user!.email),
-                      Text(user == null ? "" : user.height.toString()),
-                      OutlinedButton(
-                        onPressed: () {
-                          ref.read(authProvider.notifier).logout();
-                        },
-                        child: const Text("Logout"),
-                      ),
-                    ],
-                  ),
+                  UserPostsTab(),
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 10),
@@ -112,22 +77,22 @@ class ProfilePage extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const SizedBox(height: 50),
-                        buildButton("BODY MEASUREMENTS", () {
+                        NavigationButton("BODY MEASUREMENTS", () {
                           Navigator.of(context)
                               .pushNamed(BodyMeasurementsPage.routeName);
                         }),
                         const SizedBox(height: 15),
-                        buildButton("DIET", () {
+                        NavigationButton("DIET", () {
                           Navigator.of(context).pushNamed(DietPage.routeName);
                         }),
                         const SizedBox(height: 15),
-                        buildButton("WORKOUT PROGRAMS", () {
+                        NavigationButton("WORKOUT PROGRAMS", () {
                           Navigator.of(context)
                               .pushNamed(UserWorkoutProgramsPage.routeName);
                         }),
                         const SizedBox(height: 15),
                         if (user?.userType == UserType.trainer)
-                          buildButton("TRAINER WORKOUT PROGRAMS", () {
+                          NavigationButton("TRAINER WORKOUT PROGRAMS", () {
                             Navigator.of(context).pushNamed(
                                 TrainerWorkoutProgramsPage.routeName);
                           }),

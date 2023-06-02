@@ -21,6 +21,7 @@ public class WorkoutRepositoryAsync : GenericRepositoryAsync<Workout>, IWorkoutR
       .Where(x => x.SubjectId == subjectId)
       .Skip((pageNumber - 1) * pageSize)
       .Take(pageSize)
+      .OrderByDescending(x => x.Created)
       .AsNoTracking()
       .ToListAsync();
   }

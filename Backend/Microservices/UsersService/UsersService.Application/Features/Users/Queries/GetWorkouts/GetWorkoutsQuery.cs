@@ -7,9 +7,12 @@ using Common.Parameters;
 using MediatR;
 using Mapster;
 using Common.Helpers;
+using System.ComponentModel.DataAnnotations;
 
 public class GetWorkoutsQuery : IRequest<PagedResponse<IEnumerable<WorkoutViewModel>>>
 {
+  [Required]
+  public string SubjectId { get; set; } = default!;
   public int PageNumber { get; set; }
   public int PageSize { get; set; }
 }
@@ -17,19 +20,16 @@ public class GetWorkoutsQuery : IRequest<PagedResponse<IEnumerable<WorkoutViewMo
 public class GetWorkoutsQueryHandler : IRequestHandler<GetWorkoutsQuery, PagedResponse<IEnumerable<WorkoutViewModel>>>
 {
   private readonly IWorkoutRepositoryAsync _workoutRepository;
-  private readonly IUserAccessor _userAccessor;
-  public GetWorkoutsQueryHandler(IWorkoutRepositoryAsync workoutRepository, IUserAccessor userAccessor)
+  public GetWorkoutsQueryHandler(IWorkoutRepositoryAsync workoutRepository)
   {
     _workoutRepository = workoutRepository;
-    _userAccessor = userAccessor;
   }
 
   public async Task<PagedResponse<IEnumerable<WorkoutViewModel>>> Handle(GetWorkoutsQuery request, CancellationToken cancellationToken)
   {
-
     var validFilter = request.Adapt<RequestParameter>();
-    var dataCount = await _workoutRepository.GetDataCountBySubjectId(_userAccessor.SubjectId);
-    var workouts = await _workoutRepository.GetBySubjectIdPagedAsync(_userAccessor.SubjectId, request.PageSize, request.PageNumber);
+    var dataCount = await _workoutRepository.GetDataCountBySubjectId(request.SubjectId);
+    var workouts = await _workoutRepository.GetBySubjectIdPagedAsync(request.SubjectId, request.PageSize, request.PageNumber);
     
     var workoutViewModels = new List<WorkoutViewModel>();
 

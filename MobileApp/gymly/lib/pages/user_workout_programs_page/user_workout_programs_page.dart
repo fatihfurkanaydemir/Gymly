@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gymly/pages/user_workout_programs_page/view_user_workout.dart';
+import 'package:gymly/pages/user_workout_programs_page/view_user_workout_program.dart';
 import 'package:gymly/providers/user_provider.dart';
 
 class UserWorkoutProgramsPage extends ConsumerStatefulWidget {
@@ -71,18 +71,12 @@ class _UserWorkoutProgramsPageState
                     if (user != null) {
                       return Column(
                         children: [
-                          ViewUserWorkout(
+                          ViewUserWorkoutProgram(
                             user.userWorkoutPrograms[index],
                             key: Key(
                                 user.userWorkoutPrograms[index].id.toString()),
                           ),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 2,
-                            child: Container(
-                              color: Colors.cyan,
-                            ),
-                          )
+                          const SizedBox(height: 8)
                         ],
                       );
                     }

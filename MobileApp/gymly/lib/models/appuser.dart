@@ -8,6 +8,9 @@ class AppUser {
   final double height;
   final String gender;
   final String diet;
+  final String firstName;
+  final String lastName;
+  final String avatarUrl;
   final DateTime dateOfBirth;
   final UserType userType;
   final List<UserWorkoutProgram> userWorkoutPrograms;
@@ -20,6 +23,9 @@ class AppUser {
     this.userType,
     this.gender,
     this.diet,
+    this.firstName,
+    this.lastName,
+    this.avatarUrl,
     this.dateOfBirth,
     this.userWorkoutPrograms,
     this.trainerWorkoutPrograms,
@@ -50,6 +56,9 @@ class AppUser {
       UserType.values[json["type"] as int],
       json["gender"] as String,
       json["diet"] as String,
+      json["firstName"] as String,
+      json["lastName"] as String,
+      json["avatarUrl"] as String,
       // json["dateOfBirth"] as DateTime,
       DateTime.now(), // TODO change
       userWorkoutPrograms,

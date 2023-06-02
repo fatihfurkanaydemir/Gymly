@@ -8,7 +8,8 @@ import '../../models/post.dart';
 
 class PostCard extends StatelessWidget {
   final Post post;
-  const PostCard({required this.post, super.key});
+  final bool isUserPost;
+  const PostCard({required this.post, this.isUserPost = false, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +48,7 @@ class PostCard extends StatelessWidget {
                         ),
                   ),
                 ),
-                PostEmojis(
-                  post: post,
-                ),
+                PostEmojis(post: post, isUserPost: isUserPost),
               ],
             ),
           ),

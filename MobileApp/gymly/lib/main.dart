@@ -16,6 +16,7 @@ import 'package:gymly/pages/trainer_workout_programs_page/view_trainer_workout_p
 import 'package:gymly/pages/unknown_route_page.dart';
 import 'package:gymly/pages/user_workout_programs_page/user_workout_programs_page.dart';
 import 'package:gymly/pages/welcome_page.dart';
+import 'package:gymly/pages/workout_history_page/workout_history_page.dart';
 import 'package:gymly/providers/auth_provider.dart';
 import 'package:gymly/providers/storage_provider.dart';
 import './pages/login_page.dart';
@@ -207,6 +208,10 @@ class MyApp extends ConsumerWidget {
           case AddWorkoutPage.routeName:
             return MaterialPageRoute(
                 builder: (ctx) => const AddWorkoutPage(), settings: settings);
+          case WorkoutHistoryPage.routeName:
+            return MaterialPageRoute(
+                builder: (ctx) => const WorkoutHistoryPage(),
+                settings: settings);
         }
         return null;
       },

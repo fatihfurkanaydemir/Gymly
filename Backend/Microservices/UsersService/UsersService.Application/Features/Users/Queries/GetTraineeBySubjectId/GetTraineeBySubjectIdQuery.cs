@@ -32,7 +32,7 @@ public class GetTraineeBySubjectIdQueryHandler : IRequestHandler<GetTraineeBySub
     TraineeViewModel model = trainee.Adapt<TraineeViewModel>();
 
     var kcUser = await _kcClient.GetUser("gymly", trainee.SubjectId);
-    model.AvatarUrl = ""; // TODO change
+    model.AvatarUrl = trainee.AvatarUrl;
     model.FirstName = kcUser.FirstName ?? "";
     model.LastName = kcUser.LastName ?? "";
 

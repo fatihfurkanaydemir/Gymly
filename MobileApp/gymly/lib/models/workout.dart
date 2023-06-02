@@ -21,7 +21,7 @@ class Workout {
     return Workout(
       json['subjectId'] as String,
       json['id'] as int,
-      DateTime.parse(json["createDate"]),
+      DateTime.parse(json["created"]),
       json["durationInMinutes"] as int,
       json["programTitle"] as String,
       json["programDescription"] as String,

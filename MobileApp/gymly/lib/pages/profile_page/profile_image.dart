@@ -12,7 +12,7 @@ class ProfileImage extends StatelessWidget {
       width: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
-        color: Colors.white60,
+        color: Colors.white,
       ),
       child: Center(
         child: Transform.scale(

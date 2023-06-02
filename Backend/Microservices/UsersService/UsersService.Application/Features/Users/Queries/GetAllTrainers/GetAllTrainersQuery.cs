@@ -37,7 +37,7 @@ public class GetAllTrainersQueryHandler : IRequestHandler<GetAllTrainersQuery, P
     {
       var trainer = p.Adapt<TrainerViewModel>();
       var kcUser = await _kcClient.GetUser("gymly", p.SubjectId);
-      trainer.AvatarUrl = ""; // TODO change
+      trainer.AvatarUrl = p.AvatarUrl;
       trainer.FirstName = kcUser.FirstName ?? "";
       trainer.LastName = kcUser.LastName ?? "";
 

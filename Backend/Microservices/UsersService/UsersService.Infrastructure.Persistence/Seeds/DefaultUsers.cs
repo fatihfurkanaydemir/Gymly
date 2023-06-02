@@ -31,7 +31,8 @@ public class DefaultUsers
         Height = 176,
         Type = Domain.Enums.UserType.Normal,
         Diet = "",
-        Gender = "Male"
+        Gender = "Male",
+        AvatarUrl = ""
       };
 
       var User2 = new User()
@@ -41,7 +42,8 @@ public class DefaultUsers
         Height = 168,
         Type = Domain.Enums.UserType.Normal,
         Diet = "",
-        Gender = "Male"
+        Gender = "Male",
+        AvatarUrl = ""
       };
 
       var User3 = new User()
@@ -51,7 +53,8 @@ public class DefaultUsers
         Height = 185,
         Type = Domain.Enums.UserType.Trainer,
         Diet = "",
-        Gender = "Male"
+        Gender = "Male",
+        AvatarUrl = ""
       };
 
       var wp1 = new TrainerWorkoutProgram()
@@ -101,7 +104,8 @@ public class DefaultUsers
         Height = 188,
         Type = Domain.Enums.UserType.Trainer,
         Diet = "",
-        Gender = "Male"
+        Gender = "Male",
+        AvatarUrl = ""
       };
 
       var dbWp1 = await trainerWorkoutRepository.AddAsync(wp1);

@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/pages/trainer_workout_programs_page/add_trainer_workout_program.dart';
 import 'package:gymly/pages/trainer_workout_programs_page/view_trainer_workout_program.dart';
-import 'package:gymly/pages/user_workout_programs_page/view_user_workout.dart';
+import 'package:gymly/pages/user_workout_programs_page/view_user_workout_program.dart';
 import 'package:gymly/providers/user_provider.dart';
 
 class TrainerWorkoutProgramsPage extends ConsumerStatefulWidget {
@@ -49,10 +49,11 @@ class _TrainerWorkoutProgramsPageState
                       return Container(
                         margin: const EdgeInsets.symmetric(
                             horizontal: 0, vertical: 10),
-                        child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                  width: 2.5, color: Colors.cyan),
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
                             ),
@@ -76,7 +77,7 @@ class _TrainerWorkoutProgramsPageState
                                 const Icon(
                                   Icons.chevron_right,
                                   size: 40,
-                                  color: Colors.cyanAccent,
+                                  color: Colors.black,
                                 )
                               ],
                             )),

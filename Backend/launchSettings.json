@@ -14,7 +14,7 @@
         "pgadmin": "StartWithoutDebugging",
         "postgres": "StartWithoutDebugging",
         "mongodb": "StartWithoutDebugging",
-        "postservice.api": "StartWithoutDebugging",
+        "postservice.api": "StartDebugging",
         "resourceservice.api": "StartWithoutDebugging"
       }
     }

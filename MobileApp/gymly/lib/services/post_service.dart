@@ -49,6 +49,28 @@ class PostService {
     }
   }
 
+  Future<List<Post>> getUserPosts({
+    required String subjectId,
+    required int pageNumber,
+    required int pageSize,
+  }) async {
+    try {
+      final response = await client.get(Uri.parse(
+          "${serviceUrl!}/Post/GetUserPosts?subjectId=$subjectId&pageNumber=$pageNumber&pageSize=$pageSize"));
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      final postData = data["data"] as List<dynamic>;
+      List<Post> posts = [];
+
+      for (dynamic post in postData) {
+        posts.add(Post.fromJson(post));
+      }
+
+      return posts;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
   Future<bool> uploadPost({
     required List<File> images,
     required String content,

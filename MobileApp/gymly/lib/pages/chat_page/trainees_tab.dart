@@ -28,16 +28,8 @@ class _TraineesTabState extends ConsumerState<TraineesTab> {
 
   @override
   Widget build(BuildContext context) {
-    List<Trainee> trainees = ref.watch(traineeProvider).trainees ?? [];
+    List<Trainee>? trainees = ref.watch(traineeProvider).trainees;
     bool firstFetch = ref.watch(traineeProvider).isFirstFetch ?? true;
-    // if (isFirstRender) {
-    //   Future(() {
-    //     ref.read(traineeProvider.notifier).refreshTrainees();
-    //     setState(() {
-    //       isFirstRender = false;
-    //     });
-    //   });
-    // }
 
     bool canFetchMore = ref.watch(traineeProvider).canFetchMore ?? true;
 
@@ -60,7 +52,7 @@ class _TraineesTabState extends ConsumerState<TraineesTab> {
       fetch();
     }
 
-    if (trainees.isEmpty) {
+    if (trainees == null) {
       return const Center(
         child: CircularProgressIndicator(),
       );
@@ -79,9 +71,11 @@ class _TraineesTabState extends ConsumerState<TraineesTab> {
           if (index < trainees.length) {
             return Container(
               margin: const EdgeInsets.only(bottom: 10),
-              child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(width: 2.5, color: Colors.cyan),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 10),
                   ),
@@ -96,7 +90,7 @@ class _TraineesTabState extends ConsumerState<TraineesTab> {
                       Row(
                         children: [
                           CircleAvatar(
-                            radius: 20,
+                            radius: 30,
                             backgroundImage:
                                 Image.asset("assets/images/1.jpg").image,
                           ),
@@ -122,7 +116,7 @@ class _TraineesTabState extends ConsumerState<TraineesTab> {
                       const Icon(
                         Icons.chevron_right,
                         size: 40,
-                        color: Colors.cyanAccent,
+                        color: Colors.black,
                       )
                     ],
                   )),
@@ -133,7 +127,9 @@ class _TraineesTabState extends ConsumerState<TraineesTab> {
               child: Center(
                 child: canFetchMore
                     ? const CircularProgressIndicator()
-                    : const Text("End of the list"),
+                    : trainees.isEmpty
+                        ? const Text("You have no trainees yet.")
+                        : const Text("End of the list"),
               ),
             );
           }

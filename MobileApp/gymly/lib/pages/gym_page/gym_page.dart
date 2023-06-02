@@ -3,12 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/constants/colors.dart';
 import 'package:gymly/models/appuser.dart';
 import 'package:gymly/pages/body_measurements_page.dart';
+import 'package:gymly/pages/components/navigation_button.dart';
 import 'package:gymly/pages/gym_page/gym_page_tabs.dart';
 import 'package:gymly/pages/gym_page/trainers_tab.dart';
 import 'package:gymly/pages/profile_page/profile_section.dart';
 import 'package:gymly/pages/profile_page/profile_settings.dart';
 import 'package:gymly/pages/profile_page/profile_tabs.dart';
 import 'package:gymly/pages/trainer_workout_programs_page/view_trainer_workout_program.dart';
+import 'package:gymly/pages/workout_history_page/workout_history_page.dart';
 import 'package:gymly/providers/user_provider.dart';
 
 import '../../providers/auth_provider.dart';
@@ -17,31 +19,6 @@ import '../user_workout_programs_page/user_workout_programs_page.dart';
 
 class GymPage extends ConsumerWidget {
   const GymPage({super.key});
-
-  Widget buildButton(String text, void Function()? onPressed,
-      [Color borderColor = Colors.cyanAccent, double borderWidth = 2.5]) {
-    return OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(width: borderWidth, color: borderColor),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        ),
-        onPressed: onPressed,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              text,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(width: 15),
-            Icon(
-              Icons.chevron_right,
-              size: 40,
-              color: borderColor,
-            )
-          ],
-        ));
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -69,18 +46,18 @@ class GymPage extends ConsumerWidget {
                       children: [
                         const SizedBox(height: 20),
                         if (user?.enrolledProgram != null)
-                          buildButton("MY SUBSCRIBED PROGRAM", () {
+                          NavigationButton("MY SUBSCRIBED PROGRAM", () {
                             Navigator.of(context).pushNamed(
                                 ViewTrainerWorkoutProgram.routeName,
                                 arguments: {
                                   "program": user!.enrolledProgram,
                                   "cancelMode": true
                                 });
-                          }, Colors.green, 5),
+                          }),
                         const SizedBox(height: 20),
-                        buildButton("WORKOUT HISTORY", () {
-                          // Navigator.of(context)
-                          //     .pushNamed(BodyMeasurementsPage.routeName);
+                        NavigationButton("WORKOUT HISTORY", () {
+                          Navigator.of(context)
+                              .pushNamed(WorkoutHistoryPage.routeName);
                         }),
                       ],
                     ),

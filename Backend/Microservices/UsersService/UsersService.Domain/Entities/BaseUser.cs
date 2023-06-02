@@ -10,4 +10,5 @@ public class BaseUser : AuditableBaseEntity
   public virtual double Height { get; set; } = default!;
   public virtual string Gender { get; set; } = default!;
   public virtual UserType Type { get; set; } = UserType.Normal;
+  public virtual string AvatarUrl { get; set; } = default!;
 }

@@ -18,10 +18,20 @@ public class PostRepository : IPostRepository
     this.collection = collection;
   }
 
-  public async Task<IReadOnlyList<Post>> GetPagedReponseAsync(int pageNumber, int pageSize)
+  public async Task<IReadOnlyList<Post>> GetPagedReponseAsync(string subjectId, int pageNumber, int pageSize)
   {
     return await collection
-        .Find(x => true)
+        .Find(x => x.SubjectId != subjectId)
+        .SortByDescending(x => x.CreateDate)
+        .Skip((pageNumber - 1) * pageSize)
+        .Limit(pageSize)
+        .ToListAsync();
+  }
+
+  public async Task<IReadOnlyList<Post>> GetPagedReponseBySubjectIdAsync(string subjectId, int pageNumber, int pageSize)
+  {
+    return await collection
+        .Find(x => x.SubjectId == subjectId)
         .SortByDescending(x => x.CreateDate)
         .Skip((pageNumber - 1) * pageSize)
         .Limit(pageSize)
@@ -31,6 +41,11 @@ public class PostRepository : IPostRepository
   public async Task<int> GetDataCount()
   {
     return (int)(await collection.CountDocumentsAsync(x => true));
+  }
+
+  public async Task<int> GetDataCountBySubjectId(string subjectId)
+  {
+    return (int)(await collection.CountDocumentsAsync(x => x.SubjectId == subjectId));
   }
 
   public async Task<Post> GetByIdAsync(string id) 

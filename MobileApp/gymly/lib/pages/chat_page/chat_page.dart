@@ -20,31 +20,6 @@ import 'chat_page_tabs.dart';
 class ChatPage extends ConsumerWidget {
   const ChatPage({super.key});
 
-  Widget buildButton(String text, void Function()? onPressed,
-      [Color borderColor = Colors.cyanAccent, double borderWidth = 2.5]) {
-    return OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(width: borderWidth, color: borderColor),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        ),
-        onPressed: onPressed,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              text,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(width: 15),
-            Icon(
-              Icons.chevron_right,
-              size: 40,
-              color: borderColor,
-            )
-          ],
-        ));
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider).user;
@@ -69,23 +44,7 @@ class ChatPage extends ConsumerWidget {
                           horizontal: 20, vertical: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          // const SizedBox(height: 20),
-                          // if (user?.enrolledProgram != null)
-                          //   buildButton("MY SUBSCRIBED PROGRAM", () {
-                          //     Navigator.of(context).pushNamed(
-                          //         ViewTrainerWorkoutProgram.routeName,
-                          //         arguments: {
-                          //           "program": user!.enrolledProgram,
-                          //           "cancelMode": true
-                          //         });
-                          //   }, Colors.green, 5),
-                          // const SizedBox(height: 20),
-                          // buildButton("WORKOUT HISTORY", () {
-                          //   // Navigator.of(context)
-                          //   //     .pushNamed(BodyMeasurementsPage.routeName);
-                          // }),
-                        ],
+                        children: [],
                       ),
                     ),
                     TraineesTab(),

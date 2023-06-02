@@ -6,6 +6,7 @@ using Common.Wrappers;
 using MediatR;
 using Mapster;
 using Common.Exceptions;
+using Keycloak.AuthServices.Sdk.Admin;
 
 public class GetUserQuery : IRequest<Response<UserViewModel>>
 {
@@ -15,9 +16,11 @@ public class GetUserQuery : IRequest<Response<UserViewModel>>
 public class GetUserQueryHandler : IRequestHandler<GetUserQuery, Response<UserViewModel>>
 {
   private readonly IUserRepositoryAsync _UserRepository;
-  public GetUserQueryHandler(IUserRepositoryAsync UserRepository)
+  readonly IKeycloakUserClient _kcClient;
+  public GetUserQueryHandler(IUserRepositoryAsync UserRepository, IKeycloakUserClient kcClient)
   {
     _UserRepository = UserRepository;
+    _kcClient = kcClient;
   }
 
   public async Task<Response<UserViewModel>> Handle(GetUserQuery request, CancellationToken cancellationToken)
@@ -25,6 +28,12 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, Response<UserVi
     var user = await _UserRepository.GetBySubjectIdAsync(request.SubjectId);
     if (user == null) throw new ApiException("User data not found");
 
-    return new Response<UserViewModel>(user.Adapt<UserViewModel>());
+    var viewModel = user.Adapt<UserViewModel>();
+
+    var kcUser = await _kcClient.GetUser("gymly", user.SubjectId);
+    viewModel.FirstName = kcUser.FirstName ?? "";
+    viewModel.LastName = kcUser.LastName ?? "";
+
+    return new Response<UserViewModel>(viewModel);
   }
 }
