@@ -56,10 +56,11 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
     );
 
     state = state.copyWith(
-        messages: [...state.messages ?? [], ...messages],
-        pageNumber: state.pageNumber! + 1,
-        isFirstFetch: false,
-        canFetchMore: messages.length >= ChatState.pageSize);
+      messages: [...state.messages ?? [], ...messages],
+      pageNumber: state.pageNumber! + 1,
+      isFirstFetch: false,
+      canFetchMore: messages.length >= ChatState.pageSize,
+    );
   }
 
   Future<void> refreshChatHistory(String otherUserId) async {

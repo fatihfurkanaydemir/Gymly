@@ -19,10 +19,12 @@ public class ChatHub : Hub
 
   public async Task JoinChat(string userId)
   {
-    if (_connections.GetConnections(userId).Count() > 0)
-    {
-      return;
-    }
+    //if (_connections.GetConnections(userId).Count() > 0)
+    //{
+    //  return;
+    //}
+
+    Console.WriteLine("JoinedChat: " + userId);
 
     _connections.Add(userId, Context.ConnectionId);
   }
@@ -45,8 +47,10 @@ public class ChatHub : Hub
 
     if (_connections.GetConnections(receiverId).Count() > 0)
     {
-      var targetUserConnectionId = _connections.GetConnections(receiverId).First();
-      await Clients.Client(targetUserConnectionId).SendAsync("ChatChannel", msg);
+      foreach (var conn in _connections.GetConnections(receiverId))
+      {
+        await Clients.Client(conn).SendAsync("ChatChannel", msg);
+      }
     }
 
     await _chatRepository.AddAsync(msg);

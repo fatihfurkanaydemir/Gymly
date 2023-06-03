@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/models/chat_message.dart';
@@ -9,12 +11,18 @@ import 'package:logging/logging.dart';
 
 class HubConnectionProviderState {
   final HubConnection? connection;
+  final bool? joinedChat;
 
-  const HubConnectionProviderState({this.connection});
+  const HubConnectionProviderState({this.connection, this.joinedChat});
 
-  HubConnectionProviderState copyWith({HubConnection? connection}) {
+  HubConnectionProviderState copyWith({
+    HubConnection? connection,
+    bool? joinedChat,
+  }) {
+    print("Connection: $connection");
     return HubConnectionProviderState(
       connection: connection ?? this.connection,
+      joinedChat: joinedChat ?? this.joinedChat,
     );
   }
 }
@@ -27,12 +35,17 @@ class HubConnectionProviderStateNotifier
   final transportProtLogger = Logger("SignalR - transport");
 
   HubConnectionProviderStateNotifier()
-      : super(const HubConnectionProviderState());
+      : super(const HubConnectionProviderState(joinedChat: false));
 
   Future<void> connect() async {
     try {
-      print("RECONNECT");
+      if (state.connection != null) {
+        return;
+      }
+
+      print("CONNECT");
       final httpOptions = HttpConnectionOptions(
+        logMessageContent: true,
         logger: transportProtLogger,
       );
 
@@ -52,11 +65,7 @@ class HubConnectionProviderStateNotifier
   }
 
   Future<void> assignChatChannelFunction(Function(ChatMessage) callback) async {
-    if (state.connection == null ||
-        state.connection!.state != HubConnectionState.Connected) {
-      await connect();
-    }
-
+    state.connection!.off("ChatChannel");
     state.connection!.on("ChatChannel", (List<Object?>? parameters) {
       print(ChatMessage.fromJson(parameters![0] as Map<String, dynamic>)
           .senderId);
@@ -65,24 +74,27 @@ class HubConnectionProviderStateNotifier
   }
 
   Future<void> sendMessage(
-      String message, String subjectId, String receiverId) async {
+    String message,
+    String subjectId,
+    String receiverId,
+  ) async {
+    print("SendConnection: ${state.connection}");
     if (state.connection == null ||
         state.connection!.state != HubConnectionState.Connected) {
       await connect();
     }
     final result = await state.connection!
         .invoke("SendMessage", args: <Object>[message, subjectId, receiverId]);
-    hubProtLogger.log(Level.SEVERE, "Result: '$result");
   }
 
   Future<void> joinChat(String subjectId) async {
-    if (state.connection == null ||
-        state.connection!.state != HubConnectionState.Connected) {
-      await connect();
-    }
+    if (state.joinedChat!) return;
+
+    print("JOIN");
     final result =
         await state.connection!.invoke("JoinChat", args: <Object>[subjectId]);
-    hubProtLogger.log(Level.SEVERE, "Result: '$result");
+
+    state = state.copyWith(joinedChat: true);
   }
 
   Future<void> leaveChat(String subjectId) async {
@@ -90,9 +102,11 @@ class HubConnectionProviderStateNotifier
         state.connection!.state != HubConnectionState.Connected) {
       await connect();
     }
+
     final result =
         await state.connection!.invoke("LeaveChat", args: <Object>[subjectId]);
-    hubProtLogger.log(Level.SEVERE, "Result: '$result");
+
+    state = state.copyWith(joinedChat: false);
   }
 }
 

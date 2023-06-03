@@ -60,12 +60,16 @@ class HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    ref
-        .read(hubConnectionProvider.notifier)
-        .joinChat(ref.read(authProvider).user!.sub);
-    ref
-        .read(hubConnectionProvider.notifier)
-        .assignChatChannelFunction(ref.read(chatProvider.notifier).getMessage);
+    Future(() async {
+      await ref.watch(hubConnectionProvider.notifier).connect();
+
+      await ref
+          .watch(hubConnectionProvider.notifier)
+          .joinChat(ref.watch(authProvider).user!.sub);
+
+      await ref.watch(hubConnectionProvider.notifier).assignChatChannelFunction(
+          ref.watch(chatProvider.notifier).getMessage);
+    });
 
     return Scaffold(
       backgroundColor: Colors.black,
