@@ -1,5 +1,6 @@
 class TrainerWorkoutProgram {
   final int id;
+  final String trainerSubjectId;
   final String name;
   final String title;
   final String description;
@@ -7,12 +8,21 @@ class TrainerWorkoutProgram {
   final String programDetails;
   final double price;
 
-  TrainerWorkoutProgram(this.id, this.name, this.title, this.description,
-      this.headerImageUrl, this.programDetails, this.price);
+  TrainerWorkoutProgram(
+    this.id,
+    this.trainerSubjectId,
+    this.name,
+    this.title,
+    this.description,
+    this.headerImageUrl,
+    this.programDetails,
+    this.price,
+  );
 
   factory TrainerWorkoutProgram.fromJson(Map<String, dynamic> json) {
     return TrainerWorkoutProgram(
       json["id"] as int,
+      json["trainerSubjectId"] as String,
       json["name"] as String,
       json["title"] as String,
       json["description"] as String,

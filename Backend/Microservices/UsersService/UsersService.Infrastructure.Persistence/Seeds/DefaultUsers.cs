@@ -75,6 +75,7 @@ public class DefaultUsers
         "et porta tortor tincidunt nec.",
         Price = 1299,
         Title = "Your Workout for This Summer",
+        TrainerSubjectId = "73804339-35b0-4bc0-bedc-26d62ba2602e"
       };
 
       var wp2 = new TrainerWorkoutProgram()
@@ -95,6 +96,7 @@ public class DefaultUsers
         "et porta tortor tincidunt nec.",
         Price = 1299,
         Title = "The best program you can find if you are an absolute beginner",
+        TrainerSubjectId = "73804339-35b0-4bc0-bedc-26d62ba2602e"
       };
 
       var User4 = new User()
@@ -112,6 +114,8 @@ public class DefaultUsers
       var dbWp2 = await trainerWorkoutRepository.AddAsync(wp2);
       User3.TrainerWorkoutPrograms.Add(dbWp1);
       User3.TrainerWorkoutPrograms.Add(dbWp2);
+
+      User1.EnrolledProgram = dbWp1;
 
       await userRepository.AddAsync(User1);
       await userRepository.AddAsync(User2);

@@ -43,6 +43,7 @@ public class CreateTrainerWorkoutProgramCommandHandler : IRequestHandler<CreateT
       ) throw new ApiException("INVALID_VALUES");
 
     var workoutProgram = request.Adapt<TrainerWorkoutProgram>();
+    workoutProgram.TrainerSubjectId = user.SubjectId;
     var addedProgram = await _trainerWorkoutProgramRepository.AddAsync(workoutProgram);
 
     user.TrainerWorkoutPrograms.Add(addedProgram);

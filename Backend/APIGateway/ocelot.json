@@ -64,6 +64,49 @@
       ],
       "DownstreamPathTemplate": "/{everything}",
       "SwaggerKey": "resourceservice"
+    },
+    {
+      "UpstreamPathTemplate": "/ChatService/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Update", "Delete" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "chatservice.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/{everything}",
+      "SwaggerKey": "chatservice"
+    },
+    {
+      "UpstreamPathTemplate": "/ChatService/chatHub/negotiate",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "chatservice.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/chatHub/negotiate",
+      "SwaggerKey": "chatservice"
+    },
+    {
+      "UpstreamPathTemplate": "/ChatService/chatHub",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "chatservice.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/chatHub",
+      "SwaggerKey": "chatservice",
+      //"QoSOptions": {
+      //  "TimeoutValue": 320000
+      //},
+      "Priority": 50
     }
   ],
   "SwaggerEndPoints": [
@@ -116,9 +159,20 @@
           "Url": "http://resourceservice.api/swagger/v1/swagger.json"
         }
       ]
+    },
+    {
+      "Key": "chatservice",
+      "Config": [
+        {
+          "Name": "Chat Service",
+          "Version": "v1",
+          "Url": "http://chatservice.api/swagger/v1/swagger.json"
+        }
+      ]
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:8001"
+    //"BaseUrl": "https://localhost:8001",
+    "RequestIdKey": "OcRequestId"
   }
 }

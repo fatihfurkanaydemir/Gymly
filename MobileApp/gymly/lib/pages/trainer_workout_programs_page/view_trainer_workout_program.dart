@@ -21,11 +21,13 @@ class ViewTrainerWorkoutProgram extends ConsumerStatefulWidget {
   final bool buyMode;
   final bool cancelMode;
 
-  ViewTrainerWorkoutProgram(this.program,
-      {this.trainerMode = false,
-      this.buyMode = false,
-      this.cancelMode = false,
-      super.key});
+  ViewTrainerWorkoutProgram(
+    this.program, {
+    this.trainerMode = false,
+    this.buyMode = false,
+    this.cancelMode = false,
+    super.key,
+  });
 
   @override
   ConsumerState<ViewTrainerWorkoutProgram> createState() =>

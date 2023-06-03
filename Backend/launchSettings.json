@@ -15,7 +15,8 @@
         "postgres": "StartWithoutDebugging",
         "mongodb": "StartWithoutDebugging",
         "postservice.api": "StartDebugging",
-        "resourceservice.api": "StartWithoutDebugging"
+        "resourceservice.api": "StartWithoutDebugging",
+        "chatservice.api": "StartDebugging"
       }
     }
   }

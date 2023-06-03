@@ -1,7 +1,5 @@
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
-using Ocelot.Provider.Polly;
-using MMLib.SwaggerForOcelot.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
@@ -29,9 +27,19 @@ app.UseSwagger();
 app.UseSwaggerForOcelotUI(opt => {
   opt.PathToSwaggerGenerator = "/swagger/docs";
 });
-app.UseOcelot();
+
+app.UseCors(cors =>
+{
+  cors.AllowAnyHeader()
+      .AllowAnyMethod()
+      .SetIsOriginAllowed(x => true)
+      .AllowCredentials();
+});
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.UseWebSockets();
+app.UseOcelot().Wait();
 
 app.Run();

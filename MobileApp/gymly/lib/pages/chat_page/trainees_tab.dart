@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/models/trainer.dart';
+import 'package:gymly/pages/chat_page/chat_with_trainee_page.dart';
 import 'package:gymly/pages/chat_page/view_trainee_page.dart';
 import 'package:gymly/pages/gym_page/view_trainer_page.dart';
+import 'package:gymly/providers/chat_provider.dart';
 import 'package:gymly/providers/trainee_provider.dart';
 import 'package:gymly/providers/trainer_provider.dart';
 
@@ -69,57 +71,85 @@ class _TraineesTabState extends ConsumerState<TraineesTab> {
         controller: controller,
         itemBuilder: (ctx, index) {
           if (index < trainees.length) {
-            return Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              child: ElevatedButton(
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.785,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 8),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) =>
+                                ViewTraineePage(trainees[index].subjectId)));
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundImage:
+                                    Image.asset("assets/images/1.jpg").image,
+                              ),
+                              const SizedBox(width: 20),
+                              Center(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "${trainees[index].firstName} ${trainees[index].lastName}",
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      trainees[index].enrolledProgram?.name ??
+                                          "",
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Icon(
+                            Icons.chevron_right,
+                            size: 40,
+                            color: Colors.black,
+                          )
+                        ],
+                      )),
+                ),
+                const SizedBox(width: 8),
+                ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15)),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
+                        horizontal: 10, vertical: 25),
                   ),
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) =>
-                            ViewTraineePage(trainees[index].subjectId)));
+                    ref
+                        .read(chatProvider.notifier)
+                        .refreshChatHistory(trainees[index].subjectId);
+
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) {
+                      return ChatWithTraineePage(trainees[index]);
+                    }));
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundImage:
-                                Image.asset("assets/images/1.jpg").image,
-                          ),
-                          const SizedBox(width: 30),
-                          Center(
-                            child: Column(
-                              children: [
-                                Text(
-                                  "${trainees[index].firstName} ${trainees[index].lastName}",
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  trainees[index].enrolledProgram?.name ?? "",
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 15),
-                      const Icon(
-                        Icons.chevron_right,
-                        size: 40,
-                        color: Colors.black,
-                      )
-                    ],
-                  )),
+                  child: const Icon(Icons.chat),
+                )
+              ],
             );
           } else {
             return Padding(

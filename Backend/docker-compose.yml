@@ -8,6 +8,7 @@ services:
       dockerfile: APIGateway/Dockerfile
     ports:
      - "8001:443"
+     - "8000:80"
     networks:
      - backend
 
@@ -64,6 +65,20 @@ services:
     build:
       context: .
       dockerfile: Microservices/ResourceService/ResourceService.API/Dockerfile
+    volumes:
+      - ./gymly_cert.pem:/etc/ssl/certs/server-certificate.pem 
+    networks:
+      - backend
+    extra_hosts:
+      - "192.168.137.1:192.168.137.1"
+    depends_on:
+      - rabbitmq
+
+  chatservice.api:
+    image: ${DOCKER_REGISTRY-}chatserviceapi
+    build:
+      context: .
+      dockerfile: Microservices/ChatService/ChatService.API/Dockerfile
     volumes:
       - ./gymly_cert.pem:/etc/ssl/certs/server-certificate.pem 
     networks:
@@ -145,6 +160,7 @@ volumes:
   postgres:
   mongodb:
   mongoconfig:
+
 
 
 

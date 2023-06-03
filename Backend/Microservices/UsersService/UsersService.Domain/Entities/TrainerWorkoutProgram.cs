@@ -9,6 +9,7 @@ namespace UsersService.Domain.Entities;
 
 public class TrainerWorkoutProgram : AuditableBaseEntity
 {
+  public string TrainerSubjectId { get; set; } = default!;
   public string Name { get; set; } = default!;
   public string Title { get; set; } = default!;
   public string Description { get; set; } = default!;

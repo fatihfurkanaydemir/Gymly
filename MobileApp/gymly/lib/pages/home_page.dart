@@ -10,6 +10,8 @@ import 'package:gymly/pages/profile_page/profile_page.dart';
 import 'package:gymly/pages/add_post_page/add_post_page.dart';
 import 'package:gymly/pages/welcome_page.dart';
 import 'package:gymly/providers/auth_provider.dart';
+import 'package:gymly/providers/chat_provider.dart';
+import 'package:gymly/providers/hub_connection_provider.dart';
 import '../constants/colors.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -58,6 +60,13 @@ class HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    ref
+        .read(hubConnectionProvider.notifier)
+        .joinChat(ref.read(authProvider).user!.sub);
+    ref
+        .read(hubConnectionProvider.notifier)
+        .assignChatChannelFunction(ref.read(chatProvider.notifier).getMessage);
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(

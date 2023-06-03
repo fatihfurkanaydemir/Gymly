@@ -6,6 +6,7 @@ namespace UsersService.Application.Features.SharedViewModels;
 public class TrainerWorkoutProgramViewModel
 {
   public virtual int Id { get; set; }
+  public string TrainerSubjectId { get; set; } = default!;
   public DateTime Created { get; set; }
   public DateTime LastModified { get; set; }
   public string Name { get; set; } = default!;

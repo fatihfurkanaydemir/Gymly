@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,7 +58,17 @@ class Authentication {
 
 class AuthenticationNotifier extends StateNotifier<Authentication> {
   FlutterSecureStorage _storage;
-  AuthenticationNotifier(this._storage) : super(Authentication());
+
+  AuthenticationNotifier(this._storage) : super(Authentication()) {
+    // Timer.periodic(const Duration(minutes: 8), (timer) {
+    //   refresh();
+    // });
+  }
+
+  Future<String> getAccessToken() async {
+    await refresh();
+    return state.accessToken!;
+  }
 
   Future<bool> login() async {
     try {

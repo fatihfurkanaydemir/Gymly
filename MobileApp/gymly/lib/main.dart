@@ -18,6 +18,7 @@ import 'package:gymly/pages/user_workout_programs_page/user_workout_programs_pag
 import 'package:gymly/pages/welcome_page.dart';
 import 'package:gymly/pages/workout_history_page/workout_history_page.dart';
 import 'package:gymly/providers/auth_provider.dart';
+import 'package:gymly/providers/hub_connection_provider.dart';
 import 'package:gymly/providers/storage_provider.dart';
 import './pages/login_page.dart';
 import 'dart:convert';
@@ -221,5 +222,3 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
-
-class TrainerWorkoutProgramsPageouteName {}

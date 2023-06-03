@@ -16,10 +16,10 @@ class ChatPageTabs extends ConsumerWidget {
       Tab(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.newspaper),
-            const SizedBox(width: 8),
-            Text(user?.userType == UserType.trainer ? "Trainer News" : ""),
+          children: const [
+            Icon(Icons.newspaper),
+            SizedBox(width: 8),
+            Text("Trainer News"),
           ],
         ),
       ),
