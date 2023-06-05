@@ -18,8 +18,10 @@ public static class ServiceRegistration
 
     services.AddSingleton(mongoDatabase.GetCollection<Post>(settings.PostCollectionName));
     services.AddSingleton(mongoDatabase.GetCollection<PostInteraction>(settings.PostInteractionCollectionName));
+    services.AddSingleton(mongoDatabase.GetCollection<TrainerNews>(settings.TrainerNewsCollectionName));
 
     services.AddSingleton<IPostRepository, PostRepository>();
     services.AddSingleton<IPostInteractionRepository, PostInteractionRepository>();
+    services.AddSingleton<ITrainerNewsRepository, TrainerNewsRepository>();
   }
 }
