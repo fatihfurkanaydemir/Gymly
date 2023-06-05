@@ -163,4 +163,4 @@ class AuthenticationNotifier extends StateNotifier<Authentication> {
 
 final authProvider =
     StateNotifierProvider<AuthenticationNotifier, Authentication>(
-        (ref) => AuthenticationNotifier(ref.read(storageProvider)));
+        (ref) => AuthenticationNotifier(ref.watch(storageProvider)));

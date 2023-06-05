@@ -10,6 +10,7 @@ import 'package:gymly/providers/user_posts_provider.dart';
 
 import '../../models/auth_user.dart';
 import '../../models/post.dart';
+import '../../models/post_interaction.dart';
 
 class UserPostsTab extends ConsumerStatefulWidget {
   const UserPostsTab({super.key});
@@ -72,7 +73,12 @@ class UserPostsTabState extends ConsumerState<UserPostsTab> {
         controller: controller,
         itemBuilder: (ctx, index) {
           if (index < posts.length) {
-            return PostCard(post: posts[index], isUserPost: true);
+            return PostCard(
+              post: posts[index],
+              isUserPost: true,
+              interaction: PostInteraction(
+                  "", "", posts[index].id, false, false, false, false, false),
+            );
           } else {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 32),

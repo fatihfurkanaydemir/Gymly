@@ -7,6 +7,7 @@ using PostService.Application.Features.Posts.Commands;
 using Microsoft.AspNetCore.Authorization;
 using PostService.Application.Features.Posts.Queries.GetAllUsers;
 using PostService.Application.Features.Posts.Queries.GetPostsBySubjectId;
+using PostService.Application.Features.Posts.Queries.GetPostById;
 
 public class PostController : BaseApiController
 {
@@ -24,6 +25,14 @@ public class PostController : BaseApiController
   public async Task<IActionResult> Get([FromQuery] RequestParameter filter)
   {
     return Ok(await Mediator.Send(new GetAllPostsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
+  }
+
+  // GET: api/<controller>
+  [HttpGet("GetPostById")]
+  [Authorize]
+  public async Task<IActionResult> GetById([FromQuery] GetPostByIdQuery query)
+  {
+    return Ok(await Mediator.Send(query));
   }
 
   // GET: api/<controller>

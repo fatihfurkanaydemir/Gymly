@@ -20,7 +20,7 @@ class _WorkoutHistoryPageState extends ConsumerState<WorkoutHistoryPage> {
     var user = ref.watch(authProvider).user;
     var appUser = ref.watch(userProvider).user;
     Future<List<Workout>> workoutHistoryFuture =
-        ref.read(userProvider.notifier).getWorkoutHistory(user!.sub);
+        ref.watch(userProvider.notifier).getWorkoutHistory(user!.sub);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

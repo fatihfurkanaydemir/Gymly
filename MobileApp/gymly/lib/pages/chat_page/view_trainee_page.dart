@@ -92,10 +92,13 @@ class _ViewTraineePageState extends ConsumerState<ViewTraineePage> {
                               collapsedIconColor: Colors.black,
                               title: const Text(
                                 "Diet",
-                                style: const TextStyle(fontSize: 22),
+                                style: TextStyle(fontSize: 22),
                               ),
                               children: [
-                                Text(trainee.diet),
+                                Text(
+                                  trainee.diet,
+                                  style: const TextStyle(color: Colors.black),
+                                ),
                               ]),
                           const SizedBox(height: 10),
                           const SizedBox(height: 10),

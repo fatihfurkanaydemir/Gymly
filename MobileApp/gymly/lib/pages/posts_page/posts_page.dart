@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymly/models/auth_user.dart';
+import 'package:gymly/models/post_interaction.dart';
 import 'package:gymly/pages/posts_page/post_card.dart';
 import 'package:gymly/pages/unknown_route_page.dart';
+import 'package:gymly/providers/auth_provider.dart';
 import 'package:gymly/providers/post_provider.dart';
 
 import '../../models/post.dart';
@@ -30,6 +33,9 @@ class PostsPageState extends ConsumerState<PostsPage> {
   @override
   Widget build(BuildContext context) {
     List<Post>? posts = ref.watch(postProvider).posts;
+    List<PostInteraction>? interactions =
+        ref.watch(postProvider).postInteractions;
+    AuthUser? auth = ref.watch(authProvider).user;
     bool firstFetch = ref.watch(postProvider).isFirstFetch ?? true;
     bool canFetchMore = ref.watch(postProvider).canFetchMore ?? true;
 
@@ -52,7 +58,7 @@ class PostsPageState extends ConsumerState<PostsPage> {
       fetch();
     }
 
-    if (posts == null) {
+    if (posts == null || interactions == null || auth == null) {
       return const Center(
         child: CircularProgressIndicator(),
       );
@@ -68,7 +74,13 @@ class PostsPageState extends ConsumerState<PostsPage> {
         controller: controller,
         itemBuilder: (ctx, index) {
           if (index < posts.length) {
-            return PostCard(post: posts[index]);
+            return PostCard(
+              post: posts[index],
+              interaction: interactions.firstWhere(
+                  (element) => element.postId == posts[index].id,
+                  orElse: () => PostInteraction("", auth.sub, posts[index].id,
+                      false, false, false, false, false)),
+            );
           } else {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 32),

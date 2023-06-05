@@ -69,10 +69,14 @@ class ProfilePage extends ConsumerWidget {
                 height: MediaQuery.of(context).size.height - 210,
                 width: MediaQuery.of(context).size.width - 10,
                 child: TabBarView(children: [
-                  UserPostsTab(),
+                  Container(
+                    child: UserPostsTab(),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                  ),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
+                        horizontal: 10, vertical: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [

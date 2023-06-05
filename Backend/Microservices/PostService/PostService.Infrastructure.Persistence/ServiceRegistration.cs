@@ -17,7 +17,9 @@ public static class ServiceRegistration
     var mongoDatabase = mongoClient.GetDatabase(settings.DatabaseName);
 
     services.AddSingleton(mongoDatabase.GetCollection<Post>(settings.PostCollectionName));
-   
+    services.AddSingleton(mongoDatabase.GetCollection<PostInteraction>(settings.PostInteractionCollectionName));
+
     services.AddSingleton<IPostRepository, PostRepository>();
+    services.AddSingleton<IPostInteractionRepository, PostInteractionRepository>();
   }
 }

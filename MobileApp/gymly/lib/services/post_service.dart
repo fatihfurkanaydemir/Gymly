@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:gymly/models/post_interaction.dart';
 import 'package:gymly/models/upload_post.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -71,6 +72,55 @@ class PostService {
     }
   }
 
+  Future<Post> getPostById(
+    String postId,
+  ) async {
+    try {
+      final response = await client
+          .get(Uri.parse("${serviceUrl!}/Post/GetPostById?PostId=$postId"));
+      final data = json.decode(response.body) as Map<String, dynamic>;
+
+      return Post.fromJson(data["data"] as Map<String, dynamic>);
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<List<PostInteraction>> getPostInteractions() async {
+    try {
+      final response =
+          await client.get(Uri.parse("${serviceUrl!}/PostInteraction"));
+      final data = json.decode(response.body) as Map<String, dynamic>;
+
+      final interactionData = data["data"] as List<dynamic>;
+      List<PostInteraction> interactions = [];
+
+      for (dynamic interaction in interactionData) {
+        interactions.add(PostInteraction.fromJson(interaction));
+      }
+
+      return interactions;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> interactWithPost(
+      PostInteraction interaction) async {
+    try {
+      final response = await client.post(
+        Uri.parse("$serviceUrl/PostInteraction"),
+        body: json.encode(interaction.toJson()),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      return data;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
   Future<bool> uploadPost({
     required List<File> images,
     required String content,
@@ -107,8 +157,6 @@ class PostService {
         body: json.encode(postData.toJson()),
         headers: {"Content-Type": "application/json"},
       );
-
-      print("LOG: ${postResponse.body}");
 
       return true;
     } catch (_) {

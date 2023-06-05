@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:gymly/models/post_interaction.dart';
 import 'package:gymly/pages/posts_page/post_emojis.dart';
 import 'package:gymly/pages/posts_page/post_head.dart';
 import 'package:gymly/pages/posts_page/post_images.dart';
@@ -8,8 +9,13 @@ import '../../models/post.dart';
 
 class PostCard extends StatelessWidget {
   final Post post;
+  final PostInteraction interaction;
   final bool isUserPost;
-  const PostCard({required this.post, this.isUserPost = false, super.key});
+  const PostCard(
+      {required this.post,
+      required this.interaction,
+      this.isUserPost = false,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +54,10 @@ class PostCard extends StatelessWidget {
                         ),
                   ),
                 ),
-                PostEmojis(post: post, isUserPost: isUserPost),
+                PostEmojis(
+                    post: post,
+                    isUserPost: isUserPost,
+                    userInteraction: interaction),
               ],
             ),
           ),

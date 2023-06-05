@@ -54,7 +54,7 @@ class ChatPage extends ConsumerWidget {
                       ),
                     ),
                     if (user!.userType == UserType.normal) ChatWithTrainerTab(),
-                    if (user!.userType == UserType.trainer) TraineesTab(),
+                    if (user.userType == UserType.trainer) TraineesTab(),
                   ]),
                 ),
               )

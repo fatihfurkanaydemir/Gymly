@@ -143,7 +143,7 @@ class _ChatWithTrainerTabState extends ConsumerState<ChatWithTrainerTab> {
                           ],
                         ),
                       ),
-                      if (auth!.sub != chatHistory[index].senderId)
+                      if (auth.sub != chatHistory[index].senderId)
                         const SizedBox(width: 50),
                     ],
                   ),

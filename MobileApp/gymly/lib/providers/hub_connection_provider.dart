@@ -19,7 +19,7 @@ class HubConnectionProviderState {
     HubConnection? connection,
     bool? joinedChat,
   }) {
-    print("Connection: $connection");
+    print("Connection: ${this.connection}");
     return HubConnectionProviderState(
       connection: connection ?? this.connection,
       joinedChat: joinedChat ?? this.joinedChat,
@@ -43,7 +43,6 @@ class HubConnectionProviderStateNotifier
         return;
       }
 
-      print("CONNECT");
       final httpOptions = HttpConnectionOptions(
         logMessageContent: true,
         logger: transportProtLogger,
@@ -67,8 +66,6 @@ class HubConnectionProviderStateNotifier
   Future<void> assignChatChannelFunction(Function(ChatMessage) callback) async {
     state.connection!.off("ChatChannel");
     state.connection!.on("ChatChannel", (List<Object?>? parameters) {
-      print(ChatMessage.fromJson(parameters![0] as Map<String, dynamic>)
-          .senderId);
       callback(ChatMessage.fromJson(parameters![0] as Map<String, dynamic>));
     });
   }

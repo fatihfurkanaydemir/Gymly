@@ -57,7 +57,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final FlutterSecureStorage storage = ref.read(storageProvider);
-    final auth = ref.read(authProvider.notifier);
+    final auth = ref.watch(authProvider.notifier);
     final isAuth = ref.watch(authProvider).isAuth;
     final isFirstLogin = ref.watch(authProvider).isFirstLogin;
 
