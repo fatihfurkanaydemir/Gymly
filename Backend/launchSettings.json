@@ -6,7 +6,7 @@
       "composeLaunchServiceName": "apigateway",
       "commandVersion": "1.0",
       "serviceActions": {
-        "usersservice.api": "StartWithoutDebugging",
+        "usersservice.api": "StartDebugging",
         "rabbitmq": "StartWithoutDebugging",
         "apigateway": "StartDebugging",
         "pgadmin": "StartWithoutDebugging",

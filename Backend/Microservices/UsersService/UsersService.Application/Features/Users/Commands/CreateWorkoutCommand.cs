@@ -42,7 +42,7 @@ public class CreateWorkoutCommandHandler : IRequestHandler<CreateWorkoutCommand,
     workout.ProgramTitle = workoutProgram.Title;
     workout.SubjectId = _userAccessor.SubjectId;
 
-    var addedWorkout = _workoutRepository.AddAsync(workout);
+    var addedWorkout = await _workoutRepository.AddAsync(workout);
 
     return new Response<string>(addedWorkout.Id.ToString(), "WORKOUT_PROGRAM_CREATED");
   }

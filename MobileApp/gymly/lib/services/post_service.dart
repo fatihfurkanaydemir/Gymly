@@ -39,6 +39,7 @@ class PostService {
       final response = await client.get(Uri.parse(
           "${serviceUrl!}/Post?pageNumber=$pageNumber&pageSize=$pageSize"));
       final data = json.decode(response.body) as Map<String, dynamic>;
+
       final postData = data["data"] as List<dynamic>;
       List<Post> posts = [];
 

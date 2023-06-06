@@ -44,7 +44,6 @@ public class GetEnrolledUsersQueryHandler : IRequestHandler<GetEnrolledUsersQuer
         traineeViewModel.EnrolledProgram = programViewModel;
 
         var kcUser = await _kcClient.GetUser("gymly", traineeViewModel.SubjectId);
-        traineeViewModel.AvatarUrl = ""; // TODO change
         traineeViewModel.FirstName = kcUser.FirstName ?? "";
         traineeViewModel.LastName = kcUser.LastName ?? "";
 

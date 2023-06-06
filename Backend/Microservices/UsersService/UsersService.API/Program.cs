@@ -87,23 +87,23 @@ builder.Services.AddKeycloakAdminHttpClient(config);
   
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-  var services = scope.ServiceProvider;
+//using (var scope = app.Services.CreateScope())
+//{
+//  var services = scope.ServiceProvider;
 
-  try
-  {
-    var userRepository = services.GetRequiredService<IUserRepositoryAsync>();
-    var trainerWorkoutRepository = services.GetRequiredService<ITrainerWorkoutProgramRepositoryAsync>();
+//  try
+//  {
+//    var userRepository = services.GetRequiredService<IUserRepositoryAsync>();
+//    var trainerWorkoutRepository = services.GetRequiredService<ITrainerWorkoutProgramRepositoryAsync>();
 
-    await DefaultUsers.SeedAsync(userRepository, trainerWorkoutRepository);
+//    await DefaultUsers.SeedAsync(userRepository, trainerWorkoutRepository);
 
-  }
-  catch (Exception ex)
-  {
-    Console.Error.WriteLine(ex);
-  }
-}
+//  }
+//  catch (Exception ex)
+//  {
+//    Console.Error.WriteLine(ex);
+//  }
+//}
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
 

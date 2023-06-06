@@ -32,7 +32,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Respo
     {
       SubjectId = request.SubjectId,
       Diet = "",
-      Gender = ""
+      Gender = "",
+      AvatarUrl = "",
     };
 
     await _userRepository.AddAsync(user);
