@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/constants/colors.dart';
 import 'package:gymly/models/appuser.dart';
 import 'package:gymly/pages/body_measurements_page.dart';
+import 'package:gymly/pages/profile_page/change_profile_picture_page.dart';
 import 'package:gymly/pages/profile_page/profile_section.dart';
 import 'package:gymly/pages/profile_page/profile_settings.dart';
 import 'package:gymly/pages/profile_page/profile_tabs.dart';
@@ -54,7 +55,12 @@ class ProfilePage extends ConsumerWidget {
                   userName: "${user?.firstName ?? ""} ${user?.lastName ?? ""}",
                   userEmail: auth.user?.email ?? '-',
                   userType: user?.userType ?? UserType.normal,
-                  imageUrl: '',
+                  imageUrl: user?.avatarUrl ?? "",
+                  onProfileClicked: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: ((context) =>
+                            const ChangeProfilePicutrePage())));
+                  },
                 ),
               ),
             ),

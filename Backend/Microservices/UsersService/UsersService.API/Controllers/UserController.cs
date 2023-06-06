@@ -4,9 +4,6 @@ using UsersService.Application.Features.Users.Commands;
 using UsersService.Application.Features.Users.Queries.GetAllUsers;
 
 using Microsoft.AspNetCore.Mvc;
-using Common.Parameters;
-using MassTransit;
-using Common.Contracts.Entities;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using UsersService.Application.Features.Users.Queries.GetTrainerBySubjectId;
@@ -16,12 +13,6 @@ using UsersService.Application.Features.Users.Queries.GetTraineeBySubjectId;
 
 public class UserController : BaseApiController
 {
-  IRequestClient<GetEntityData> _client;
-  public UserController(IRequestClient<GetEntityData> client)
-  {
-    _client = client;
-  }
-
   // POST api/<controller>
   [HttpPost]
   [Authorize]
@@ -43,6 +34,14 @@ public class UserController : BaseApiController
   [HttpPatch("UpdateDiet")]
   [Authorize]
   public async Task<IActionResult> UpdateDiet(UpdateUserDietCommand command)
+  {
+    return Ok(await Mediator.Send(command));
+  }
+
+  // POST api/<controller>
+  [HttpPatch("UpdateAvatar")]
+  [Authorize]
+  public async Task<IActionResult> UpdateAvatar(UpdateUserAvatarCommand command)
   {
     return Ok(await Mediator.Send(command));
   }
@@ -101,14 +100,6 @@ public class UserController : BaseApiController
   public async Task<IActionResult> GetEnrolledUsers()
   {
     return Ok(await Mediator.Send(new GetEnrolledUsersQuery()));
-  }
-
-  // GET: api/<controller>/TestGetEntityData/{id}
-  [HttpGet("/api/TestGetEntityData/{id}")]
-  //[Authorize(Policy = "IsAdmin")]
-  public async Task<IActionResult> TestGetEntityData(int id)
-  {
-    return Ok(await _client.GetResponse<GetEntityDataResult>(new { Id = id }));
   }
 
   [HttpPost("Workout")]

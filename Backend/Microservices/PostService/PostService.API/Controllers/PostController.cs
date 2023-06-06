@@ -19,6 +19,13 @@ public class PostController : BaseApiController
     return Ok(await Mediator.Send(command));
   }
 
+  [HttpDelete]
+  [Authorize]
+  public async Task<IActionResult> Delete(DeletePostCommand command)
+  {
+    return Ok(await Mediator.Send(command));
+  }
+
   // GET: api/<controller>
   [HttpGet]
   [Authorize]

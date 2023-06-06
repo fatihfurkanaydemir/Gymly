@@ -308,7 +308,8 @@ class _AddTrainerWorkoutProgramState
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
+                        if (_formKey.currentState!.validate() &&
+                            _imageFile != null) {
                           _formKey.currentState!.save();
                           final isAdded = await ref
                               .read(userProvider.notifier)

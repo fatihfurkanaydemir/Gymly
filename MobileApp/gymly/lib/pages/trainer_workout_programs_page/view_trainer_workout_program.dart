@@ -193,41 +193,118 @@ class _ViewTrainerWorkoutProgramState
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () async {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                  SizedBox(width: 15),
-                                  Text(
-                                    "Edit",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 16),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: ElevatedButton(
                               onPressed: () async {
-                                final isDeleted = await ref
-                                    .read(userProvider.notifier)
-                                    .deleteTrainerWorkoutProgram(
-                                      widget.program.id,
-                                    );
-                                if (isDeleted) {
-                                  ref.read(userProvider.notifier).getUser();
-                                  Navigator.of(context).pop();
-                                }
+                                showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              const Icon(
+                                                Icons.warning_amber,
+                                                color: Colors.amber,
+                                                size: 100.0,
+                                              ),
+                                              const SizedBox(height: 10.0),
+                                              const Text(
+                                                "Are you sure?",
+                                                style: TextStyle(fontSize: 24),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              const SizedBox(height: 10.0),
+                                              const Text(
+                                                "Your program will be deleted",
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              const SizedBox(height: 24.0),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    child: ElevatedButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        backgroundColor:
+                                                            Colors.green,
+                                                      ),
+                                                      child: const Text(
+                                                        "No",
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 15),
+                                                  Expanded(
+                                                    child: ElevatedButton(
+                                                      onPressed: () async {
+                                                        Map<String, dynamic>
+                                                            response = await ref
+                                                                .read(userProvider
+                                                                    .notifier)
+                                                                .deleteTrainerWorkoutProgram(
+                                                                  widget.program
+                                                                      .id,
+                                                                );
+
+                                                        if (response[
+                                                                "succeeded"]
+                                                            as bool) {
+                                                          ref
+                                                              .read(userProvider
+                                                                  .notifier)
+                                                              .getUser();
+
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        } else {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                                  SnackBar(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    vertical:
+                                                                        30,
+                                                                    horizontal:
+                                                                        20),
+                                                            content: Text(
+                                                                response[
+                                                                        "message"]
+                                                                    as String),
+                                                          ));
+                                                        }
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                      ),
+                                                      child: const Text(
+                                                        "Yes",
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.red,

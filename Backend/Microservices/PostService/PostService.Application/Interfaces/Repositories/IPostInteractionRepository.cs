@@ -12,6 +12,7 @@ public interface IPostInteractionRepository
   Task<IReadOnlyList<PostInteraction>> GetInteractionsOfUser(string subjectId);
   Task<PostInteraction> GetByIdAsync(string id);
   Task<PostInteraction> GetByPostAndSubjectIdAsync(string postId, string subjectId);
+  Task RemoveAllInteractionsOfPostAsync(string postId);
   Task AddAsync(PostInteraction post);
   Task RemoveAsync(string id);
   Task UpdateAsync(string id, PostInteraction post);

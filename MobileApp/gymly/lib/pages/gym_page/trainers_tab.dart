@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/models/trainer.dart';
 import 'package:gymly/pages/gym_page/view_trainer_page.dart';
@@ -14,6 +15,8 @@ class TrainersTab extends ConsumerStatefulWidget {
 class _TrainersTabState extends ConsumerState<TrainersTab> {
   bool hasListener = false;
   final controller = ScrollController();
+
+  final resourceUrl = dotenv.env["RESOURCE_URL"];
 
   @override
   void dispose() {
@@ -84,10 +87,12 @@ class _TrainersTabState extends ConsumerState<TrainersTab> {
                       Row(
                         children: [
                           CircleAvatar(
-                            radius: 30,
-                            backgroundImage:
-                                Image.asset("assets/images/1.jpg").image,
-                          ),
+                              radius: 30,
+                              backgroundImage: trainers[index].avatarUrl.isEmpty
+                                  ? Image.asset("assets/images/1.jpg").image
+                                  : Image.network(
+                                          "$resourceUrl/${trainers[index].avatarUrl}")
+                                      .image),
                           const SizedBox(width: 30),
                           Column(
                             children: [

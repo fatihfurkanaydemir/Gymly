@@ -137,6 +137,26 @@ class PostService {
     }
   }
 
+  Future<bool> deletePost({
+    required String id,
+  }) async {
+    try {
+      final response = await client.delete(
+        Uri.parse("${serviceUrl!}/Post"),
+        body: json.encode({
+          "id": id,
+        }),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      final data = json.decode(response.body) as Map<String, dynamic>;
+
+      return data["succeeded"] as bool;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
   Future<Post> getPostById(
     String postId,
   ) async {

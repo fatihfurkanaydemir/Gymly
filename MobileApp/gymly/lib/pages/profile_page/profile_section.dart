@@ -8,6 +8,7 @@ class ProfileSection extends StatelessWidget {
   final String userName, userEmail;
   final String? programName;
   final UserType userType;
+  final Function()? onProfileClicked;
 
   const ProfileSection({
     required this.userName,
@@ -15,6 +16,7 @@ class ProfileSection extends StatelessWidget {
     required this.imageUrl,
     required this.userType,
     this.programName,
+    this.onProfileClicked,
     super.key,
   });
 
@@ -31,7 +33,29 @@ class ProfileSection extends StatelessWidget {
               ),
           child: Column(
             children: <Widget>[
-              const ProfileImage(),
+              Stack(children: [
+                GestureDetector(
+                  onTap: () {
+                    if (onProfileClicked != null) {
+                      onProfileClicked!();
+                    }
+                  },
+                  child: ProfileImage(imageUrl),
+                ),
+                if (onProfileClicked != null)
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(2.5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Colors.white,
+                      ),
+                      child: const Icon(Icons.edit, color: Colors.cyan),
+                    ),
+                  ),
+              ]),
               const SizedBox(
                 height: 20,
               ),

@@ -106,6 +106,46 @@ class UserService {
     }
   }
 
+  Future<bool> updateAvatar(File image) async {
+    try {
+      var fileUploadRequest = http.MultipartRequest(
+          "POST", Uri.parse("${resourceServiceUrl!}/Resource/UploadImages"));
+      List<Future<MultipartFile>> filesToUploadFutures = [];
+      filesToUploadFutures.add(
+        http.MultipartFile.fromPath(
+          'picture',
+          image.path,
+          filename: image.path.split("/").last,
+          contentType: MediaType('image', 'jpeg'),
+        ),
+      );
+
+      List<MultipartFile> filesToUpload =
+          await Future.wait(filesToUploadFutures);
+
+      fileUploadRequest.files.addAll(filesToUpload);
+      final fileUploadResponse =
+          await http.Response.fromStream(await client.send(fileUploadRequest));
+
+      final List<String> fileUrls = [];
+      ((json.decode(fileUploadResponse.body) as Map<String, dynamic>)["data"])
+          .forEach((e) => fileUrls.add(e as String));
+
+      final postResponse = await client.patch(
+        Uri.parse("$serviceUrl/User/UpdateAvatar"),
+        body: json.encode({
+          "url": fileUrls[0],
+        }),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      return (json.decode(postResponse.body)
+          as Map<String, dynamic>)["succeeded"] as bool;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
   Future<List<Workout>> getWorkoutHistory(
     String subjectId, {
     required int pageNumber,
@@ -270,15 +310,14 @@ class UserService {
         headers: {"Content-Type": "application/json"},
       );
 
-      print("LOG: ${postResponse.body}");
-
-      return true;
+      return (json.decode(postResponse.body)
+          as Map<String, dynamic>)["succeeded"] as bool;
     } catch (_) {
       rethrow;
     }
   }
 
-  Future<bool> deleteTrainerWorkoutProgram(int id) async {
+  Future<Map<String, dynamic>> deleteTrainerWorkoutProgram(int id) async {
     try {
       final response = await client.delete(
         Uri.parse("${serviceUrl!}/WorkoutProgram/DeleteTrainerWorkoutProgram"),
@@ -290,7 +329,7 @@ class UserService {
       );
 
       final data = json.decode(response.body) as Map<String, dynamic>;
-      return data["succeeded"] as bool;
+      return data;
     } catch (_) {
       rethrow;
     }

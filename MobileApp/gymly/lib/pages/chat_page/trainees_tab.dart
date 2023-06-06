@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymly/models/trainer.dart';
 import 'package:gymly/pages/chat_page/chat_with_trainee_page.dart';
@@ -27,6 +28,8 @@ class _TraineesTabState extends ConsumerState<TraineesTab> {
     controller.dispose();
     super.dispose();
   }
+
+  final resourceUrl = dotenv.env["RESOURCE_URL"];
 
   @override
   Widget build(BuildContext context) {
@@ -97,10 +100,14 @@ class _TraineesTabState extends ConsumerState<TraineesTab> {
                           Row(
                             children: [
                               CircleAvatar(
-                                radius: 30,
-                                backgroundImage:
-                                    Image.asset("assets/images/1.jpg").image,
-                              ),
+                                  radius: 30,
+                                  backgroundImage: trainees[index]
+                                          .avatarUrl
+                                          .isEmpty
+                                      ? Image.asset("assets/images/1.jpg").image
+                                      : Image.network(
+                                              "$resourceUrl/${trainees[index].avatarUrl}")
+                                          .image),
                               const SizedBox(width: 20),
                               Center(
                                 child: Column(

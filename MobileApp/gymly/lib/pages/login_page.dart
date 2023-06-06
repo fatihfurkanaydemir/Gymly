@@ -72,6 +72,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
           ),
           Column(children: <Widget>[
+            const Spacer(flex: 2),
+            Container(
+              padding: const EdgeInsets.all(70),
+              child: Image.asset("assets/images/logo.png"),
+            ),
             const Spacer(flex: 10),
             Row(children: [
               Flexible(
@@ -129,31 +134,28 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   context: context,
                   builder: (BuildContext context) {
                     return Container(
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      color: Colors.black.withAlpha(230),
                       padding: const EdgeInsets.symmetric(
                           vertical: 12, horizontal: 12),
                       child: Column(
                         children: <Widget>[
                           Container(
                             width: 50,
-                            height: 10,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(20)),
-                                color: textColorGrey2),
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                              color: Colors.white,
+                            ),
                           ),
                           const Spacer(flex: 1),
-                          const Text('[AYARLAR ANTRENÖRLÜK]'),
-                          const Spacer(flex: 1),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton(
-                                  child: const Text('OKAY'),
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                              ),
-                            ],
+                          const Text(
+                            textAlign: TextAlign.center,
+                            "You can go to profile settings and change your account type to Trainer.",
+                            style: TextStyle(fontSize: 20),
                           ),
+                          const Spacer(flex: 1),
                         ],
                       ),
                     );

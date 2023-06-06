@@ -53,6 +53,14 @@ class UserStateNotifier extends StateNotifier<UserState> {
     return await userService.updateDiet(diet);
   }
 
+  Future<bool> updateAvatar(
+    File image,
+  ) async {
+    bool success = await userService.updateAvatar(image);
+    await getUser();
+    return success;
+  }
+
   Future<List<Workout>> getWorkoutHistory(String subjectId) async {
     return await userService.getWorkoutHistory(subjectId,
         pageNumber: 1, pageSize: 100);
@@ -82,7 +90,7 @@ class UserStateNotifier extends StateNotifier<UserState> {
     return success;
   }
 
-  Future<bool> deleteTrainerWorkoutProgram(int id) async {
+  Future<Map<String, dynamic>> deleteTrainerWorkoutProgram(int id) async {
     return await userService.deleteTrainerWorkoutProgram(id);
   }
 

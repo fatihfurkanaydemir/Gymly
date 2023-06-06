@@ -26,26 +26,6 @@ services:
     depends_on:
       - rabbitmq
 
-  otherservice.api:
-    image: ${DOCKER_REGISTRY-}otherserviceapi
-    build:
-      context: .
-      dockerfile: Microservices/OtherService/OtherService.API/Dockerfile
-    networks:
-      - backend
-    depends_on:
-      - rabbitmq
-
-  authservice.api:
-    image: ${DOCKER_REGISTRY-}authserviceapi
-    build:
-      context: .
-      dockerfile: Microservices/AuthService/AuthService.API/Dockerfile
-    networks:
-      - backend
-    depends_on:
-      - rabbitmq
-
   postservice.api:
     image: ${DOCKER_REGISTRY-}postserviceapi
     build:

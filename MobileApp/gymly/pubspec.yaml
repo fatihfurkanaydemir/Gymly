@@ -76,6 +76,7 @@ flutter:
   assets:
     - assets/videos/login_background.mp4
     - assets/images/1.jpg
+    - assets/images/logo.png
     - assets/icons/items.svg
     - assets/rive_animations/odin_emojis.riv
     - assets/rive_animations/rives_animated_emojis.riv

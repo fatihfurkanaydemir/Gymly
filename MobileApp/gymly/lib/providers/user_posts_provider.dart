@@ -61,6 +61,12 @@ class UserPostsStateNotifier extends StateNotifier<UserPostsState> {
 
     await getPosts(subjectId);
   }
+
+  Future<bool> deletePost({
+    required String id,
+  }) {
+    return postService.deletePost(id: id);
+  }
 }
 
 final userPostsProvider =

@@ -25,6 +25,11 @@ public class PostInteractionRepository : IPostInteractionRepository
     return await collection.Find(x => x.SubjectId == subjectId && x.PostId == postId).FirstOrDefaultAsync();
   }
 
+  public async Task RemoveAllInteractionsOfPostAsync(string postId)
+  {
+    await collection.DeleteManyAsync(x => x.PostId == postId);
+  }
+
   public async Task<PostInteraction> GetByIdAsync(string id) 
   {
     return await collection.Find(x => x.Id == id).FirstOrDefaultAsync();
