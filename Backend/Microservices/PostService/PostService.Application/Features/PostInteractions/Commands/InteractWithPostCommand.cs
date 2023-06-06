@@ -29,6 +29,8 @@ record InteractionDiff
 
 public class InteractWithPostCommandHandler : IRequestHandler<InteractWithPostCommand, Response<string>>
 {
+  static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+
   private readonly IPostInteractionRepository _postInteractionRepository;
   private readonly IPostRepository _postRepository;
   private readonly IUserAccessor _userAccessor;
@@ -59,39 +61,47 @@ public class InteractWithPostCommandHandler : IRequestHandler<InteractWithPostCo
 
   public async Task<Response<string>> Handle(InteractWithPostCommand command, CancellationToken cancellationToken)
   {
-    var post = await _postRepository.GetByIdAsync(command.PostId);
-    if (post == null) throw new ApiException("POST_NOT_FOUND");
-
-    var dbInteraction = await _postInteractionRepository.GetByPostAndSubjectIdAsync(command.PostId, _userAccessor.SubjectId);
-
-    var interaction = command.Adapt<PostInteraction>();
-    interaction.SubjectId = _userAccessor.SubjectId;
-
-    var diff = getInteractionDiff(interaction, dbInteraction);
-
-    post.AmazedCount += diff.AmazedDiff;
-    post.CelebrationCount += diff.CelebrationDiff;
-    post.ReachedTargetCount += diff.ReachedTargetDiff;
-    post.FlameCount += diff.FlameDiff;
-    post.LostMindCount += diff.LostMindDiff;
-
-    await _postRepository.UpdateAsync(post.Id, post);
-
-    if (dbInteraction == null)
+    await semaphoreSlim.WaitAsync();
+    try
     {
-      await _postInteractionRepository.AddAsync(interaction);
+      var post = await _postRepository.GetByIdAsync(command.PostId);
+      if (post == null) throw new ApiException("POST_NOT_FOUND");
 
-      return new Response<string>(interaction.Id.ToString(), "INTERACTION_CREATED");
+      var dbInteraction = await _postInteractionRepository.GetByPostAndSubjectIdAsync(command.PostId, _userAccessor.SubjectId);
+
+      var interaction = command.Adapt<PostInteraction>();
+      interaction.SubjectId = _userAccessor.SubjectId;
+
+      var diff = getInteractionDiff(interaction, dbInteraction);
+
+      post.AmazedCount += diff.AmazedDiff;
+      post.CelebrationCount += diff.CelebrationDiff;
+      post.ReachedTargetCount += diff.ReachedTargetDiff;
+      post.FlameCount += diff.FlameDiff;
+      post.LostMindCount += diff.LostMindDiff;
+
+      await _postRepository.UpdateAsync(post.Id, post);
+
+      if (dbInteraction == null)
+      {
+        await _postInteractionRepository.AddAsync(interaction);
+
+        return new Response<string>(interaction.Id.ToString(), "INTERACTION_CREATED");
+      }
+
+      dbInteraction.LostMind = command.LostMind;
+      dbInteraction.ReachedTarget = command.ReachedTarget;
+      dbInteraction.Amazed = command.Amazed;
+      dbInteraction.Celebration = command.Celebration;
+      dbInteraction.Flame = command.Flame;
+
+      await _postInteractionRepository.UpdateAsync(dbInteraction.Id, dbInteraction);
+
+      return new Response<string>(dbInteraction.Id.ToString(), "INTERACTION_UPDATED");
     }
-
-    dbInteraction.LostMind = command.LostMind;
-    dbInteraction.ReachedTarget = command.ReachedTarget;
-    dbInteraction.Amazed = command.Amazed;
-    dbInteraction.Celebration = command.Celebration;
-    dbInteraction.Flame = command.Flame;
-
-    await _postInteractionRepository.UpdateAsync(dbInteraction.Id, dbInteraction);
-
-    return new Response<string>(dbInteraction.Id.ToString(), "INTERACTION_UPDATED");
+    finally
+    {
+      semaphoreSlim.Release();
+    }    
   }
 }

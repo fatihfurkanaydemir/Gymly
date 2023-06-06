@@ -5,6 +5,7 @@ import 'package:gymly/models/appuser.dart';
 import 'package:gymly/models/trainee.dart';
 import 'package:gymly/pages/body_measurements_page.dart';
 import 'package:gymly/pages/chat_page/trainees_tab.dart';
+import 'package:gymly/pages/chat_page/trainer_news_tab.dart';
 import 'package:gymly/pages/gym_page/gym_page_tabs.dart';
 import 'package:gymly/pages/gym_page/trainers_tab.dart';
 import 'package:gymly/pages/profile_page/profile_section.dart';
@@ -30,7 +31,13 @@ class ChatPage extends ConsumerWidget {
     final authUser = ref.watch(authProvider).user;
     final chat = ref.watch(chatProvider.notifier);
 
-    if (user?.enrolledProgram != null || user?.userType == UserType.trainer) {
+    if (user == null || authUser == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (user.enrolledProgram != null || user.userType == UserType.trainer) {
       return DefaultTabController(
           length: 2,
           child: SafeArea(
@@ -45,15 +52,17 @@ class ChatPage extends ConsumerWidget {
                   height: MediaQuery.of(context).size.height - 210,
                   width: MediaQuery.of(context).size.width - 10,
                   child: TabBarView(children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [],
-                      ),
-                    ),
-                    if (user!.userType == UserType.normal) ChatWithTrainerTab(),
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(
+                    //       horizontal: 20, vertical: 10),
+                    //   child: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.stretch,
+                    //     children: [],
+                    //   ),
+                    // ),
+                    TrainerNewsTab(
+                        isTrainerMode: user.userType == UserType.trainer),
+                    if (user.userType == UserType.normal) ChatWithTrainerTab(),
                     if (user.userType == UserType.trainer) TraineesTab(),
                   ]),
                 ),

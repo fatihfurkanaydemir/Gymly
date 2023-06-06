@@ -133,8 +133,8 @@ class _ChatWithTrainerTabState extends ConsumerState<ChatWithTrainerTab> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Text(
-                                  DateFormat('kk:mm')
-                                      .format(chatHistory[index].messageTime),
+                                  DateFormat('kk:mm').format(
+                                      chatHistory[index].messageTime.toLocal()),
                                   style: TextStyle(
                                       color: Colors.white.withAlpha(120)),
                                 )

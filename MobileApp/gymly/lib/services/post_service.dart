@@ -14,6 +14,8 @@ import 'package:http_interceptor/http_interceptor.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http_parser/http_parser.dart';
 
+import '../models/trainer_news.dart';
+
 class PostService {
   Client client;
   static final serviceUrl = dotenv.env['POST_SERVICE_URL'];
@@ -67,6 +69,69 @@ class PostService {
       }
 
       return posts;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<List<TrainerNews>> getTrainerNews({
+    required String subjectId,
+    required int pageNumber,
+    required int pageSize,
+  }) async {
+    try {
+      final response = await client.get(Uri.parse(
+          "${serviceUrl!}/TrainerNews?subjectId=$subjectId&pageNumber=$pageNumber&pageSize=$pageSize"));
+      final data = json.decode(response.body) as Map<String, dynamic>;
+
+      List<TrainerNews> news = [];
+      for (var newsJson in (data["data"] as List<dynamic>)) {
+        news.add(TrainerNews.fromJson(newsJson as Map<String, dynamic>));
+      }
+
+      return news;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<bool> createTrainerNews({
+    required String title,
+    required String content,
+  }) async {
+    try {
+      final response = await client.post(
+        Uri.parse("${serviceUrl!}/TrainerNews"),
+        body: json.encode({
+          "title": title,
+          "content": content,
+        }),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      final data = json.decode(response.body) as Map<String, dynamic>;
+
+      return data["succeeded"] as bool;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<bool> deleteTrainerNews({
+    required String id,
+  }) async {
+    try {
+      final response = await client.delete(
+        Uri.parse("${serviceUrl!}/TrainerNews"),
+        body: json.encode({
+          "id": id,
+        }),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      final data = json.decode(response.body) as Map<String, dynamic>;
+
+      return data["succeeded"] as bool;
     } catch (_) {
       rethrow;
     }

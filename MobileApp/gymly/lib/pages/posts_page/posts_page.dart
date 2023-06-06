@@ -72,6 +72,7 @@ class PostsPageState extends ConsumerState<PostsPage> {
         physics: const AlwaysScrollableScrollPhysics(),
         cacheExtent: 5000,
         controller: controller,
+        addAutomaticKeepAlives: true,
         itemBuilder: (ctx, index) {
           if (index < posts.length) {
             return PostCard(

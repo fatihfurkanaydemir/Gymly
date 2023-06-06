@@ -144,8 +144,10 @@ class _ChatWithTraineePageState extends ConsumerState<ChatWithTraineePage> {
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
-                                    DateFormat('kk:mm')
-                                        .format(chatHistory[index].messageTime),
+                                    DateFormat('kk:mm').format(
+                                        chatHistory[index]
+                                            .messageTime
+                                            .toLocal()),
                                     style: TextStyle(
                                       color: Colors.white.withAlpha(120),
                                     ),
