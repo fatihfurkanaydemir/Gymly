@@ -13,7 +13,7 @@ class AuthInterceptor implements InterceptorContract {
     String accessToken = "";
 
     if (await storage.containsKey(key: "accessToken")) {
-      accessToken = (await storage.read(key: "accessToken"))!;
+      accessToken = (await storage.read(key: "accessToken")) ?? "";
       await storage.delete(key: "accessToken");
     } else if (authentication.accessToken != null) {
       accessToken = authentication.accessToken!;
@@ -35,7 +35,9 @@ class ExpiredTokenRetryPolicy extends RetryPolicy {
   ExpiredTokenRetryPolicy(this.authNotifier);
 
   @override
-  int maxRetryAttempts = 1;
+  int get maxRetryAttempts {
+    return 2;
+  }
 
   @override
   Future<bool> shouldAttemptRetryOnResponse(ResponseData response) async {

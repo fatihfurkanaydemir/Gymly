@@ -102,7 +102,7 @@ class AuthenticationNotifier extends StateNotifier<Authentication> {
       }
       return false;
     } catch (_) {
-      rethrow;
+      return false;
     }
   }
 

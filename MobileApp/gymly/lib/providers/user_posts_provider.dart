@@ -48,12 +48,14 @@ class UserPostsStateNotifier extends StateNotifier<UserPostsState> {
       pageSize: UserPostsState.pageSize,
     );
 
-    state = state.copyWith(
-      posts: [...state.posts ?? [], ...posts],
-      pageNumber: state.pageNumber! + 1,
-      isFirstFetch: false,
-      canFetchMore: posts.length >= UserPostsState.pageSize,
-    );
+    if (mounted) {
+      state = state.copyWith(
+        posts: [...state.posts ?? [], ...posts],
+        pageNumber: state.pageNumber! + 1,
+        isFirstFetch: false,
+        canFetchMore: posts.length >= UserPostsState.pageSize,
+      );
+    }
   }
 
   Future<void> refreshPosts(String subjectId) async {

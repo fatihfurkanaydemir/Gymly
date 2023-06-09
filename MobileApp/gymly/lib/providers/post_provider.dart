@@ -54,13 +54,15 @@ class PostStateNotifier extends StateNotifier<PostState> {
     List<PostInteraction> postInteractions =
         await postService.getPostInteractions();
 
-    state = state.copyWith(
-      posts: [...state.posts ?? [], ...posts],
-      postInteractions: postInteractions,
-      pageNumber: state.pageNumber! + 1,
-      isFirstFetch: false,
-      canFetchMore: posts.length >= PostState.pageSize,
-    );
+    if (mounted) {
+      state = state.copyWith(
+        posts: [...state.posts ?? [], ...posts],
+        postInteractions: postInteractions,
+        pageNumber: state.pageNumber! + 1,
+        isFirstFetch: false,
+        canFetchMore: posts.length >= PostState.pageSize,
+      );
+    }
   }
 
   Future<Post> getPostById(String postId) async {
@@ -69,10 +71,11 @@ class PostStateNotifier extends StateNotifier<PostState> {
 
   Future<bool> interactWithPost(PostInteraction interaction) async {
     final result = await postService.interactWithPost(interaction);
-    if (result["succeeded"] as bool) {
+    if (result["succeeded"] as bool && mounted) {
       final interactionId = result["data"] as String;
       final post = await postService.getPostById(interaction.postId);
       List<Post> oldPosts = state.posts!;
+
       oldPosts[oldPosts.indexWhere((element) => element.id == post.id)] = post;
 
       List<PostInteraction> oldInteractions = state.postInteractions!;
