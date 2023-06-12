@@ -12,6 +12,9 @@ public class UsersServiceDbContext: DbContext
   }
 
   public DbSet<User> Users { get; set; }
+  public DbSet<UserWorkoutProgram> UserWorkoutPrograms { get; set; }
+  public DbSet<TrainerWorkoutProgram> TrainerWorkoutPrograms { get; set; }
+  public DbSet<Workout> Workouts{ get; set; }
   public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
   {
     foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
@@ -38,6 +41,10 @@ public class UsersServiceDbContext: DbContext
       {
         property.SetColumnType("decimal(18,6)");
       }
+
+    builder.Entity<User>()
+      .HasOne(u => u.EnrolledProgram)
+      .WithMany(p => p.EnrolledUsers);
 
     base.OnModelCreating(builder);
   }

@@ -6,7 +6,6 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-# Certificate
 WORKDIR /src
 COPY ["Microservices/UsersService/UsersService.API/UsersService.API.csproj", "Microservices/UsersService/UsersService.API/"]
 COPY ["Microservices/Common/Common.csproj", "Microservices/Common/"]

@@ -1,6 +1,5 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:gymly/providers/auth_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -17,7 +16,7 @@ class AuthenticationService {
 
   static const FlutterAppAuth _appAuth = const FlutterAppAuth();
 
-  static Future<EndSessionResponse?> logout({required idToken}) async {
+  static Future<EndSessionResponse?> logout({required String idToken}) async {
     try {
       return await _appAuth.endSession(EndSessionRequest(
         idTokenHint: idToken,
@@ -47,13 +46,11 @@ class AuthenticationService {
     }
   }
 
-  static Future<TokenResponse?> refresh({refreshToken}) async {
+  static Future<TokenResponse?> refresh({required String refreshToken}) async {
     try {
       final TokenResponse? result = await _appAuth.token(TokenRequest(
           _clientId, _redirectUrl,
           refreshToken: refreshToken, issuer: _issuer, scopes: _scopes));
-
-      if (result != null) {}
 
       return result;
     } catch (_) {
@@ -70,8 +67,24 @@ class AuthenticationService {
             'Content-Type': 'application/x-www-form-urlencoded'
           });
 
-      print('LOG: ${httpResponse.body}');
       return AuthUser.fromJson(json.decode(httpResponse.body));
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  static Future<bool> checkUserCreated(TokenResponse response) async {
+    try {
+      final http.Response httpResponse = await http.post(
+          Uri.parse("${dotenv.env['USER_SERVICE_URL']!}/User"),
+          headers: <String, String>{
+            'Authorization': 'Bearer ${response.accessToken}',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          });
+
+      final data = json.decode(httpResponse.body) as Map<String, dynamic>;
+      print("LOG: ${httpResponse.body}");
+      return data["message"] as String == "USER_CREATED";
     } catch (_) {
       rethrow;
     }

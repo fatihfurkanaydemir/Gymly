@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProfileImage extends StatelessWidget {
-  const ProfileImage({super.key});
+  final String? imageUrl;
+  ProfileImage(this.imageUrl, {super.key});
+
+  final resourceUrl = dotenv.env["RESOURCE_URL"];
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +16,7 @@ class ProfileImage extends StatelessWidget {
       width: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
-        color: Colors.white60,
+        color: Colors.white,
       ),
       child: Center(
         child: Transform.scale(
@@ -24,10 +28,15 @@ class ProfileImage extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
             ),
-            child: Image.asset(
-              "assets/images/1.jpg",
-              fit: BoxFit.cover,
-            ),
+            child: (imageUrl == null || imageUrl!.isEmpty)
+                ? Image.asset(
+                    "assets/images/1.jpg",
+                    fit: BoxFit.cover,
+                  )
+                : Image.network(
+                    "$resourceUrl/$imageUrl",
+                    fit: BoxFit.cover,
+                  ),
           ),
         ),
       ),

@@ -13,4 +13,74 @@ public class UserRepositoryAsync: GenericRepositoryAsync<User>, IUserRepositoryA
   {
     _Users = dbContext.Users;
   }
+
+  public async Task<User?> GetBySubjectIdAsync(String subjectId)
+  {
+    return await
+      _Users
+      .Where(x => x.SubjectId == subjectId)
+      .Include(x => x.UserWorkoutPrograms)
+      .Include(x => x.TrainerWorkoutPrograms)
+      .Include(x => x.EnrolledProgram)
+      .AsNoTracking()
+      .FirstOrDefaultAsync();
+  }
+
+  public async Task<User?> GetBySubjectIdAsTrackingAsync(String subjectId)
+  {
+    return await
+      _Users
+      .Where(x => x.SubjectId == subjectId)
+      .Include(x => x.UserWorkoutPrograms)
+      .Include(x => x.TrainerWorkoutPrograms)
+      .Include(x => x.EnrolledProgram)
+      .AsTracking()
+      .FirstOrDefaultAsync();
+  }
+
+  public async Task<User?> GetBySubjectIdMinAsync(String subjectId)
+  {
+    return await
+      _Users
+      .Where(x => x.SubjectId == subjectId)
+      .AsNoTracking()
+      .FirstOrDefaultAsync();
+  }
+
+  public async Task<User?> GetBySubjectIdWithEnrolledProgramAsync(String subjectId)
+  {
+    return await
+      _Users
+      .Where(x => x.SubjectId == subjectId)
+      .Include(x => x.EnrolledProgram)
+      .AsNoTracking()
+      .FirstOrDefaultAsync();
+  }
+
+  public async Task<IReadOnlyList<User>> GetTrainersPagedAsync(int pageNumber, int pageSize)
+  {
+    return await _Users
+        .Where(u => u.Type == Domain.Enums.UserType.Trainer)
+        .Skip((pageNumber - 1) * pageSize)
+        .Take(pageSize)
+        .AsNoTracking()
+        .ToListAsync();
+  }
+
+  public async Task<User?> GetTrainerBySubjectIdAsync(string subjectId)
+  {
+    return await
+      _Users
+      .Where(x => x.SubjectId == subjectId && x.Type == Domain.Enums.UserType.Trainer)
+      .Include(x => x.TrainerWorkoutPrograms)
+      .AsNoTracking()
+      .FirstOrDefaultAsync();
+  }
+
+  public async Task<int> GetTrainerDataCount()
+  {
+    return await _Users
+      .Where(u => u.Type == Domain.Enums.UserType.Trainer)
+      .CountAsync();
+  }
 }

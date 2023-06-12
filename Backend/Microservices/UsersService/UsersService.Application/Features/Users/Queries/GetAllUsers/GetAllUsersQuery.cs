@@ -4,8 +4,8 @@ using UsersService.Application.Interfaces.Repositories;
 using UsersService.Application.Features.SharedViewModels;
 using Common.Wrappers;
 using Common.Parameters;
-using AutoMapper;
 using MediatR;
+using Mapster;
 
 public class GetAllUsersQuery : IRequest<PagedResponse<IEnumerable<UserViewModel>>>
 {
@@ -16,16 +16,15 @@ public class GetAllUsersQuery : IRequest<PagedResponse<IEnumerable<UserViewModel
 public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PagedResponse<IEnumerable<UserViewModel>>>
 {
   private readonly IUserRepositoryAsync _UserRepository;
-  private readonly IMapper _mapper;
-  public GetAllUsersQueryHandler(IUserRepositoryAsync UserRepository, IMapper mapper)
+  public GetAllUsersQueryHandler(IUserRepositoryAsync UserRepository)
   {
     _UserRepository = UserRepository;
-    _mapper = mapper;
   }
 
   public async Task<PagedResponse<IEnumerable<UserViewModel>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
   {
-    var validFilter = _mapper.Map<RequestParameter>(request);
+
+    var validFilter = request.Adapt<RequestParameter>();
     var dataCount = await _UserRepository.GetDataCount();
     var Users = await _UserRepository.GetPagedReponseAsync(request.PageNumber, request.PageSize);
 
@@ -33,7 +32,7 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PagedRe
 
     foreach (var p in Users)
     {
-      var User = _mapper.Map<UserViewModel>(p);
+      var User = p.Adapt<UserViewModel>();
       UserViewModels.Add(User);
     }
 

@@ -27,5 +27,8 @@ public static class ServiceRegistration
 
     services.AddScoped(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
     services.AddScoped<IUserRepositoryAsync, UserRepositoryAsync>();
+    services.AddScoped<IUserWorkoutProgramRepositoryAsync, UserWorkoutProgramRepositoryAsync>();
+    services.AddScoped<ITrainerWorkoutProgramRepositoryAsync, TrainerWorkoutProgramRepositoryAsync>();
+    services.AddScoped<IWorkoutRepositoryAsync, WorkoutRepositoryAsync>();
   }
 }
