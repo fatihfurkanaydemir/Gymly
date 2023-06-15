@@ -104,41 +104,42 @@ class _ChatWithTrainerTabState extends ConsumerState<ChatWithTrainerTab> {
             itemBuilder: (ctx, index) {
               if (index < chatHistory.length) {
                 return Container(
-                  width: 40,
-                  height: 40,
                   margin: const EdgeInsets.only(bottom: 10),
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       if (auth!.sub == chatHistory[index].senderId)
                         const SizedBox(width: 50),
                       Container(
-                        // width: MediaQuery.of(context).size.width * 0.8,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(15)),
                           color: Colors.white.withAlpha(50),
                         ),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 8),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text(
-                              chatHistory[index].message,
-                              style: TextStyle(
+                            LimitedBox(
+                              maxWidth:
+                                  MediaQuery.of(context).size.width * 0.685,
+                              child: Text(
+                                chatHistory[index].message,
+                                style: TextStyle(
                                   fontSize: 16,
-                                  color: Colors.white.withAlpha(240)),
+                                  color: Colors.white.withAlpha(240),
+                                ),
+                              ),
                             ),
                             const SizedBox(width: 8),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  DateFormat('kk:mm').format(
-                                      chatHistory[index].messageTime.toLocal()),
-                                  style: TextStyle(
-                                      color: Colors.white.withAlpha(120)),
-                                )
-                              ],
+                            Text(
+                              DateFormat('kk:mm').format(
+                                  chatHistory[index].messageTime.toLocal()),
+                              style: TextStyle(
+                                color: Colors.white.withAlpha(120),
+                              ),
                             )
                           ],
                         ),

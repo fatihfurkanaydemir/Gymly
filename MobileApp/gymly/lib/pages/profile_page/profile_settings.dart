@@ -15,10 +15,17 @@ class ProfileSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    UserType type = ref.watch(userProvider).user?.userType ?? UserType.normal;
+    // UserType type = ref.watch(userProvider).user?.userType ?? UserType.normal;
+    AppUser? user = ref.watch(userProvider).user;
+
+    if (user == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
     return Scaffold(
-        appBar: AppBar(title: Text("Settings")),
+        appBar: AppBar(title: const Text("Settings")),
         backgroundColor: Colors.black,
         body: SingleChildScrollView(
           child: Container(
@@ -27,12 +34,60 @@ class ProfileSettings extends ConsumerWidget {
             child: Column(children: [
               NavigationButton(
                 "Switch to trainer account",
-                type != UserType.normal
+                user.userType != UserType.normal
                     ? null
                     : () async {
-                        await ref
-                            .read(userProvider.notifier)
-                            .switchToTrainerAccountType();
+                        if (user.enrolledProgram == null) {
+                          await ref
+                              .read(userProvider.notifier)
+                              .switchToTrainerAccountType();
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        const Icon(
+                                          Icons.error,
+                                          color: Colors.red,
+                                          size: 100.0,
+                                        ),
+                                        const SizedBox(height: 10.0),
+                                        const Text(
+                                          "You are a trainee as you currently enrolled to a program. If you want to switch to trainer account type, please cancel your subscription first.",
+                                          style: TextStyle(fontSize: 24),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 24.0),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.green,
+                                                ),
+                                                child: const Text(
+                                                  "I Understand",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ));
+                        }
                       },
               ),
               const SizedBox(height: 10),

@@ -110,8 +110,6 @@ class _ChatWithTraineePageState extends ConsumerState<ChatWithTraineePage> {
                   itemBuilder: (ctx, index) {
                     if (index < chatHistory.length) {
                       return Container(
-                        // width: 40,
-                        // height: 40,
                         margin: const EdgeInsets.only(bottom: 10),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
